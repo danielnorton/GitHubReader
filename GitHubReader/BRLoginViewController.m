@@ -7,6 +7,7 @@
 //
 
 #import "BRLoginViewController.h"
+#import "BRUserService.h"
 
 
 @interface BRLoginViewController ()
@@ -50,6 +51,7 @@
 		
 		[self setIsAuthenticating:YES];
 		[textField resignFirstResponder];
+		[self doLogin];
 	}
 	
 	return YES;
@@ -67,6 +69,33 @@
 	[_password resignFirstResponder];
 }
 
+
+#pragma mark Private Messages
+- (void)doLogin {
+	
+	BRUserService *service = [[BRUserService alloc] init];
+	NSError *error = nil;
+	BOOL win = [service generateOAuthTokenForUser:_userName.text withPassword:_password.text error:&error];
+	[self setIsAuthenticating:NO];
+	
+	if (!win || error) {
+		
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Authentication Failed"
+														message:error.localizedDescription
+													   delegate:nil
+											  cancelButtonTitle:@"OK"
+											  otherButtonTitles:nil];
+		[alert show];
+		return;
+	}
+	
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Authenticated!"
+													message:nil
+												   delegate:nil
+										  cancelButtonTitle:@"OK"
+										  otherButtonTitles:nil];
+	[alert show];
+}
 
 @end
 
