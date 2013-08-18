@@ -14,13 +14,20 @@
 		9B1F6A7217C0560100813AF5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6A7117C0560100813AF5 /* main.m */; };
 		9B1F6A7617C0560100813AF5 /* BRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6A7517C0560100813AF5 /* BRAppDelegate.m */; };
 		9B1F6A7917C0560100813AF5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B1F6A7717C0560100813AF5 /* Main.storyboard */; };
-		9B1F6A7C17C0560100813AF5 /* BRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6A7B17C0560100813AF5 /* BRViewController.m */; };
 		9B1F6A7E17C0560100813AF5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B1F6A7D17C0560100813AF5 /* Images.xcassets */; };
 		9B1F6A8517C0560100813AF5 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B1F6A8417C0560100813AF5 /* XCTest.framework */; };
 		9B1F6A8617C0560100813AF5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B1F6A6517C0560100813AF5 /* Foundation.framework */; };
 		9B1F6A8717C0560100813AF5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B1F6A6917C0560100813AF5 /* UIKit.framework */; };
 		9B1F6A8F17C0560100813AF5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9B1F6A8D17C0560100813AF5 /* InfoPlist.strings */; };
 		9B1F6A9117C0560100813AF5 /* GitHubReaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6A9017C0560100813AF5 /* GitHubReaderTests.m */; };
+		9B1F6AA117C058AB00813AF5 /* fishhook.c in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6A9C17C058AB00813AF5 /* fishhook.c */; };
+		9B1F6AA217C058AB00813AF5 /* fishhook.c in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6A9C17C058AB00813AF5 /* fishhook.c */; };
+		9B1F6AA317C058AB00813AF5 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 9B1F6A9E17C058AB00813AF5 /* LICENSE */; };
+		9B1F6AA417C058AB00813AF5 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 9B1F6A9E17C058AB00813AF5 /* LICENSE */; };
+		9B1F6AA517C058AB00813AF5 /* QuietAssertMacros.c in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6A9F17C058AB00813AF5 /* QuietAssertMacros.c */; };
+		9B1F6AA617C058AB00813AF5 /* QuietAssertMacros.c in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6A9F17C058AB00813AF5 /* QuietAssertMacros.c */; };
+		9B1F6AA717C058AB00813AF5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9B1F6AA017C058AB00813AF5 /* README.md */; };
+		9B1F6AA817C058AB00813AF5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9B1F6AA017C058AB00813AF5 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,14 +52,17 @@
 		9B1F6A7417C0560100813AF5 /* BRAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BRAppDelegate.h; sourceTree = "<group>"; };
 		9B1F6A7517C0560100813AF5 /* BRAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BRAppDelegate.m; sourceTree = "<group>"; };
 		9B1F6A7817C0560100813AF5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		9B1F6A7A17C0560100813AF5 /* BRViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BRViewController.h; sourceTree = "<group>"; };
-		9B1F6A7B17C0560100813AF5 /* BRViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BRViewController.m; sourceTree = "<group>"; };
 		9B1F6A7D17C0560100813AF5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9B1F6A8317C0560100813AF5 /* GitHubReaderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GitHubReaderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B1F6A8417C0560100813AF5 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		9B1F6A8C17C0560100813AF5 /* GitHubReaderTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GitHubReaderTests-Info.plist"; sourceTree = "<group>"; };
 		9B1F6A8E17C0560100813AF5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9B1F6A9017C0560100813AF5 /* GitHubReaderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GitHubReaderTests.m; sourceTree = "<group>"; };
+		9B1F6A9C17C058AB00813AF5 /* fishhook.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fishhook.c; sourceTree = "<group>"; };
+		9B1F6A9D17C058AB00813AF5 /* fishhook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fishhook.h; sourceTree = "<group>"; };
+		9B1F6A9E17C058AB00813AF5 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		9B1F6A9F17C058AB00813AF5 /* QuietAssertMacros.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = QuietAssertMacros.c; sourceTree = "<group>"; };
+		9B1F6AA017C058AB00813AF5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +96,7 @@
 				9B1F6A8A17C0560100813AF5 /* GitHubReaderTests */,
 				9B1F6A6417C0560100813AF5 /* Frameworks */,
 				9B1F6A6317C0560100813AF5 /* Products */,
+				9B1F6A9A17C058AB00813AF5 /* Third Party */,
 			);
 			sourceTree = "<group>";
 		};
@@ -115,8 +126,6 @@
 				9B1F6A7417C0560100813AF5 /* BRAppDelegate.h */,
 				9B1F6A7517C0560100813AF5 /* BRAppDelegate.m */,
 				9B1F6A7717C0560100813AF5 /* Main.storyboard */,
-				9B1F6A7A17C0560100813AF5 /* BRViewController.h */,
-				9B1F6A7B17C0560100813AF5 /* BRViewController.m */,
 				9B1F6A7D17C0560100813AF5 /* Images.xcassets */,
 				9B1F6A6C17C0560100813AF5 /* Supporting Files */,
 			);
@@ -150,6 +159,26 @@
 				9B1F6A8D17C0560100813AF5 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9B1F6A9A17C058AB00813AF5 /* Third Party */ = {
+			isa = PBXGroup;
+			children = (
+				9B1F6A9B17C058AB00813AF5 /* fishhook */,
+			);
+			path = "Third Party";
+			sourceTree = "<group>";
+		};
+		9B1F6A9B17C058AB00813AF5 /* fishhook */ = {
+			isa = PBXGroup;
+			children = (
+				9B1F6A9C17C058AB00813AF5 /* fishhook.c */,
+				9B1F6A9D17C058AB00813AF5 /* fishhook.h */,
+				9B1F6A9E17C058AB00813AF5 /* LICENSE */,
+				9B1F6A9F17C058AB00813AF5 /* QuietAssertMacros.c */,
+				9B1F6AA017C058AB00813AF5 /* README.md */,
+			);
+			path = fishhook;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -234,6 +263,8 @@
 			files = (
 				9B1F6A7E17C0560100813AF5 /* Images.xcassets in Resources */,
 				9B1F6A7017C0560100813AF5 /* InfoPlist.strings in Resources */,
+				9B1F6AA717C058AB00813AF5 /* README.md in Resources */,
+				9B1F6AA317C058AB00813AF5 /* LICENSE in Resources */,
 				9B1F6A7917C0560100813AF5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,6 +273,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B1F6AA817C058AB00813AF5 /* README.md in Resources */,
+				9B1F6AA417C058AB00813AF5 /* LICENSE in Resources */,
 				9B1F6A8F17C0560100813AF5 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -253,9 +286,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B1F6A7C17C0560100813AF5 /* BRViewController.m in Sources */,
 				9B1F6A7617C0560100813AF5 /* BRAppDelegate.m in Sources */,
+				9B1F6AA117C058AB00813AF5 /* fishhook.c in Sources */,
 				9B1F6A7217C0560100813AF5 /* main.m in Sources */,
+				9B1F6AA517C058AB00813AF5 /* QuietAssertMacros.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,7 +297,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B1F6AA217C058AB00813AF5 /* fishhook.c in Sources */,
 				9B1F6A9117C0560100813AF5 /* GitHubReaderTests.m in Sources */,
+				9B1F6AA617C058AB00813AF5 /* QuietAssertMacros.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
