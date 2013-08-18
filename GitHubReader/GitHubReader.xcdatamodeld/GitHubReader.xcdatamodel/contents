@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3389" systemVersion="12E55" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Branch" representedClassName="Branch" parentEntity="Commit" syncable="YES"/>
+    <entity name="Commit" representedClassName="Commit" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="repository" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Repository" inverseName="commits" inverseEntity="Repository" syncable="YES"/>
+    </entity>
+    <entity name="Login" representedClassName="Login" isAbstract="YES" syncable="YES">
+        <attribute name="created" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gitHubId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="gravatarId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="loginName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="repositoriesPath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updated" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="repositories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Repository" inverseName="owner" inverseEntity="Repository" syncable="YES"/>
+    </entity>
+    <entity name="Organization" representedClassName="Organization" parentEntity="Login" syncable="YES">
+        <attribute name="membersPath" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="organizations" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="Repository" representedClassName="Repository" syncable="YES">
+        <attribute name="branchesPath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="commitsPath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="created" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="defaultBranchName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fullName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gitHubDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gitHubId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="treesPath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updated" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="commits" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Commit" inverseName="repository" inverseEntity="Commit" syncable="YES"/>
+        <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Login" inverseName="repositories" inverseEntity="Login" syncable="YES"/>
+    </entity>
+    <entity name="User" representedClassName="User" parentEntity="Login" syncable="YES">
+        <attribute name="organizationsPath" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="organizations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Organization" inverseName="members" inverseEntity="Organization" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Branch" positionX="-74" positionY="200" width="128" height="43"/>
+        <element name="Commit" positionX="-72" positionY="302" width="128" height="103"/>
+        <element name="Login" positionX="-495" positionY="89" width="128" height="193"/>
+        <element name="Organization" positionX="-290" positionY="180" width="128" height="73"/>
+        <element name="Repository" positionX="-279" positionY="326" width="128" height="223"/>
+        <element name="User" positionX="-288" positionY="8" width="128" height="73"/>
+    </elements>
+</model>

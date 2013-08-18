@@ -103,7 +103,8 @@
 		
 	[self setIsAuthenticating:YES];
 	[self displayPasswordPlaceholder:@"Authenticating..." withColor:nil];
-
+	[_avatar setImage:[UIImage imageNamed:@"octocat"]];
+	
 	BRLogin *login = [[BRLogin alloc] init];
 	[login setName:_userName.text];
 	[login setService:BRGitHubReaderSecurityService];
@@ -116,14 +117,21 @@
 	
 	BRUserService *service = [[BRUserService alloc] init];
 	NSError *error = nil;
-	BOOL win = [service getUser:login.name withPassword:password error:&error];
+	User *user = [service getUser:login.name withPassword:password error:&error];
 	[self setIsAuthenticating:NO];
 	
-	if (!win || error) {
+	if (!user || error) {
 		
-		[self displayPasswordPlaceholder:@"Authentication Failed" withColor:[UIColor colorFrom255Red:255 green:49 blue:48]];
+		[_avatar setImage:[UIImage imageNamed:@"strongbadtocat"]];
+		[self displayPasswordPlaceholder:@"Log-in Fail'd!" withColor:[UIColor colorFrom255Red:255 green:49 blue:48]];
 		return;
 	}
+	
+	NSString *gravatarPath = [NSString stringWithFormat:@"https://gravatar.com/avatar/%@?s=%@", user.gravatarId, @(_avatar.frame.size.width * 2)];
+	NSURL *gravatarUrl = [NSURL URLWithString:gravatarPath];
+	UIImage *gravatarDownload = [UIImage imageWithData:[NSData dataWithContentsOfURL:gravatarUrl]];
+	UIImage *gravatar = [UIImage imageWithCGImage:[gravatarDownload CGImage] scale:[[UIScreen mainScreen] scale] orientation:UIImageOrientationUp];
+	[_avatar setImage:gravatar];
 	
 	[_password setTextColor:[UIColor colorFrom255Red:76 green:217 blue:100]];
 	[self displayFakePasswordPlaceholder];

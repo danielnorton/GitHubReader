@@ -40,6 +40,25 @@
 		9B1F6AD817C07EBE00813AF5 /* BRLoginService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6AD617C07EBE00813AF5 /* BRLoginService.m */; };
 		9B1F6ADB17C0918600813AF5 /* UIColor+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6ADA17C0918600813AF5 /* UIColor+Helpers.m */; };
 		9B1F6ADC17C0918600813AF5 /* UIColor+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6ADA17C0918600813AF5 /* UIColor+Helpers.m */; };
+		9B1F6AE317C09CEE00813AF5 /* GitHubReader.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6AE117C09CEE00813AF5 /* GitHubReader.xcdatamodeld */; };
+		9B1F6AE417C09CEE00813AF5 /* GitHubReader.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6AE117C09CEE00813AF5 /* GitHubReader.xcdatamodeld */; };
+		9B1F6B4917C0A6F900813AF5 /* BRModelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B4817C0A6F800813AF5 /* BRModelManager.m */; };
+		9B1F6B4A17C0A6F900813AF5 /* BRModelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B4817C0A6F800813AF5 /* BRModelManager.m */; };
+		9B1F6B4D17C0A7C000813AF5 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B1F6B4C17C0A7C000813AF5 /* CoreData.framework */; };
+		9B1F6B7817C0B12D00813AF5 /* NSDictionary+valueOrDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B7717C0B12D00813AF5 /* NSDictionary+valueOrDefault.m */; };
+		9B1F6B7917C0B12D00813AF5 /* NSDictionary+valueOrDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B7717C0B12D00813AF5 /* NSDictionary+valueOrDefault.m */; };
+		9B1F6B7C17C0B24900813AF5 /* Repository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B7B17C0B24900813AF5 /* Repository.m */; };
+		9B1F6B7D17C0B24900813AF5 /* Repository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B7B17C0B24900813AF5 /* Repository.m */; };
+		9B1F6B8017C0B24A00813AF5 /* Branch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B7F17C0B24A00813AF5 /* Branch.m */; };
+		9B1F6B8117C0B24A00813AF5 /* Branch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B7F17C0B24A00813AF5 /* Branch.m */; };
+		9B1F6B8417C0B24A00813AF5 /* Commit.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B8317C0B24A00813AF5 /* Commit.m */; };
+		9B1F6B8517C0B24A00813AF5 /* Commit.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B8317C0B24A00813AF5 /* Commit.m */; };
+		9B1F6B8C17C0B24A00813AF5 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B8B17C0B24A00813AF5 /* User.m */; };
+		9B1F6B8D17C0B24A00813AF5 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B8B17C0B24A00813AF5 /* User.m */; };
+		9B1F6B9017C0B24A00813AF5 /* Organization.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B8F17C0B24A00813AF5 /* Organization.m */; };
+		9B1F6B9117C0B24A00813AF5 /* Organization.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B8F17C0B24A00813AF5 /* Organization.m */; };
+		9B1F6B9417C0B37400813AF5 /* Login.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B9317C0B37400813AF5 /* Login.m */; };
+		9B1F6B9517C0B37400813AF5 /* Login.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6B9317C0B37400813AF5 /* Login.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,18 +94,37 @@
 		9B1F6A9E17C058AB00813AF5 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		9B1F6A9F17C058AB00813AF5 /* QuietAssertMacros.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = QuietAssertMacros.c; sourceTree = "<group>"; };
 		9B1F6AA017C058AB00813AF5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		9B1F6AAA17C0632400813AF5 /* BRLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRLoginViewController.h; path = GitHubReader/BRLoginViewController.h; sourceTree = "<group>"; };
-		9B1F6AAB17C0632400813AF5 /* BRLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRLoginViewController.m; path = GitHubReader/BRLoginViewController.m; sourceTree = "<group>"; };
-		9B1F6ABD17C0666B00813AF5 /* BRUserService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRUserService.h; path = GitHubReader/BRUserService.h; sourceTree = "<group>"; };
-		9B1F6ABE17C0666B00813AF5 /* BRUserService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRUserService.m; path = GitHubReader/BRUserService.m; sourceTree = "<group>"; };
+		9B1F6AAA17C0632400813AF5 /* BRLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRLoginViewController.h; sourceTree = "<group>"; };
+		9B1F6AAB17C0632400813AF5 /* BRLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRLoginViewController.m; sourceTree = "<group>"; };
+		9B1F6ABD17C0666B00813AF5 /* BRUserService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRUserService.h; sourceTree = "<group>"; };
+		9B1F6ABE17C0666B00813AF5 /* BRUserService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRUserService.m; sourceTree = "<group>"; };
 		9B1F6AC417C06C0A00813AF5 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		9B1F6AC517C06C0A00813AF5 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
-		9B1F6AC817C06CB200813AF5 /* BRBasicAuthenticationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRBasicAuthenticationService.h; path = GitHubReader/BRBasicAuthenticationService.h; sourceTree = "<group>"; };
-		9B1F6AC917C06CB200813AF5 /* BRBasicAuthenticationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRBasicAuthenticationService.m; path = GitHubReader/BRBasicAuthenticationService.m; sourceTree = "<group>"; };
-		9B1F6AD517C07EBE00813AF5 /* BRLoginService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRLoginService.h; path = GitHubReader/BRLoginService.h; sourceTree = "<group>"; };
-		9B1F6AD617C07EBE00813AF5 /* BRLoginService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRLoginService.m; path = GitHubReader/BRLoginService.m; sourceTree = "<group>"; };
+		9B1F6AC817C06CB200813AF5 /* BRBasicAuthenticationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRBasicAuthenticationService.h; sourceTree = "<group>"; };
+		9B1F6AC917C06CB200813AF5 /* BRBasicAuthenticationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRBasicAuthenticationService.m; sourceTree = "<group>"; };
+		9B1F6AD517C07EBE00813AF5 /* BRLoginService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRLoginService.h; sourceTree = "<group>"; };
+		9B1F6AD617C07EBE00813AF5 /* BRLoginService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRLoginService.m; sourceTree = "<group>"; };
 		9B1F6AD917C0918600813AF5 /* UIColor+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Helpers.h"; sourceTree = "<group>"; };
 		9B1F6ADA17C0918600813AF5 /* UIColor+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Helpers.m"; sourceTree = "<group>"; };
+		9B1F6AE217C09CEE00813AF5 /* GitHubReader.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GitHubReader.xcdatamodel; sourceTree = "<group>"; };
+		9B1F6B4717C0A6F800813AF5 /* BRModelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRModelManager.h; sourceTree = "<group>"; };
+		9B1F6B4817C0A6F800813AF5 /* BRModelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRModelManager.m; sourceTree = "<group>"; };
+		9B1F6B4B17C0A70C00813AF5 /* BRModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRModel.h; sourceTree = "<group>"; };
+		9B1F6B4C17C0A7C000813AF5 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		9B1F6B7617C0B12D00813AF5 /* NSDictionary+valueOrDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+valueOrDefault.h"; sourceTree = "<group>"; };
+		9B1F6B7717C0B12D00813AF5 /* NSDictionary+valueOrDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+valueOrDefault.m"; sourceTree = "<group>"; };
+		9B1F6B7A17C0B24900813AF5 /* Repository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Repository.h; sourceTree = "<group>"; };
+		9B1F6B7B17C0B24900813AF5 /* Repository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Repository.m; sourceTree = "<group>"; };
+		9B1F6B7E17C0B24A00813AF5 /* Branch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Branch.h; sourceTree = "<group>"; };
+		9B1F6B7F17C0B24A00813AF5 /* Branch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Branch.m; sourceTree = "<group>"; };
+		9B1F6B8217C0B24A00813AF5 /* Commit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Commit.h; sourceTree = "<group>"; };
+		9B1F6B8317C0B24A00813AF5 /* Commit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Commit.m; sourceTree = "<group>"; };
+		9B1F6B8A17C0B24A00813AF5 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		9B1F6B8B17C0B24A00813AF5 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		9B1F6B8E17C0B24A00813AF5 /* Organization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Organization.h; sourceTree = "<group>"; };
+		9B1F6B8F17C0B24A00813AF5 /* Organization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Organization.m; sourceTree = "<group>"; };
+		9B1F6B9217C0B37400813AF5 /* Login.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Login.h; sourceTree = "<group>"; };
+		9B1F6B9317C0B37400813AF5 /* Login.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Login.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B1F6B4D17C0A7C000813AF5 /* CoreData.framework in Frameworks */,
 				9B1F6A6817C0560100813AF5 /* CoreGraphics.framework in Frameworks */,
 				9B1F6A6A17C0560100813AF5 /* UIKit.framework in Frameworks */,
 				9B1F6A6617C0560100813AF5 /* Foundation.framework in Frameworks */,
@@ -136,6 +175,7 @@
 		9B1F6A6417C0560100813AF5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9B1F6B4C17C0A7C000813AF5 /* CoreData.framework */,
 				9B1F6A6517C0560100813AF5 /* Foundation.framework */,
 				9B1F6A6717C0560100813AF5 /* CoreGraphics.framework */,
 				9B1F6A6917C0560100813AF5 /* UIKit.framework */,
@@ -153,9 +193,10 @@
 				9B1F6A7D17C0560100813AF5 /* Images.xcassets */,
 				9B1F6A6C17C0560100813AF5 /* Supporting Files */,
 				9B1F6AC317C06BEF00813AF5 /* Category */,
-				9B1F6AA917C062F400813AF5 /* View Controllers */,
 				9B1F6AD017C0783500813AF5 /* Class */,
-				9B1F6AAE17C0656C00813AF5 /* Services */,
+				9B1F6ADF17C09C9900813AF5 /* View Controllers */,
+				9B1F6ADE17C09C7700813AF5 /* Model */,
+				9B1F6AE017C09CB100813AF5 /* Service */,
 			);
 			path = GitHubReader;
 			sourceTree = "<group>";
@@ -209,33 +250,11 @@
 			path = fishhook;
 			sourceTree = "<group>";
 		};
-		9B1F6AA917C062F400813AF5 /* View Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				9B1F6AAA17C0632400813AF5 /* BRLoginViewController.h */,
-				9B1F6AAB17C0632400813AF5 /* BRLoginViewController.m */,
-			);
-			name = "View Controllers";
-			path = ..;
-			sourceTree = "<group>";
-		};
-		9B1F6AAE17C0656C00813AF5 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				9B1F6ABD17C0666B00813AF5 /* BRUserService.h */,
-				9B1F6ABE17C0666B00813AF5 /* BRUserService.m */,
-				9B1F6AC817C06CB200813AF5 /* BRBasicAuthenticationService.h */,
-				9B1F6AC917C06CB200813AF5 /* BRBasicAuthenticationService.m */,
-				9B1F6AD517C07EBE00813AF5 /* BRLoginService.h */,
-				9B1F6AD617C07EBE00813AF5 /* BRLoginService.m */,
-			);
-			name = Services;
-			path = ..;
-			sourceTree = "<group>";
-		};
 		9B1F6AC317C06BEF00813AF5 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				9B1F6B7617C0B12D00813AF5 /* NSDictionary+valueOrDefault.h */,
+				9B1F6B7717C0B12D00813AF5 /* NSDictionary+valueOrDefault.m */,
 				9B1F6AC417C06C0A00813AF5 /* NSData+Base64.h */,
 				9B1F6AC517C06C0A00813AF5 /* NSData+Base64.m */,
 				9B1F6AD917C0918600813AF5 /* UIColor+Helpers.h */,
@@ -249,6 +268,51 @@
 			children = (
 			);
 			name = Class;
+			sourceTree = "<group>";
+		};
+		9B1F6ADE17C09C7700813AF5 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9B1F6B4B17C0A70C00813AF5 /* BRModel.h */,
+				9B1F6B4717C0A6F800813AF5 /* BRModelManager.h */,
+				9B1F6B4817C0A6F800813AF5 /* BRModelManager.m */,
+				9B1F6AE117C09CEE00813AF5 /* GitHubReader.xcdatamodeld */,
+				9B1F6B8E17C0B24A00813AF5 /* Organization.h */,
+				9B1F6B8F17C0B24A00813AF5 /* Organization.m */,
+				9B1F6B9217C0B37400813AF5 /* Login.h */,
+				9B1F6B9317C0B37400813AF5 /* Login.m */,
+				9B1F6B8A17C0B24A00813AF5 /* User.h */,
+				9B1F6B8B17C0B24A00813AF5 /* User.m */,
+				9B1F6B8217C0B24A00813AF5 /* Commit.h */,
+				9B1F6B8317C0B24A00813AF5 /* Commit.m */,
+				9B1F6B7E17C0B24A00813AF5 /* Branch.h */,
+				9B1F6B7F17C0B24A00813AF5 /* Branch.m */,
+				9B1F6B7A17C0B24900813AF5 /* Repository.h */,
+				9B1F6B7B17C0B24900813AF5 /* Repository.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		9B1F6ADF17C09C9900813AF5 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				9B1F6AAA17C0632400813AF5 /* BRLoginViewController.h */,
+				9B1F6AAB17C0632400813AF5 /* BRLoginViewController.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		9B1F6AE017C09CB100813AF5 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				9B1F6ABD17C0666B00813AF5 /* BRUserService.h */,
+				9B1F6ABE17C0666B00813AF5 /* BRUserService.m */,
+				9B1F6AC817C06CB200813AF5 /* BRBasicAuthenticationService.h */,
+				9B1F6AC917C06CB200813AF5 /* BRBasicAuthenticationService.m */,
+				9B1F6AD517C07EBE00813AF5 /* BRLoginService.h */,
+				9B1F6AD617C07EBE00813AF5 /* BRLoginService.m */,
+			);
+			name = Service;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -358,14 +422,23 @@
 			files = (
 				9B1F6ACA17C06CB200813AF5 /* BRBasicAuthenticationService.m in Sources */,
 				9B1F6ADB17C0918600813AF5 /* UIColor+Helpers.m in Sources */,
+				9B1F6B9017C0B24A00813AF5 /* Organization.m in Sources */,
+				9B1F6B8C17C0B24A00813AF5 /* User.m in Sources */,
 				9B1F6A7617C0560100813AF5 /* BRAppDelegate.m in Sources */,
+				9B1F6B7817C0B12D00813AF5 /* NSDictionary+valueOrDefault.m in Sources */,
+				9B1F6AE317C09CEE00813AF5 /* GitHubReader.xcdatamodeld in Sources */,
 				9B1F6AA117C058AB00813AF5 /* fishhook.c in Sources */,
 				9B1F6A7217C0560100813AF5 /* main.m in Sources */,
+				9B1F6B7C17C0B24900813AF5 /* Repository.m in Sources */,
 				9B1F6AC617C06C0A00813AF5 /* NSData+Base64.m in Sources */,
 				9B1F6AAC17C0632400813AF5 /* BRLoginViewController.m in Sources */,
 				9B1F6AC117C0666B00813AF5 /* BRUserService.m in Sources */,
+				9B1F6B4917C0A6F900813AF5 /* BRModelManager.m in Sources */,
+				9B1F6B8417C0B24A00813AF5 /* Commit.m in Sources */,
+				9B1F6B8017C0B24A00813AF5 /* Branch.m in Sources */,
 				9B1F6AD717C07EBE00813AF5 /* BRLoginService.m in Sources */,
 				9B1F6AA517C058AB00813AF5 /* QuietAssertMacros.c in Sources */,
+				9B1F6B9417C0B37400813AF5 /* Login.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,13 +448,22 @@
 			files = (
 				9B1F6ACB17C06CB200813AF5 /* BRBasicAuthenticationService.m in Sources */,
 				9B1F6AD817C07EBE00813AF5 /* BRLoginService.m in Sources */,
+				9B1F6B4A17C0A6F900813AF5 /* BRModelManager.m in Sources */,
+				9B1F6B9517C0B37400813AF5 /* Login.m in Sources */,
 				9B1F6AA217C058AB00813AF5 /* fishhook.c in Sources */,
+				9B1F6B8D17C0B24A00813AF5 /* User.m in Sources */,
 				9B1F6A9117C0560100813AF5 /* GitHubReaderTests.m in Sources */,
 				9B1F6ADC17C0918600813AF5 /* UIColor+Helpers.m in Sources */,
+				9B1F6AE417C09CEE00813AF5 /* GitHubReader.xcdatamodeld in Sources */,
+				9B1F6B8117C0B24A00813AF5 /* Branch.m in Sources */,
 				9B1F6AAD17C0632400813AF5 /* BRLoginViewController.m in Sources */,
+				9B1F6B8517C0B24A00813AF5 /* Commit.m in Sources */,
 				9B1F6AC217C0666B00813AF5 /* BRUserService.m in Sources */,
+				9B1F6B9117C0B24A00813AF5 /* Organization.m in Sources */,
 				9B1F6AA617C058AB00813AF5 /* QuietAssertMacros.c in Sources */,
 				9B1F6AC717C06C0A00813AF5 /* NSData+Base64.m in Sources */,
+				9B1F6B7917C0B12D00813AF5 /* NSDictionary+valueOrDefault.m in Sources */,
+				9B1F6B7D17C0B24900813AF5 /* Repository.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -578,6 +660,7 @@
 				9B1F6A9617C0560100813AF5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9B1F6A9717C0560100813AF5 /* Build configuration list for PBXNativeTarget "GitHubReaderTests" */ = {
 			isa = XCConfigurationList;
@@ -586,8 +669,22 @@
 				9B1F6A9917C0560100813AF5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		9B1F6AE117C09CEE00813AF5 /* GitHubReader.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				9B1F6AE217C09CEE00813AF5 /* GitHubReader.xcdatamodel */,
+			);
+			currentVersion = 9B1F6AE217C09CEE00813AF5 /* GitHubReader.xcdatamodel */;
+			path = GitHubReader.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 9B1F6A5A17C0560000813AF5 /* Project object */;
 }

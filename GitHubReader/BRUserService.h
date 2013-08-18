@@ -10,6 +10,6 @@
 
 @interface BRUserService : NSObject
 
-- (BOOL)getUser:(NSString *)userName withPassword:(NSString *)password error:(NSError **)error;
+- (User *)getUser:(NSString *)userName withPassword:(NSString *)password error:(NSError **)error;
 
 @end
