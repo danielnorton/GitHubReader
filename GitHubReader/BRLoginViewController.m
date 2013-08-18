@@ -8,6 +8,11 @@
 
 #import "BRLoginViewController.h"
 #import "BRUserService.h"
+#import "BRLoginService.h"
+#import "UIColor+Helpers.h"
+
+
+#define kDefaultPasswordPlaceholder @"password"
 
 
 @interface BRLoginViewController ()
@@ -30,28 +35,47 @@
 	[super viewWillAppear:animated];
 	
 	[self.navigationController setNavigationBarHidden:YES animated:NO];
+	
+	
+	NSArray *userNames = [BRLoginService getLoginNamesForService:BRGitHubReaderSecurityService];
+	if (userNames && userNames.count > 0) {
+		
+		NSString *userName = [userNames lastObject];
+		[_userName setText:userName];
+		[self displayFakePasswordPlaceholder];
+		
+		BRLogin *login = [[BRLogin alloc] init];
+		[login setName:userName];
+		[login setService:BRGitHubReaderSecurityService];
+		
+		BRLoginService *service = [[BRLoginService alloc] initWithLogin:login];
+		NSString *password = [service getPassword];
+		
+		[self doLogin:password];
+	}
 }
 
 
 #pragma mark UITextFieldDelegate
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
 	
+	[_password setPlaceholder:kDefaultPasswordPlaceholder];
+	[_password setTextColor:_userName.textColor];
 	return !_isAuthenticating;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
 	
-	
 	// Move along through the text fields to the "go" state
 	if ([textField isEqual:_userName]) {
 		
 		[_password becomeFirstResponder];
+		[_password setPlaceholder:kDefaultPasswordPlaceholder];
 		
 	} else {
 		
-		[self setIsAuthenticating:YES];
 		[textField resignFirstResponder];
-		[self doLogin];
+		[self doLogin:_password.text];
 	}
 	
 	return YES;
@@ -67,35 +91,65 @@
 	// of the text field controls
 	[_userName resignFirstResponder];
 	[_password resignFirstResponder];
+	
+	BRLogin *login = [[BRLogin alloc] init];
+	[login setName:_userName.text];
+	[login setService:BRGitHubReaderSecurityService];
 }
 
 
 #pragma mark Private Messages
-- (void)doLogin {
+- (void)doLogin:(NSString *)password {
+		
+	[self setIsAuthenticating:YES];
+	[self displayPasswordPlaceholder:@"Authenticating..." withColor:nil];
+
+	BRLogin *login = [[BRLogin alloc] init];
+	[login setName:_userName.text];
+	[login setService:BRGitHubReaderSecurityService];
+	
+	if ([BRLoginService hasPasswordForLogin:login]) {
+		
+		BRLoginService *loginService = [[BRLoginService alloc] initWithLogin:login];
+		[loginService deletePassword];
+	}
 	
 	BRUserService *service = [[BRUserService alloc] init];
 	NSError *error = nil;
-	BOOL win = [service generateOAuthTokenForUser:_userName.text withPassword:_password.text error:&error];
+	BOOL win = [service getUser:login.name withPassword:password error:&error];
 	[self setIsAuthenticating:NO];
 	
 	if (!win || error) {
 		
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Authentication Failed"
-														message:error.localizedDescription
-													   delegate:nil
-											  cancelButtonTitle:@"OK"
-											  otherButtonTitles:nil];
-		[alert show];
+		[self displayPasswordPlaceholder:@"Authentication Failed" withColor:[UIColor colorFrom255Red:255 green:49 blue:48]];
 		return;
 	}
 	
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Authenticated!"
-													message:nil
-												   delegate:nil
-										  cancelButtonTitle:@"OK"
-										  otherButtonTitles:nil];
-	[alert show];
+	[_password setTextColor:[UIColor colorFrom255Red:76 green:217 blue:100]];
+	[self displayFakePasswordPlaceholder];
 }
+
+- (void)displayFakePasswordPlaceholder {
+	
+	[_password setPlaceholder:kDefaultPasswordPlaceholder];
+	[_password setText:@"xxxxxxxxxx"];
+}
+
+- (void)displayPasswordPlaceholder:(NSString *)placeholder withColor:(UIColor *)color {
+
+	[_password setText:[NSString string]];
+	
+	if (!color) {
+		
+		[_password setPlaceholder:placeholder];
+		
+	} else {
+	
+		[_password setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName: color}]];
+	}
+	
+}
+
 
 @end
 

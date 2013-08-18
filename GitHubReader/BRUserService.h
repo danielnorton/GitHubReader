@@ -10,6 +10,6 @@
 
 @interface BRUserService : NSObject
 
-- (BOOL)generateOAuthTokenForUser:(NSString *)userName withPassword:(NSString *)password error:(NSError **)error;
+- (BOOL)getUser:(NSString *)userName withPassword:(NSString *)password error:(NSError **)error;
 
 @end
