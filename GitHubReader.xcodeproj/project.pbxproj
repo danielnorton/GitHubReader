@@ -28,6 +28,8 @@
 		9B1F6AA617C058AB00813AF5 /* QuietAssertMacros.c in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6A9F17C058AB00813AF5 /* QuietAssertMacros.c */; };
 		9B1F6AA717C058AB00813AF5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9B1F6AA017C058AB00813AF5 /* README.md */; };
 		9B1F6AA817C058AB00813AF5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9B1F6AA017C058AB00813AF5 /* README.md */; };
+		9B1F6AAC17C0632400813AF5 /* BRLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6AAB17C0632400813AF5 /* BRLoginViewController.m */; };
+		9B1F6AAD17C0632400813AF5 /* BRLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6AAB17C0632400813AF5 /* BRLoginViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +65,8 @@
 		9B1F6A9E17C058AB00813AF5 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		9B1F6A9F17C058AB00813AF5 /* QuietAssertMacros.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = QuietAssertMacros.c; sourceTree = "<group>"; };
 		9B1F6AA017C058AB00813AF5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		9B1F6AAA17C0632400813AF5 /* BRLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRLoginViewController.h; path = GitHubReader/BRLoginViewController.h; sourceTree = "<group>"; };
+		9B1F6AAB17C0632400813AF5 /* BRLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRLoginViewController.m; path = GitHubReader/BRLoginViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				9B1F6A6B17C0560100813AF5 /* GitHubReader */,
+				9B1F6AA917C062F400813AF5 /* View Controllers */,
 				9B1F6A8A17C0560100813AF5 /* GitHubReaderTests */,
 				9B1F6A6417C0560100813AF5 /* Frameworks */,
 				9B1F6A6317C0560100813AF5 /* Products */,
@@ -179,6 +184,15 @@
 				9B1F6AA017C058AB00813AF5 /* README.md */,
 			);
 			path = fishhook;
+			sourceTree = "<group>";
+		};
+		9B1F6AA917C062F400813AF5 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				9B1F6AAA17C0632400813AF5 /* BRLoginViewController.h */,
+				9B1F6AAB17C0632400813AF5 /* BRLoginViewController.m */,
+			);
+			name = "View Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -289,6 +303,7 @@
 				9B1F6A7617C0560100813AF5 /* BRAppDelegate.m in Sources */,
 				9B1F6AA117C058AB00813AF5 /* fishhook.c in Sources */,
 				9B1F6A7217C0560100813AF5 /* main.m in Sources */,
+				9B1F6AAC17C0632400813AF5 /* BRLoginViewController.m in Sources */,
 				9B1F6AA517C058AB00813AF5 /* QuietAssertMacros.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -299,6 +314,7 @@
 			files = (
 				9B1F6AA217C058AB00813AF5 /* fishhook.c in Sources */,
 				9B1F6A9117C0560100813AF5 /* GitHubReaderTests.m in Sources */,
+				9B1F6AAD17C0632400813AF5 /* BRLoginViewController.m in Sources */,
 				9B1F6AA617C058AB00813AF5 /* QuietAssertMacros.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
