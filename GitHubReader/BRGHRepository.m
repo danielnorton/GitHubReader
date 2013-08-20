@@ -1,17 +1,18 @@
 //
-//  Repository.m
+//  BRGHRepository.m
 //  GitHubReader
 //
-//  Created by Daniel Norton on 8/18/13.
+//  Created by Daniel Norton on 8/19/13.
 //  Copyright (c) 2013 Daniel Norton. All rights reserved.
 //
 
-#import "Repository.h"
-#import "Commit.h"
-#import "Login.h"
+#import "BRGHRepository.h"
+#import "BRGHBranch.h"
+#import "BRGHCommit.h"
+#import "BRGHLogin.h"
 
 
-@implementation Repository
+@implementation BRGHRepository
 
 @dynamic branchesPath;
 @dynamic commitsPath;
@@ -25,5 +26,6 @@
 @dynamic updated;
 @dynamic commits;
 @dynamic owner;
+@dynamic branches;
 
 @end

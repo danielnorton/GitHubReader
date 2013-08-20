@@ -10,8 +10,6 @@
                 <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="m36-m6-4WU" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="7F7-S9-12c">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.94999999999999996" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.29803921568627451" green="0.85098039215686272" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="VXK-to-SUp" kind="relationship" relationship="rootViewController" id="qyi-6G-3o9"/>
@@ -139,6 +137,7 @@
                         <outlet property="avatar" destination="4qg-qa-YvT" id="XZ5-wH-XUM"/>
                         <outlet property="password" destination="gYC-Ou-3Lo" id="upU-O7-Dd7"/>
                         <outlet property="userName" destination="X9s-j7-yp1" id="vCH-DE-bdv"/>
+                        <segue destination="8sh-AO-AHR" kind="push" identifier="SegueFromLogin" id="msY-lD-GBQ"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zZY-lS-KSq" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -149,6 +148,62 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="284" y="87"/>
+        </scene>
+        <!--Organizations View Controller-->
+        <scene sceneID="oA3-wj-dXs">
+            <objects>
+                <tableViewController id="8sh-AO-AHR" customClass="BROrganizationsViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="51" sectionHeaderHeight="22" sectionFooterHeight="22" id="hNU-a1-LWt">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="0.94999999999999996" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UserCell" textLabel="SeD-RS-njy" style="IBUITableViewCellStyleDefault" id="1e5-l6-ZCj">
+                                <rect key="frame" x="0.0" y="22" width="320" height="51"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="1e5-l6-ZCj" id="iYg-YL-UGv">
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="51"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" ambiguous="YES" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="SeD-RS-njy">
+                                            <rect key="frame" x="15" y="0.0" width="270" height="51"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <color key="textColor" red="0.14901961389999999" green="0.47843140360000003" blue="0.98431378599999997" alpha="1" colorSpace="deviceRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" white="0.94999999999999996" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="OrganizationCell" textLabel="o53-cE-lBC" style="IBUITableViewCellStyleDefault" id="xVS-9F-kKy">
+                                <rect key="frame" x="0.0" y="73" width="320" height="51"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="xVS-9F-kKy" id="w9U-Q6-hR6">
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="51"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" ambiguous="YES" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="o53-cE-lBC">
+                                            <rect key="frame" x="15" y="0.0" width="270" height="51"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                            <color key="textColor" red="0.14901961389999999" green="0.47843140360000003" blue="0.98431378599999997" alpha="1" colorSpace="deviceRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="8sh-AO-AHR" id="KJX-R4-ADM"/>
+                            <outlet property="delegate" destination="8sh-AO-AHR" id="XVd-ZK-eRP"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="l37-Eg-FdQ"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bng-Mb-L7y" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="735" y="87"/>
         </scene>
     </scenes>
     <resources>

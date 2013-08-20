@@ -11,10 +11,6 @@
 #import "BRLoginService.h"
 
 
-@implementation BRLogin
-
-@end
-
 
 NSString *const BRGitHubReaderSecurityService = @"BRGitHubReaderSecurityService";
 
@@ -32,7 +28,8 @@ NSString *const BRGitHubReaderSecurityService = @"BRGitHubReaderSecurityService"
 #pragma mark BRLoginService
 #pragma mark Public Messages
 + (BOOL)hasPasswordForLogin:(BRLogin *)user {
-	
+
+	if (!user) return NO;
 	BRLoginService *service = [[BRLoginService alloc] initWithLogin:user];
 	NSString *password = [service getPassword];
 	return (password && password.length > 0);

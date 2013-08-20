@@ -7,12 +7,7 @@
 //
 
 
-@interface BRLogin : NSObject
-
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *service;
-
-@end
+#import "BRLogin.h"
 
 
 extern NSString *const BRGitHubReaderSecurityService;

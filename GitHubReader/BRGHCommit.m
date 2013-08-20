@@ -1,16 +1,16 @@
 //
-//  Commit.m
+//  BRGHCommit.m
 //  GitHubReader
 //
-//  Created by Daniel Norton on 8/18/13.
+//  Created by Daniel Norton on 8/19/13.
 //  Copyright (c) 2013 Daniel Norton. All rights reserved.
 //
 
-#import "Commit.h"
-#import "Repository.h"
+#import "BRGHCommit.h"
+#import "BRGHRepository.h"
 
 
-@implementation Commit
+@implementation BRGHCommit
 
 @dynamic date;
 @dynamic message;

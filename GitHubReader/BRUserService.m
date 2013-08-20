@@ -17,7 +17,7 @@
 
 #pragma mark -
 #pragma mark BRUserService
-- (User *)getUser:(NSString *)userName withPassword:(NSString *)password error:(NSError **)error {
+- (BRGHUser *)getUser:(NSString *)userName withPassword:(NSString *)password error:(NSError **)error {
 	
 	// Verbose construction of syncronous request. All the code
 	// is 'right here' to make the demo easier to follow
@@ -64,10 +64,10 @@
 
 
 #pragma mark Private Messages
-- (User *)saveUserData:(NSDictionary *)json {
+- (BRGHUser *)saveUserData:(NSDictionary *)json {
 	
 	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
-	NSString *entityName = NSStringFromClass([User class]);
+	NSString *entityName = NSStringFromClass([BRGHUser class]);
 	
 	NSNumber *gitHubId = json[@"id"];
 	
@@ -82,34 +82,20 @@
 	NSArray *matches = [context executeFetchRequest:fetch error:&error];
 	if (error) return nil;
 	
-	User *user = (matches && matches.count > 0)
+	BRGHUser *user = (matches && matches.count > 0)
 	? [matches lastObject]
 	: [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context];
 
-	NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-	[dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-	
-	NSString *createdString = [json objectForKey:@"created_at" orDefault:nil];
-	NSDate *created = createdString
-	? [dateFormatter dateFromString:createdString]
-	: nil;
-	
-	NSString *updatedString = [json objectForKey:@"updated_at" orDefault:nil];
-	NSDate *updated = updatedString
-	? [dateFormatter dateFromString:updatedString]
-	: nil;
-	
 	[user setGitHubId:				gitHubId];
-	[user setLoginName:				[json objectForKey:@"login" orDefault:nil]];
-	[user setCreated:				created];
 	[user setEmail:					[json objectForKey:@"email" orDefault:nil]];
-	[user setGravatarId:			[json objectForKey:@"gravatar_id" orDefault:nil]];
-	[user setName:					[json objectForKey:@"name" orDefault:nil]];
-	[user setPath:					[json objectForKey:@"url" orDefault:nil]];
-	[user setUpdated:				updated];
-	[user setRepositoriesPath:		[json objectForKey:@"repos_url" orDefault:nil]];
+	[user setLongName:				[json objectForKey:@"name" orDefault:nil]];
 	[user setOrganizationsPath:		[json objectForKey:@"organizations_url" orDefault:nil]];
+	
+	[user setGravatarId:			[json objectForKey:@"gravatar_id" orDefault:nil]];
+	[user setName:					[json objectForKey:@"login" orDefault:nil]];
+	[user setPath:					[json objectForKey:@"url" orDefault:nil]];
+	[user setRepositoriesPath:		[json objectForKey:@"repos_url" orDefault:nil]];
+	
 	
 	[context save:&error];
 	 

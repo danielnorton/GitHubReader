@@ -1,16 +1,20 @@
 //
-//  BRModel.h
+//  BRGHBranch.m
 //  GitHubReader
 //
-//  Created by Daniel Norton on 8/18/13.
+//  Created by Daniel Norton on 8/19/13.
 //  Copyright (c) 2013 Daniel Norton. All rights reserved.
 //
 
-#import "BRModelManager.h"
-
 #import "BRGHBranch.h"
 #import "BRGHCommit.h"
-#import "BRGHLogin.h"
-#import "BRGHOrganization.h"
 #import "BRGHRepository.h"
-#import "BRGHUser.h"
+
+
+@implementation BRGHBranch
+
+@dynamic name;
+@dynamic commit;
+@dynamic repository;
+
+@end

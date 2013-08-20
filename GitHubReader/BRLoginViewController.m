@@ -10,6 +10,8 @@
 #import "BRUserService.h"
 #import "BRLoginService.h"
 #import "UIColor+Helpers.h"
+#import "BROrganizationService.h"
+#import "BRGravatarService.h"
 
 
 #define kDefaultPasswordPlaceholder @"password"
@@ -24,18 +26,31 @@
 
 @end
 
+static BOOL didLaunchLogin = NO;
 
 @implementation BRLoginViewController
 
 
 #pragma mark -
 #pragma mark UIViewController
-- (void)viewWillAppear:(BOOL)animated {
-	
-	[super viewWillAppear:animated];
+- (void)viewDidLoad {
+	[super viewDidLoad];
 	
 	[self.navigationController setNavigationBarHidden:YES animated:NO];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
 	
+	[self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	
+	
+	if (didLaunchLogin) return;
+	didLaunchLogin = YES;
 	
 	NSArray *userNames = [BRLoginService getLoginNamesForService:BRGitHubReaderSecurityService];
 	if (userNames && userNames.count > 0) {
@@ -100,7 +115,7 @@
 
 #pragma mark Private Messages
 - (void)doLogin:(NSString *)password {
-		
+
 	[self setIsAuthenticating:YES];
 	[self displayPasswordPlaceholder:@"Authenticating..." withColor:nil];
 	[_avatar setImage:[UIImage imageNamed:@"octocat"]];
@@ -117,24 +132,28 @@
 	
 	BRUserService *service = [[BRUserService alloc] init];
 	NSError *error = nil;
-	User *user = [service getUser:login.name withPassword:password error:&error];
+	BRGHUser *user = [service getUser:login.name withPassword:password error:&error];
 	[self setIsAuthenticating:NO];
 	
-	if (!user || error) {
+	if (!user || error) {	
 		
 		[_avatar setImage:[UIImage imageNamed:@"strongbadtocat"]];
 		[self displayPasswordPlaceholder:@"Log-in Fail'd!" withColor:[UIColor colorFrom255Red:255 green:49 blue:48]];
 		return;
 	}
 	
-	NSString *gravatarPath = [NSString stringWithFormat:@"https://gravatar.com/avatar/%@?s=%@", user.gravatarId, @(_avatar.frame.size.width * 2)];
-	NSURL *gravatarUrl = [NSURL URLWithString:gravatarPath];
-	UIImage *gravatarDownload = [UIImage imageWithData:[NSData dataWithContentsOfURL:gravatarUrl]];
-	UIImage *gravatar = [UIImage imageWithCGImage:[gravatarDownload CGImage] scale:[[UIScreen mainScreen] scale] orientation:UIImageOrientationUp];
+	UIImage *gravatar = [BRGravatarService imageForGravatarWithHash:user.gravatarId ofSize:_avatar.frame.size.width * 2];
 	[_avatar setImage:gravatar];
 	
 	[_password setTextColor:[UIColor colorFrom255Red:76 green:217 blue:100]];
 	[self displayFakePasswordPlaceholder];
+	
+	NSError *orgError = nil;
+	BROrganizationService *orgService = [[BROrganizationService alloc] init];
+	if ([orgService saveOrganizationsForGitLogin:user withLogin:login error:&orgError]) {
+		
+		[self performSegueWithIdentifier:@"SegueFromLogin" sender:user];
+	}
 }
 
 - (void)displayFakePasswordPlaceholder {
