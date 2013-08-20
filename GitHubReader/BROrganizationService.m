@@ -93,50 +93,13 @@
 		[org setSortIndex:@(1)];
 	}];
 	
-	if (![self deleteExcept:gitHubIds error:&inError])  {
+	if (![apiService deleteExcept:gitHubIds ofKind:[BRGHOrganization class] error:&inError])  {
 		
 		*error = inError;
 		return NO;
 	}
 
-	
 	return [context save:error];
-}
-
-- (BOOL)deleteExcept:(NSArray *)gitHubIds error:(NSError **)error {
-	
-	NSError* inError = nil;
-	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
-	
-	NSSortDescriptor *gitHubId = [NSSortDescriptor sortDescriptorWithKey:@"gitHubId" ascending:YES];
-	NSEntityDescription *entity = [NSEntityDescription entityForName:NSStringFromClass([BRGHOrganization class])
-											  inManagedObjectContext:context];
-	
-	
-	NSPredicate *pred = (gitHubIds && gitHubIds.count > 0)
-	? [NSPredicate predicateWithFormat:@"NOT (gitHubId IN %@)", gitHubIds]
-	: nil;
-	
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	[fetchRequest setEntity:entity];
-	[fetchRequest setSortDescriptors:@[gitHubId]];
-	[fetchRequest setPredicate:pred];
-	
-	NSArray *all = [context executeFetchRequest:fetchRequest error:&inError];
-	if (!all || inError)   {
-		
-		*error = inError;
-		return NO;
-	}
-	
-	
-	[all enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-		
-		NSManagedObject *one = (NSManagedObject *)obj;
-		[context deleteObject:one];
-	}];
-	
-	return YES;
 }
 
 

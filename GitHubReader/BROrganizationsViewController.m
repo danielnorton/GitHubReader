@@ -9,13 +9,15 @@
 #import "BROrganizationsViewController.h"
 #import "BRGravatarService.h"
 #import "BROrganizationService.h"
+#import "BRRepositoriesService.h"
+#import "BRRepositoriesViewController.h"
+#import "BRBasicFetchedResultControllerDelegate.h"
 
 
 @interface BROrganizationsViewController()
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (strong, nonatomic) NSManagedObjectContext *context;
-@property (strong, nonatomic) IBOutlet UIRefreshControl *refresh;
+@property (strong, nonatomic) BRBasicFetchedResultControllerDelegate *delegate;
 
 @end
 
@@ -27,6 +29,7 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
+	[self setTitle:@"Organizations"];
 	[self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
@@ -34,7 +37,6 @@
 	[super viewDidLoad];
 	
 	[self initializeFetchedResultsController];
-	[self setTitle:@"Organizations"];
 	
 	UIBarButtonItem *logout = [[UIBarButtonItem alloc] initWithTitle:@"Log Out" style:UIBarButtonItemStyleDone target:self action:@selector(didTapLogout:)];
 	[self.navigationItem setLeftBarButtonItem:logout];
@@ -42,9 +44,20 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 	
-//	NSIndexPath *indexPath = (NSIndexPath *)sender;
-//	BRGHLogin *login = (BRGHLogin *)[_fetchedResultsController objectAtIndexPath:indexPath];
-//	[segue.destinationViewController]
+	BRRepositoriesViewController *controller = (BRRepositoriesViewController *)segue.destinationViewController;
+	if (![controller isKindOfClass:[BRRepositoriesViewController class]]) return;
+	
+	NSIndexPath *indexPath = (NSIndexPath *)sender;
+	BRGHLogin *login = (BRGHLogin *)[_fetchedResultsController objectAtIndexPath:indexPath];
+	
+	NSError *error = nil;
+	BRRepositoriesService *service = [[BRRepositoriesService alloc] init];
+	if (![service saveRepositoriesForGitLogin:login withLogin:_login error:&error]) return;
+
+	[self setTitle:login.name];
+	
+	[controller setGitHubLogin:login];
+	[controller setLogin:_login];
 }
 
 
@@ -82,69 +95,16 @@
 }
 
 
-#pragma mark NSFetchedResultsControllerDelegate
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-    [self.tableView beginUpdates];
-}
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
-           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
-    
-    switch(type) {
-        case NSFetchedResultsChangeInsert:
-            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
-}
-
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
-       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
-      newIndexPath:(NSIndexPath *)newIndexPath {
-    
-    UITableView *tableView = self.tableView;
-	
-    switch(type) {
-            
-        case NSFetchedResultsChangeInsert:
-            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeUpdate:
-            [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
-            break;
-            
-        case NSFetchedResultsChangeMove:
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [tableView insertRowsAtIndexPaths:@[newIndexPath]withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
-}
-
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    [self.tableView endUpdates];
-}
-
-
 #pragma mark -
 #pragma mark BROrganizationsViewController
 - (void)initializeFetchedResultsController {
 	
 	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
-	[self setContext:context];
 	
 	NSSortDescriptor *sortIndex = [NSSortDescriptor sortDescriptorWithKey:@"sortIndex" ascending:YES];
 	NSSortDescriptor *name = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:NSStringFromClass([BRGHLogin class])
-											  inManagedObjectContext:_context];
+											  inManagedObjectContext:context];
 	
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	[fetchRequest setReturnsDistinctResults:YES];
@@ -154,11 +114,20 @@
 
 	NSFetchedResultsController *fetchedResultsController =
 	[[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-										managedObjectContext:_context
+										managedObjectContext:context
 										  sectionNameKeyPath:nil
 												   cacheName:nil];
 	
-	[fetchedResultsController setDelegate:self];
+	BROrganizationsViewController *me = self;
+	BRBasicFetchedResultControllerDelegate *delegate = [[BRBasicFetchedResultControllerDelegate alloc] init];
+	[delegate setTableView:self.tableView];
+	[delegate setConfigureCell:^(UITableViewCell *cell, NSIndexPath *indexPath) {
+		
+		[me configureCell:cell atIndexPath:indexPath];
+	}];
+	 
+	[self setDelegate:delegate];
+	[fetchedResultsController setDelegate:delegate];
 	[self setFetchedResultsController:fetchedResultsController];
 	
 	NSError *error = nil;

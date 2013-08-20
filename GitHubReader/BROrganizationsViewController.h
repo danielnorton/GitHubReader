@@ -10,7 +10,7 @@
 #import "BRLogin.h"
 
 
-@interface BROrganizationsViewController : UITableViewController <NSFetchedResultsControllerDelegate>
+@interface BROrganizationsViewController : UITableViewController
 
 @property (strong, nonatomic) BRGHUser *gitHubUser;
 @property (strong, nonatomic) BRLogin *login;

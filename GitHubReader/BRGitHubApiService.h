@@ -25,4 +25,6 @@
 												   ofType:(NSString *)entityName
 												inContext:(NSManagedObjectContext *)context;
 
+- (BOOL)deleteExcept:(NSArray *)gitHubIds ofKind:(Class)kind error:(NSError **)error;
+
 @end

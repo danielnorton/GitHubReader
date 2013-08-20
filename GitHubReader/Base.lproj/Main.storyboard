@@ -19,22 +19,37 @@
             </objects>
             <point key="canvasLocation" x="-119" y="-469"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Repositories View Controller-->
         <scene sceneID="bzP-id-DKK">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="zAv-Nc-W4W" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tableViewController id="2GJ-BD-iXt" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="1M3-K0-xsu">
+                <tableViewController id="2GJ-BD-iXt" customClass="BRRepositoriesViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="60" sectionHeaderHeight="22" sectionFooterHeight="22" id="1M3-K0-xsu">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="obu-bz-fHT">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                            <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="RepoCell" textLabel="8MH-0C-i91" detailTextLabel="H1f-xD-urP" style="IBUITableViewCellStyleSubtitle" id="P3a-JM-4ck">
+                                <rect key="frame" x="0.0" y="86" width="320" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="obu-bz-fHT" id="NTj-db-bMH">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="P3a-JM-4ck" id="zUu-Vc-IaT">
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="59"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" ambiguous="YES" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8MH-0C-i91">
+                                            <rect key="frame" x="15" y="8" width="40" height="24"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <color key="textColor" red="0.14901961389999999" green="0.47843140360000003" blue="0.98431378599999997" alpha="1" colorSpace="deviceRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" ambiguous="YES" text="Detail" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="H1f-xD-urP">
+                                            <rect key="frame" x="15" y="32" width="42" height="20"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
@@ -44,7 +59,14 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="ut4-qQ-YkG"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="J9Z-Ar-HXh">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="didBeginRefresh:" destination="2GJ-BD-iXt" eventType="valueChanged" id="nGu-YV-iBN"/>
+                        </connections>
+                    </refreshControl>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zAv-Nc-W4W" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1200" y="87"/>
         </scene>
@@ -238,7 +260,6 @@
                         </connections>
                     </refreshControl>
                     <connections>
-                        <outlet property="refresh" destination="Rh8-xm-sh2" id="UtN-vo-8tD"/>
                         <segue destination="xJX-qj-M7E" kind="unwind" identifier="unwindFromOrganizationSegue" unwindAction="unwindToLogout:" id="GKC-up-tBx"/>
                         <segue destination="2GJ-BD-iXt" kind="push" identifier="SegueFromOrganizations" id="mRE-SB-Y2V"/>
                     </connections>
