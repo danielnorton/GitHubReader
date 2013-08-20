@@ -21,6 +21,7 @@
 	
 	// Verbose construction of syncronous request. All the code
 	// is 'right here' to make the demo easier to follow
+	NSError* inError = nil;
 	
 	// Create the request object and set all the pertainant HTTP parts
 	NSURL *url = [NSURL URLWithString:@"https://api.github.com/user"];
@@ -43,13 +44,22 @@
 	
 	// Now make the syncronous call
 	NSURLResponse *response = nil;
-	NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:error];
-	if (*error || !data) return nil;
+	NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&inError];
+	if (inError || !data) {
+		
+		*error = inError;
+		return nil;
+	}
 	
 
 	// Parse out the json response data
-	NSDictionary *returnJson = [NSJSONSerialization JSONObjectWithData:data options:0 error:error];
-	if (*error || !returnJson) return nil;
+	NSDictionary *returnJson = [NSJSONSerialization JSONObjectWithData:data options:0 error:&inError];
+	if (inError || !returnJson) {
+		
+		*error = inError;
+		return nil;
+	}
+	
 	if (returnJson[@"message"]) return nil;
 	
 	BRLogin *login = [[BRLogin alloc] init];

@@ -11,7 +11,6 @@
 #import "BRLoginService.h"
 
 
-
 NSString *const BRGitHubReaderSecurityService = @"BRGitHubReaderSecurityService";
 
 
@@ -146,6 +145,40 @@ NSString *const BRGitHubReaderSecurityService = @"BRGitHubReaderSecurityService"
 	return (err == noErr);
 }
 
+- (BOOL)logout:(NSError **)error {
+	
+	[self deletePassword];
+	NSError* inError = nil;
+	
+	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
+	
+	NSSortDescriptor *gitHubId = [NSSortDescriptor sortDescriptorWithKey:@"gitHubId" ascending:YES];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:NSStringFromClass([BRGHLogin class])
+											  inManagedObjectContext:context];
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	[fetchRequest setEntity:entity];
+	[fetchRequest setSortDescriptors:@[gitHubId]];
+	[fetchRequest setPredicate:nil];
+	
+	NSArray *all = [context executeFetchRequest:fetchRequest error:&inError];
+	if (!all || inError) {
+		
+		*error = inError;
+		return NO;
+	}
+	
+	[all enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		
+		NSManagedObject *one = (NSManagedObject *)obj;
+		[context deleteObject:one];
+	}];
+	
+	return YES;
+}
+
+
+#pragma mark Private Messages
 - (void)findKeychainItemForUserName:(NSString *)userName
 						serviceName:(NSString *)serviceName
 					 findAttributes:(BOOL)findAttributes

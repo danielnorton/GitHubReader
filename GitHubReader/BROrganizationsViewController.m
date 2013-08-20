@@ -35,11 +35,24 @@
 	
 	[self initializeFetchedResultsController];
 	[self setTitle:@"Organizations"];
+	
+	UIBarButtonItem *logout = [[UIBarButtonItem alloc] initWithTitle:@"Log Out" style:UIBarButtonItemStyleDone target:self action:@selector(didTapLogout:)];
+	[self.navigationItem setLeftBarButtonItem:logout];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+	
+//	NSIndexPath *indexPath = (NSIndexPath *)sender;
+//	BRGHLogin *login = (BRGHLogin *)[_fetchedResultsController objectAtIndexPath:indexPath];
+//	[segue.destinationViewController]
+}
+
+
+#pragma mark UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	[self performSegueWithIdentifier:@"SegueFromOrganizations" sender:indexPath];
 }
 
 
@@ -167,6 +180,11 @@
 	BRGHLogin *login = (BRGHLogin *)[_fetchedResultsController objectAtIndexPath:indexPath];
 	[cell.imageView setImage:[BRGravatarService imageForGravatarWithHash:login.gravatarId ofSize:80]];
 	[cell.textLabel setText:login.name];
+}
+
+- (void)didTapLogout:(UIBarButtonItem *)sender {
+
+	[self performSegueWithIdentifier:@"unwindFromOrganizationSegue" sender:self];
 }
 
 

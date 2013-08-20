@@ -24,6 +24,6 @@ extern NSString *const BRGitHubReaderSecurityService;
 - (NSString *)getPassword;
 - (BOOL)setPassword:(NSString *)password;
 - (BOOL)deletePassword;
-
+- (BOOL)logout:(NSError **)error;
 
 @end

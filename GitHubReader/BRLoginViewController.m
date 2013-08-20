@@ -49,7 +49,6 @@ static BOOL didLaunchLogin = NO;
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
-	
 	if (didLaunchLogin) return;
 	didLaunchLogin = YES;
 	
@@ -131,6 +130,22 @@ static BOOL didLaunchLogin = NO;
 	BRLogin *login = [[BRLogin alloc] init];
 	[login setName:_userName.text];
 	[login setService:BRGitHubReaderSecurityService];
+}
+
+- (IBAction)unwindToLogout:(UIStoryboardSegue *)unwindSegue {
+
+	BRLogin *login = [[BRLogin alloc] init];
+	[login setName:_userName.text];
+	[login setService:BRGitHubReaderSecurityService];
+	
+	BRLoginService *service = [[BRLoginService alloc] initWithLogin:login];
+	[service logout:NULL];
+	
+	[self setIsAuthenticating:NO];
+	[_userName setText:nil];
+	[_password setText:nil];
+	[self displayPasswordPlaceholder:@"password" withColor:nil];
+	[_avatar setImage:[UIImage imageNamed:@"octocat"]];
 }
 
 
