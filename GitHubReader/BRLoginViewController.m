@@ -12,6 +12,7 @@
 #import "UIColor+Helpers.h"
 #import "BROrganizationService.h"
 #import "BRGravatarService.h"
+#import "BROrganizationsViewController.h"
 
 
 #define kDefaultPasswordPlaceholder @"password"
@@ -68,6 +69,26 @@ static BOOL didLaunchLogin = NO;
 		
 		[self doLogin:password];
 	}
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+	
+	BROrganizationsViewController *controller = (BROrganizationsViewController *)segue.destinationViewController;
+	if (![controller isKindOfClass:[BROrganizationsViewController class]]) return;
+	
+	NSArray *items = (NSArray *)sender;
+	if (![items isKindOfClass:[NSArray class]]) return;
+	
+	BRGHUser *user = items[0];
+	if (![user isKindOfClass:[BRGHUser class]]) return;
+	
+	BRLogin *login = items[1];
+	if (![login isKindOfClass:[BRLogin class]]) return;
+	
+	[controller setGitHubUser:user];
+	[controller setLogin:login];
 }
 
 
@@ -152,7 +173,7 @@ static BOOL didLaunchLogin = NO;
 	BROrganizationService *orgService = [[BROrganizationService alloc] init];
 	if ([orgService saveOrganizationsForGitLogin:user withLogin:login error:&orgError]) {
 		
-		[self performSegueWithIdentifier:@"SegueFromLogin" sender:user];
+		[self performSegueWithIdentifier:@"SegueFromLogin" sender:@[user, login]];
 	}
 }
 

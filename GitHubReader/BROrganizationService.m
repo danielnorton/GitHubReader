@@ -52,12 +52,16 @@
 	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
 	NSString *entityName = NSStringFromClass([BRGHOrganization class]);
 	
+	NSMutableArray *gitHubIds = [NSMutableArray arrayWithCapacity:0];
+	
 	[json enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 	
 		NSDictionary *itemJson = (NSDictionary *)obj;
 		BRGHOrganization *org = (BRGHOrganization *)[apiService findOrCreateObjectByIdConventionFrom:itemJson
 																							  ofType:entityName
 																						   inContext:context];
+		
+		[gitHubIds addObject:itemJson[@"id"]];
 		
 		NSString *avatarPath = [itemJson objectForKey:@"avatar_url" orDefault:nil];
 		NSString *gravitarId = nil;
@@ -74,7 +78,38 @@
 		[org setSortIndex:@(1)];
 	}];
 	
+	if (![self deleteExcept:gitHubIds error:error]) return NO;
+	
+	
 	return [context save:error];
+}
+
+- (BOOL)deleteExcept:(NSArray *)gitHubIds error:(NSError **)error {
+	
+	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
+	
+	NSSortDescriptor *name = [NSSortDescriptor sortDescriptorWithKey:@"gitHubId" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:NSStringFromClass([BRGHOrganization class])
+											  inManagedObjectContext:context];
+	
+	NSPredicate *pred = [NSPredicate predicateWithFormat:@"NOT (gitHubId IN %@)", gitHubIds];
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	[fetchRequest setEntity:entity];
+	[fetchRequest setSortDescriptors:@[name]];
+	[fetchRequest setPredicate:pred];
+	
+	NSArray *all = [context executeFetchRequest:fetchRequest error:error];
+	if (!all || *error) return NO;
+	
+	
+	[all enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		
+		NSManagedObject *one = (NSManagedObject *)obj;
+		[context deleteObject:one];
+	}];
+	
+	return YES;
 }
 
 

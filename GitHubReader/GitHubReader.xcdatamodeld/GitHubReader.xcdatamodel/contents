@@ -32,7 +32,7 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="treesPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated" optional="YES" attributeType="Date" syncable="YES"/>
-        <relationship name="branches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BRGHBranch" inverseName="repository" inverseEntity="BRGHBranch" syncable="YES"/>
+        <relationship name="branches" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BRGHBranch" inverseName="repository" inverseEntity="BRGHBranch" syncable="YES"/>
         <relationship name="commits" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BRGHCommit" inverseName="repository" inverseEntity="BRGHCommit" syncable="YES"/>
         <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BRGHLogin" inverseName="repositories" inverseEntity="BRGHLogin" syncable="YES"/>
     </entity>

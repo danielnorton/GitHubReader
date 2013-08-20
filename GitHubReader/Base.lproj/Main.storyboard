@@ -17,7 +17,36 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jql-bl-Fxx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-159" y="91"/>
+            <point key="canvasLocation" x="-119" y="-469"/>
+        </scene>
+        <!--Table View Controller-->
+        <scene sceneID="bzP-id-DKK">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zAv-Nc-W4W" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewController id="2GJ-BD-iXt" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="1M3-K0-xsu">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="obu-bz-fHT">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="obu-bz-fHT" id="NTj-db-bMH">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="2GJ-BD-iXt" id="6s5-V6-8bS"/>
+                            <outlet property="delegate" destination="2GJ-BD-iXt" id="KNq-mh-7Gf"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="ut4-qQ-YkG"/>
+                </tableViewController>
+            </objects>
+            <point key="canvasLocation" x="1200" y="87"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="qaF-96-6Xb">
@@ -175,6 +204,9 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.94999999999999996" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <segue destination="2GJ-BD-iXt" kind="push" identifier="SegueFromOrganizations" id="Eil-pm-Ela"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="OrganizationCell" textLabel="o53-cE-lBC" style="IBUITableViewCellStyleDefault" id="xVS-9F-kKy">
                                 <rect key="frame" x="0.0" y="73" width="320" height="51"/>
@@ -200,10 +232,19 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="l37-Eg-FdQ"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="Rh8-xm-sh2">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="didBeginRefresh:" destination="8sh-AO-AHR" eventType="valueChanged" id="glY-IA-iVw"/>
+                        </connections>
+                    </refreshControl>
+                    <connections>
+                        <outlet property="refresh" destination="Rh8-xm-sh2" id="UtN-vo-8tD"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bng-Mb-L7y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="735" y="87"/>
+            <point key="canvasLocation" x="743" y="87"/>
         </scene>
     </scenes>
     <resources>
