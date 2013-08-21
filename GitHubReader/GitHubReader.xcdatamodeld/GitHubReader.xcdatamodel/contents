@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3389" systemVersion="12E55" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="BRGHBranch" representedClassName="BRGHBranch" syncable="YES">
+        <attribute name="isDefault" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="commit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BRGHCommit" syncable="YES"/>
+        <attribute name="sha" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="commit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BRGHCommit" inverseName="branch" inverseEntity="BRGHCommit" syncable="YES"/>
         <relationship name="repository" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BRGHRepository" inverseName="branches" inverseEntity="BRGHRepository" syncable="YES"/>
     </entity>
     <entity name="BRGHCommit" representedClassName="BRGHCommit" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sha" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="branch" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BRGHBranch" inverseName="commit" inverseEntity="BRGHBranch" syncable="YES"/>
         <relationship name="repository" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BRGHRepository" inverseName="commits" inverseEntity="BRGHRepository" syncable="YES"/>
     </entity>
     <entity name="BRGHLogin" representedClassName="BRGHLogin" isAbstract="YES" syncable="YES">
@@ -42,8 +46,8 @@
         <attribute name="organizationsPath" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="BRGHBranch" positionX="-279" positionY="200" width="128" height="88"/>
-        <element name="BRGHCommit" positionX="-279" positionY="347" width="128" height="103"/>
+        <element name="BRGHBranch" positionX="-207" positionY="189" width="128" height="28"/>
+        <element name="BRGHCommit" positionX="-261" positionY="351" width="128" height="28"/>
         <element name="BRGHLogin" positionX="-522" positionY="27" width="128" height="148"/>
         <element name="BRGHOrganization" positionX="-722" positionY="135" width="128" height="43"/>
         <element name="BRGHRepository" positionX="-479" positionY="216" width="128" height="238"/>

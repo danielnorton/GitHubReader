@@ -65,18 +65,21 @@
 	BRGitHubApiService *apiService = [[BRGitHubApiService alloc] init];
 	
 	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
-	NSString *entityName = NSStringFromClass([BRGHOrganization class]);
+	Class kind = [BRGHOrganization class];
 	
 	NSMutableArray *gitHubIds = [NSMutableArray arrayWithCapacity:0];
 	
 	[json enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 	
 		NSDictionary *itemJson = (NSDictionary *)obj;
-		BRGHOrganization *org = (BRGHOrganization *)[apiService findOrCreateObjectByIdConventionFrom:itemJson
-																							  ofType:entityName
-																						   inContext:context];
 		
-		[gitHubIds addObject:itemJson[@"id"]];
+		NSNumber *gitHubId = itemJson[@"id"];
+		[gitHubIds addObject:gitHubId];
+		
+		BRGHOrganization *org = (BRGHOrganization *)[apiService findOrCreateObjectById:gitHubId
+																			   withKey:BRGitHubIdKey
+																				ofKind:kind
+																			 inContext:context];
 		
 		NSString *avatarPath = [itemJson objectForKey:@"avatar_url" orDefault:nil];
 		NSString *gravitarId = nil;
@@ -93,7 +96,7 @@
 		[org setSortIndex:@(1)];
 	}];
 	
-	if (![apiService deleteExcept:gitHubIds ofKind:[BRGHOrganization class] error:&inError])  {
+	if (![apiService deleteExcept:gitHubIds withKey:BRGitHubIdKey ofKind:kind inContext:context error:&inError]) {
 		
 		*error = inError;
 		return NO;

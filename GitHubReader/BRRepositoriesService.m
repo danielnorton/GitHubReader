@@ -65,45 +65,50 @@
 	BRGitHubApiService *apiService = [[BRGitHubApiService alloc] init];
 	
 	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
-	NSString *entityName = NSStringFromClass([BRGHRepository class]);
+	Class kind = [BRGHRepository class];
 	
 	NSMutableArray *gitHubIds = [NSMutableArray arrayWithCapacity:0];
 	
 	[json enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 		
 		NSDictionary *itemJson = (NSDictionary *)obj;
-		BRGHRepository *repo = (BRGHRepository *)[apiService findOrCreateObjectByIdConventionFrom:itemJson
-																						   ofType:entityName
-																						inContext:context];
+
+		NSNumber *gitHubId = itemJson[@"id"];
+		[gitHubIds addObject:gitHubId];
 		
-		[gitHubIds addObject:itemJson[@"id"]];
+		BRGHRepository *repo = (BRGHRepository *)[apiService findOrCreateObjectById:gitHubId
+																			withKey:BRGitHubIdKey
+																			 ofKind:kind
+																		  inContext:context];
 		
 		NSDate *created = [apiService dateFromJson:itemJson key:@"created_at"];
 		NSDate *updated = [apiService dateFromJson:itemJson key:@"updated_at"];
+
+		NSString *branches = [apiService stripToken:@"{/branch}" inPathFromJson:itemJson atKey:@"branches_url"];
+		NSString *commits = [apiService stripToken:@"{/sha}" inPathFromJson:itemJson atKey:@"commits_url"];
+		NSString *trees = [apiService stripToken:@"{/sha}" inPathFromJson:itemJson atKey:@"trees_url"];
 		
-		[repo setBranchesPath:			[itemJson objectForKey:@"branches_url" orDefault:nil]];
-		[repo setCommitsPath:			[itemJson objectForKey:@"commits_url" orDefault:nil]];
+		[repo setBranchesPath:			branches];
+		[repo setCommitsPath:			commits];
 		[repo setCreated:				created];
 		[repo setDefaultBranchName:		[itemJson objectForKey:@"default_branch" orDefault:nil]];
 		[repo setFullName:				[itemJson objectForKey:@"full_name" orDefault:nil]];
 		[repo setGitHubDescription:		[itemJson objectForKey:@"description" orDefault:nil]];
 		[repo setName:					[itemJson objectForKey:@"name" orDefault:nil]];
-		[repo setTreesPath:				[itemJson objectForKey:@"trees_url" orDefault:nil]];
+		[repo setTreesPath:				trees];
 		[repo setUpdated:				updated];
 
 		[repo setOwner:gitHubLogin];
 		[gitHubLogin addRepositoriesObject:repo];
 	}];
 	
-	if (![apiService deleteExcept:gitHubIds ofKind:[BRGHRepository class] error:&inError])  {
+	if (![apiService deleteExcept:gitHubIds withKey:BRGitHubIdKey ofKind:kind inContext:context error:&inError]) {
 		
 		*error = inError;
 		return NO;
 	}
 		
-	BOOL huh = [context save:&inError];
-	
-	return huh;
+	return [context save:error];
 }
 
 

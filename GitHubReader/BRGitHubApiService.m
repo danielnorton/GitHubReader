@@ -14,6 +14,10 @@
 #define kModelGitHubId @"gitHubId"
 
 
+NSString *const BRGitHubIdKey = @"gitHubId";
+NSString *const BRShaKey = @"sha";
+
+
 @implementation BRGitHubApiService
 
 
@@ -80,13 +84,50 @@ static NSDateFormatter *gitDateFormatter;
 	: nil;
 }
 
-- (NSManagedObject *)findOrCreateObjectByIdConventionFrom:(NSDictionary *)json
-												   ofType:(NSString *)entityName
-												inContext:(NSManagedObjectContext *)context {
+- (NSString *)stripToken:(NSString *)token inPathFromJson:(NSDictionary *)json atKey:(NSString *)key {
+
+	NSString *start = [json objectForKey:key orDefault:nil];
+	return start
+	? [self stripTokens:@[token] inPath:start]
+	: nil;
+}
+
+- (NSString *)stripTokens:(NSArray *)tokens inPath:(NSString *)path {
+
+	NSMutableDictionary *nulls = [NSMutableDictionary dictionaryWithCapacity:0];
+	[tokens enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		
+		[nulls setObject:[NSNull null] forKey:(NSString *)obj];
+	}];
 	
-	NSNumber *gitHubId = json[@"id"];
+	return [self replaceTokens:nulls inPath:path];
+}
+
+- (NSString *)replaceTokens:(NSDictionary *)tokens inPath:(NSString *)path {
 	
-	NSPredicate *pred = [NSPredicate predicateWithFormat:@"%K == %@",kModelGitHubId, gitHubId];
+	__block NSString *replace = path;
+	[tokens enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+		
+		NSString *token = (NSString *)key;
+		if (![token isKindOfClass:[NSString class]]) return;
+		
+		NSString *value = [obj isKindOfClass:[NSString class]]
+		? (NSString *)obj
+		: [NSString string];
+		replace = [replace stringByReplacingOccurrencesOfString:token withString:value];
+	}];
+	
+	return replace;
+}
+
+- (NSManagedObject *)findOrCreateObjectById:(id)objectId
+									withKey:(NSString *)key
+									 ofKind:(Class)kind
+								  inContext:(NSManagedObjectContext *)context {
+	
+	NSString *entityName = NSStringFromClass(kind);
+	
+	NSPredicate *pred = [NSPredicate predicateWithFormat:@"%K == %@",key, objectId];
 	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
 	NSEntityDescription *desc = [NSEntityDescription entityForName:entityName inManagedObjectContext:context];
 	[fetch setReturnsDistinctResults:YES];
@@ -103,22 +144,25 @@ static NSDateFormatter *gitDateFormatter;
 	}
 	
 	NSManagedObject *newOne = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context];
-	[newOne setValue:gitHubId forKey:kModelGitHubId];
+	[newOne setValue:objectId forKey:key];
 	return newOne;
 }
 
-- (BOOL)deleteExcept:(NSArray *)gitHubIds ofKind:(Class)kind error:(NSError **)error {
+- (BOOL)deleteExcept:(NSArray *)ids
+			 withKey:(NSString *)key
+			  ofKind:(Class)kind
+		   inContext:(NSManagedObjectContext *)context
+			   error:(NSError **)error {
 	
 	NSError* inError = nil;
-	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
 	
-	NSSortDescriptor *gitHubId = [NSSortDescriptor sortDescriptorWithKey:@"gitHubId" ascending:YES];
+	NSSortDescriptor *gitHubId = [NSSortDescriptor sortDescriptorWithKey:key ascending:YES];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:NSStringFromClass(kind)
 											  inManagedObjectContext:context];
 	
 	
-	NSPredicate *pred = (gitHubIds && gitHubIds.count > 0)
-	? [NSPredicate predicateWithFormat:@"NOT (gitHubId IN %@)", gitHubIds]
+	NSPredicate *pred = (ids && ids.count > 0)
+	? [NSPredicate predicateWithFormat:@"NOT (%K IN %@)", key, ids]
 	: nil;
 	
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];

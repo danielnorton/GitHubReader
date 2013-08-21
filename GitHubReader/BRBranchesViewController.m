@@ -1,26 +1,25 @@
 //
-//  BRRepositoriesViewController.m
+//  BRBranchesViewController.m
 //  GitHubReader
 //
 //  Created by Daniel Norton on 8/20/13.
 //  Copyright (c) 2013 Daniel Norton. All rights reserved.
 //
 
-#import "BRRepositoriesViewController.h"
-#import "BRRepositoriesService.h"
 #import "BRBranchesViewController.h"
 #import "BRBranchService.h"
 #import "BRBasicFetchedResultControllerDelegate.h"
 
 
-@interface BRRepositoriesViewController()
+@interface BRBranchesViewController()
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) BRBasicFetchedResultControllerDelegate *delegate;
 
 @end
 
-@implementation BRRepositoriesViewController
+
+@implementation BRBranchesViewController
 
 
 #pragma mark -
@@ -28,39 +27,14 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
-	[self setTitle:@"Organizations"];
+	[self setTitle:@"Branches"];
+	[self.navigationController setNavigationBarHidden:NO animated:YES];
 }
-
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
 	[self initializeFetchedResultsController];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-
-	BRBranchesViewController *controller = (BRBranchesViewController *)segue.destinationViewController;
-	if (![controller isKindOfClass:[BRBranchesViewController class]]) return;
-	
-	NSIndexPath *indexPath = (NSIndexPath *)sender;
-	BRGHRepository *repo = (BRGHRepository *)[_fetchedResultsController objectAtIndexPath:indexPath];
-	
-	NSError *error = nil;
-	BRBranchService *service = [[BRBranchService alloc] init];
-	if (![service saveBranchesForRepository:repo withLogin:_login error:&error]) return;
-	
-	[self setTitle:repo.name];
-	
-	[controller setRepository:repo];
-	[controller setLogin:_login];
-}
-
-
-#pragma mark UITableViewDelegate
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-	[self performSegueWithIdentifier:@"SegueFromRepositories" sender:indexPath];
 }
 
 
@@ -78,29 +52,35 @@
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-	NSString *const cellIdentifier = @"RepoCell";
+	BRGHBranch *branch = (BRGHBranch *)[_fetchedResultsController objectAtIndexPath:indexPath];
+	NSString *cellIdentifier = [branch.isDefault boolValue]
+	? @"DefaultBranchCell"
+	: @"BranchCell";
+	
 	UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	
 	[self configureCell:cell atIndexPath:indexPath];
 	return cell;
 }
 
 
 #pragma mark -
-#pragma mark BRRepositoriesViewController
+#pragma mark BRBranchesViewController
 - (void)initializeFetchedResultsController {
 	
 	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
 	
+	NSSortDescriptor *isDefault = [NSSortDescriptor sortDescriptorWithKey:@"isDefault" ascending:NO];
 	NSSortDescriptor *name = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-	NSEntityDescription *entity = [NSEntityDescription entityForName:NSStringFromClass([BRGHRepository class])
+	NSEntityDescription *entity = [NSEntityDescription entityForName:NSStringFromClass([BRGHBranch class])
 											  inManagedObjectContext:context];
 	
-	NSPredicate *pred = [NSPredicate predicateWithFormat:@"owner = %@", _gitHubLogin];
+	NSPredicate *pred = [NSPredicate predicateWithFormat:@"repository = %@", _repository];
 	
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	[fetchRequest setReturnsDistinctResults:YES];
 	[fetchRequest setEntity:entity];
-	[fetchRequest setSortDescriptors:@[name]];
+	[fetchRequest setSortDescriptors:@[isDefault, name]];
 	[fetchRequest setPredicate:pred];
 	
 	NSFetchedResultsController *fetchedResultsController =
@@ -109,7 +89,7 @@
 										  sectionNameKeyPath:nil
 												   cacheName:nil];
 	
-	BRRepositoriesViewController *me = self;
+	BRBranchesViewController *me = self;
 	BRBasicFetchedResultControllerDelegate *delegate = [[BRBasicFetchedResultControllerDelegate alloc] init];
 	[delegate setTableView:self.tableView];
 	[delegate setConfigureCell:^(UITableViewCell *cell, NSIndexPath *indexPath) {
@@ -128,25 +108,17 @@
 - (IBAction)didBeginRefresh:(UIRefreshControl *)sender {
 	
 	NSError *error = nil;
-	BRRepositoriesService *service = [[BRRepositoriesService alloc] init];
+	BRBranchService *service = [[BRBranchService alloc] init];
 	
-	if (![service saveRepositoriesForGitLogin:_gitHubLogin withLogin:_login error:&error]) return;
+	if (![service saveBranchesForRepository:_repository withLogin:_login error:&error]) return;
 	
 	[sender endRefreshing];
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
 	
-	BRGHRepository *repo = (BRGHRepository *)[_fetchedResultsController objectAtIndexPath:indexPath];
-	
-	[cell.textLabel setText:repo.name];
-	if (repo.updated) {
-		
-		NSString *date = [NSDateFormatter localizedStringFromDate:repo.updated dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
-		NSString *message = [NSString stringWithFormat:@"last updated: %@", date];
-		[cell.detailTextLabel setText:message];
-	}
+	BRGHBranch *branch = (BRGHBranch *)[_fetchedResultsController objectAtIndexPath:indexPath];
+	[cell.textLabel setText:branch.name];
 }
-
 
 @end

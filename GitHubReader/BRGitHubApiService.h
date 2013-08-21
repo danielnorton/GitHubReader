@@ -9,6 +9,8 @@
 
 #import "BRLogin.h"
 
+extern NSString *const BRGitHubIdKey;
+extern NSString *const BRShaKey;
 
 @interface BRGitHubApiService : NSObject
 
@@ -21,10 +23,19 @@
 
 - (NSDate *)dateFromJson:(NSDictionary *)json key:(NSString *)key;
 
-- (NSManagedObject *)findOrCreateObjectByIdConventionFrom:(NSDictionary *)json
-												   ofType:(NSString *)entityName
-												inContext:(NSManagedObjectContext *)context;
+- (NSString *)stripToken:(NSString *)token inPathFromJson:(NSDictionary *)json atKey:(NSString *)key;
+- (NSString *)stripTokens:(NSArray *)tokens inPath:(NSString *)path;
+- (NSString *)replaceTokens:(NSDictionary *)tokens inPath:(NSString *)path;
 
-- (BOOL)deleteExcept:(NSArray *)gitHubIds ofKind:(Class)kind error:(NSError **)error;
+- (NSManagedObject *)findOrCreateObjectById:(id)objectId
+									withKey:(NSString *)key
+									 ofKind:(Class)kind
+								  inContext:(NSManagedObjectContext *)context;
+
+- (BOOL)deleteExcept:(NSArray *)ids
+			 withKey:(NSString *)key
+			  ofKind:(Class)kind
+		   inContext:(NSManagedObjectContext *)context
+			   error:(NSError **)error;
 
 @end
