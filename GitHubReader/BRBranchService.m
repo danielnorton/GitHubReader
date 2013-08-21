@@ -50,7 +50,7 @@
 	
 	// Parse out the json response data
 	NSArray *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:error];
-	if (inError || !json) {
+	if (inError || !json || [json isKindOfClass:[NSDictionary class]]) {
 		
 		*error = inError;
 		return nil;
@@ -66,6 +66,7 @@
 	
 	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
 	Class kind = [BRGHBranch class];
+	NSString *key = BRShaKey;
 	
 	NSMutableArray *shas = [NSMutableArray arrayWithCapacity:0];
 	NSString *defaultBranch = [repo.defaultBranchName lowercaseString];
@@ -78,7 +79,7 @@
 		[shas addObject:sha];
 		
 		BRGHBranch *branch = (BRGHBranch *)[apiService findOrCreateObjectById:sha
-																	  withKey:BRShaKey
+																	  withKey:key
 																	   ofKind:kind
 																	inContext:context];
 		
@@ -87,7 +88,10 @@
 		[branch setRepository:repo];
 	}];
 	
-	if (![apiService deleteExcept:shas withKey:BRShaKey ofKind:kind inContext:context error:&inError])  {
+	NSPredicate *pred = (shas.count > 0)
+	? [NSPredicate predicateWithFormat:@"repository = %@ AND NOT (%K IN %@)", repo, key, shas]
+	: nil;
+	if (![apiService deletePredicate:pred withKey:key ofKind:kind inContext:context error:&inError]) {
 		
 		*error = inError;
 		return NO;

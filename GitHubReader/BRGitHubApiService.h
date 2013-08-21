@@ -32,10 +32,10 @@ extern NSString *const BRShaKey;
 									 ofKind:(Class)kind
 								  inContext:(NSManagedObjectContext *)context;
 
-- (BOOL)deleteExcept:(NSArray *)ids
-			 withKey:(NSString *)key
-			  ofKind:(Class)kind
-		   inContext:(NSManagedObjectContext *)context
-			   error:(NSError **)error;
+- (BOOL)deletePredicate:(NSPredicate *)predicate
+				withKey:(NSString *)key
+				 ofKind:(Class)kind
+			  inContext:(NSManagedObjectContext *)context
+				  error:(NSError **)error;
 
 @end

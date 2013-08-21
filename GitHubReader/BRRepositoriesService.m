@@ -50,11 +50,12 @@
 	
 	// Parse out the json response data
 	NSArray *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:error];
-	if (inError || !json) {
+	if (inError || !json || [json isKindOfClass:[NSDictionary class]]) {
 		
 		*error = inError;
 		return nil;
 	}
+
 	
 	return json;
 }
@@ -66,6 +67,7 @@
 	
 	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
 	Class kind = [BRGHRepository class];
+	NSString *key = BRGitHubIdKey;
 	
 	NSMutableArray *gitHubIds = [NSMutableArray arrayWithCapacity:0];
 	
@@ -77,7 +79,7 @@
 		[gitHubIds addObject:gitHubId];
 		
 		BRGHRepository *repo = (BRGHRepository *)[apiService findOrCreateObjectById:gitHubId
-																			withKey:BRGitHubIdKey
+																			withKey:key
 																			 ofKind:kind
 																		  inContext:context];
 		
@@ -102,7 +104,10 @@
 		[gitHubLogin addRepositoriesObject:repo];
 	}];
 	
-	if (![apiService deleteExcept:gitHubIds withKey:BRGitHubIdKey ofKind:kind inContext:context error:&inError]) {
+	NSPredicate *pred = (gitHubIds.count > 0)
+	? [NSPredicate predicateWithFormat:@"owner = %@ AND NOT (%K IN %@)", gitHubLogin, key, gitHubIds]
+	: nil;
+	if (![apiService deletePredicate:pred withKey:key ofKind:kind inContext:context error:&inError]) {
 		
 		*error = inError;
 		return NO;

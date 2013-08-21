@@ -13,6 +13,16 @@ extern NSString *const BRHTTPContentTypeForm;
 extern NSString *const BRHTTPMethodGet;
 extern NSString *const BRHTTPMethodPost;
 
+
+typedef NS_ENUM(uint, BRHTTPArgumentLocation) {
+	
+	BRHTTPArgumentLocationQueryString,
+	BRHTTPArgumentLocationBody
+};
+
 @interface BRRemoteService : NSObject
+
+- (void)updateRequest:(NSMutableURLRequest *)request withJson:(id)json withContentType:(NSString *)contentType;
+- (NSString *)pathFromURLPath:(NSString *)path withQueryStringParams:(NSDictionary *)params;
 
 @end

@@ -148,11 +148,11 @@ static NSDateFormatter *gitDateFormatter;
 	return newOne;
 }
 
-- (BOOL)deleteExcept:(NSArray *)ids
-			 withKey:(NSString *)key
-			  ofKind:(Class)kind
-		   inContext:(NSManagedObjectContext *)context
-			   error:(NSError **)error {
+- (BOOL)deletePredicate:(NSPredicate *)predicate
+				withKey:(NSString *)key
+				 ofKind:(Class)kind
+			  inContext:(NSManagedObjectContext *)context
+				  error:(NSError **)error {
 	
 	NSError* inError = nil;
 	
@@ -160,15 +160,10 @@ static NSDateFormatter *gitDateFormatter;
 	NSEntityDescription *entity = [NSEntityDescription entityForName:NSStringFromClass(kind)
 											  inManagedObjectContext:context];
 	
-	
-	NSPredicate *pred = (ids && ids.count > 0)
-	? [NSPredicate predicateWithFormat:@"NOT (%K IN %@)", key, ids]
-	: nil;
-	
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	[fetchRequest setEntity:entity];
 	[fetchRequest setSortDescriptors:@[gitHubId]];
-	[fetchRequest setPredicate:pred];
+	[fetchRequest setPredicate:predicate];
 	
 	NSArray *all = [context executeFetchRequest:fetchRequest error:&inError];
 	if (!all || inError)   {

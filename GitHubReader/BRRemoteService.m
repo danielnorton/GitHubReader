@@ -8,6 +8,7 @@
 
 
 #import "BRRemoteService.h"
+#import "NSDictionary+join.h"
 
 
 NSString *const BRHTTPContentTypeJson = @"application/json";
@@ -20,7 +21,8 @@ NSString *const BRHTTPMethodPost = @"POST";
 @implementation BRRemoteService
 
 
-#pragma mark
+#pragma mark -
+#pragma mark BRRemoteService
 - (void)updateRequest:(NSMutableURLRequest *)request withJson:(id)json withContentType:(NSString *)contentType {
 	
 	NSError *error = nil;
@@ -39,6 +41,14 @@ NSString *const BRHTTPMethodPost = @"POST";
 	
 	NSString *length = [NSString stringWithFormat:@"%i", paramsString.length];
 	[request setValue:length forHTTPHeaderField:@"Content-Length"];
+}
+
+- (NSString *)pathFromURLPath:(NSString *)path withQueryStringParams:(NSDictionary *)params; {
+	
+	NSString *paramsString = [params join];
+	return (paramsString && paramsString.length > 0)
+	? [NSString stringWithFormat:@"%@?%@", path, paramsString]
+	: path;
 }
 
 
