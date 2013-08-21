@@ -105,11 +105,12 @@
 	NSEntityDescription *entity = [NSEntityDescription entityForName:NSStringFromClass([BRGHLogin class])
 											  inManagedObjectContext:context];
 	
+	NSPredicate *pred = [NSPredicate predicateWithFormat:@"isAuthenticated = %@", @(YES)];
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	[fetchRequest setReturnsDistinctResults:YES];
 	[fetchRequest setEntity:entity];
 	[fetchRequest setSortDescriptors:@[sortIndex, name]];
-	[fetchRequest setPredicate:nil];
+	[fetchRequest setPredicate:pred];
 
 	NSFetchedResultsController *fetchedResultsController =
 	[[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest

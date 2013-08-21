@@ -2,7 +2,7 @@
 //  BRGHRepository.h
 //  GitHubReader
 //
-//  Created by Daniel Norton on 8/19/13.
+//  Created by Daniel Norton on 8/21/13.
 //  Copyright (c) 2013 Daniel Norton. All rights reserved.
 //
 
@@ -23,21 +23,21 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * treesPath;
 @property (nonatomic, retain) NSDate * updated;
+@property (nonatomic, retain) NSSet *branches;
 @property (nonatomic, retain) NSSet *commits;
 @property (nonatomic, retain) BRGHLogin *owner;
-@property (nonatomic, retain) NSSet *branches;
 @end
 
 @interface BRGHRepository (CoreDataGeneratedAccessors)
-
-- (void)addCommitsObject:(BRGHCommit *)value;
-- (void)removeCommitsObject:(BRGHCommit *)value;
-- (void)addCommits:(NSSet *)values;
-- (void)removeCommits:(NSSet *)values;
 
 - (void)addBranchesObject:(BRGHBranch *)value;
 - (void)removeBranchesObject:(BRGHBranch *)value;
 - (void)addBranches:(NSSet *)values;
 - (void)removeBranches:(NSSet *)values;
+
+- (void)addCommitsObject:(BRGHCommit *)value;
+- (void)removeCommitsObject:(BRGHCommit *)value;
+- (void)addCommits:(NSSet *)values;
+- (void)removeCommits:(NSSet *)values;
 
 @end

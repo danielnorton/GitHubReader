@@ -2,7 +2,7 @@
 //  BRGHLogin.h
 //  GitHubReader
 //
-//  Created by Daniel Norton on 8/19/13.
+//  Created by Daniel Norton on 8/21/13.
 //  Copyright (c) 2013 Daniel Norton. All rights reserved.
 //
 
@@ -18,8 +18,9 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * path;
 @property (nonatomic, retain) NSString * repositoriesPath;
-@property (nonatomic, retain) NSSet *repositories;
 @property (nonatomic, retain) NSNumber * sortIndex;
+@property (nonatomic, retain) NSNumber * isAuthenticated;
+@property (nonatomic, retain) NSSet *repositories;
 @end
 
 @interface BRGHLogin (CoreDataGeneratedAccessors)

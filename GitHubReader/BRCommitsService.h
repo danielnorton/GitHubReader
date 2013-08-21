@@ -7,11 +7,16 @@
 //
 
 
-
+#import "BRLogin.h"
 
 
 @interface BRCommitsService : NSObject
 
-@property (nonatomic) int pageSize;
+- (BOOL)saveCommitsForRepository:(BRGHRepository *)repo
+						   atSha:(NSString *)sha
+						  atPage:(int)page
+					withPageSize:(int)pageSize
+					   withLogin:(BRLogin *)login
+						   error:(NSError **)error;
 
 @end

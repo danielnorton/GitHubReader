@@ -94,7 +94,9 @@
 		[org setGravatarId:				gravitarId];
 		[org setPath:					[itemJson objectForKey:@"url" orDefault:nil]];
 		[org setRepositoriesPath:		[itemJson objectForKey:@"repos_url" orDefault:nil]];
-		[org setSortIndex:@(1)];
+		[org setSortIndex:				@(1)];
+		[org setIsAuthenticated:		gitHubUser.isAuthenticated];
+		[org setUser:					gitHubUser];
 	}];
 	
 	NSPredicate *pred = (gitHubIds.count > 0)

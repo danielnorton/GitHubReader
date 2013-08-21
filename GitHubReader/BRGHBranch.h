@@ -13,9 +13,9 @@
 
 @interface BRGHBranch : NSManagedObject
 
+@property (nonatomic, retain) NSNumber * isDefault;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * sha;
-@property (nonatomic, retain) NSNumber * isDefault;
 @property (nonatomic, retain) BRGHRepository *repository;
 
 @end

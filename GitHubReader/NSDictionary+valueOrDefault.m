@@ -12,7 +12,7 @@
 
 - (id)objectForKey:(NSString *)key orDefault:(id)aDefault {
 	
-	id value = [self valueForKey:key];
+	id value = [self valueForKeyPath:key];
 	if ([value isEqual:[NSNull null]] || value == nil) {
 		
 		return aDefault;

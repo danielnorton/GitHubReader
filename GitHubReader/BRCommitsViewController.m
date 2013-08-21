@@ -1,27 +1,28 @@
 //
-//  BRBranchesViewController.m
+//  BRCommitsViewController.m
 //  GitHubReader
 //
-//  Created by Daniel Norton on 8/20/13.
+//  Created by Daniel Norton on 8/21/13.
 //  Copyright (c) 2013 Daniel Norton. All rights reserved.
 //
 
-#import "BRBranchesViewController.h"
-#import "BRBranchService.h"
 #import "BRCommitsViewController.h"
 #import "BRCommitsService.h"
 #import "BRBasicFetchedResultControllerDelegate.h"
 
 
-@interface BRBranchesViewController()
+#define kDataPageSize 100
+
+@interface BRCommitsViewController()
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) BRBasicFetchedResultControllerDelegate *delegate;
+@property (nonatomic) BOOL isDoneFetching;
 
 @end
 
 
-@implementation BRBranchesViewController
+@implementation BRCommitsViewController
 
 
 #pragma mark -
@@ -29,7 +30,7 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
-	[self setTitle:@"Branches"];
+	[self setTitle:@"Commits"];
 	[self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
@@ -37,39 +38,6 @@
 	[super viewDidLoad];
 	
 	[self initializeFetchedResultsController];
-}
-
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-	
-	BRCommitsViewController *controller = (BRCommitsViewController *)segue.destinationViewController;
-	if (![controller isKindOfClass:[BRCommitsViewController class]]) return;
-	
-	NSIndexPath *indexPath = (NSIndexPath *)sender;
-	BRGHBranch *branch = (BRGHBranch *)[_fetchedResultsController objectAtIndexPath:indexPath];
-	
-	int dataPage = 1;
-	NSError *error = nil;
-	BRCommitsService *service = [[BRCommitsService alloc] init];
-	if (![service saveCommitsForRepository:_repository
-									 atSha:branch.sha
-									atPage:dataPage
-							  withPageSize:[BRCommitsViewController dataPageSize]
-								 withLogin:_login error:&error]) return;
-	
-	[self setTitle:branch.name];
-	
-	[controller setRepository:_repository];
-	[controller setTopSha:branch.sha];
-	[controller setLogin:_login];
-	[controller setDataPage:dataPage];
-}
-
-
-#pragma mark UITableViewDelegate
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-	[self performSegueWithIdentifier:@"SegueFromBranches" sender:indexPath];
 }
 
 
@@ -87,10 +55,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-	BRGHBranch *branch = (BRGHBranch *)[_fetchedResultsController objectAtIndexPath:indexPath];
-	NSString *cellIdentifier = [branch.isDefault boolValue]
-	? @"DefaultBranchCell"
-	: @"BranchCell";
+	NSString *const cellIdentifier = @"CommitCell";
 	
 	UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	
@@ -99,15 +64,39 @@
 }
 
 
+#pragma mark UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+	
+	if (_isDoneFetching) return;
+	
+	float offset = scrollView.contentOffset.y;
+	float rowHeight = self.tableView.rowHeight;
+	int rows = [self tableView:self.tableView numberOfRowsInSection:0];
+	int buffer = kDataPageSize / 2;
+
+	float start = (rowHeight * rows) - (buffer * rowHeight);
+	if (offset >= start) {
+		
+		[self fetchNextPage];
+	}
+}
+
+
 #pragma mark -
-#pragma mark BRBranchesViewController
+#pragma mark BRCommitsViewController
++ (int)dataPageSize {
+	
+	return kDataPageSize;
+}
+
+
+#pragma mark Private Messages
 - (void)initializeFetchedResultsController {
 	
 	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
 	
-	NSSortDescriptor *isDefault = [NSSortDescriptor sortDescriptorWithKey:@"isDefault" ascending:NO];
-	NSSortDescriptor *name = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-	NSEntityDescription *entity = [NSEntityDescription entityForName:NSStringFromClass([BRGHBranch class])
+	NSSortDescriptor *date = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:NSStringFromClass([BRGHCommit class])
 											  inManagedObjectContext:context];
 	
 	NSPredicate *pred = [NSPredicate predicateWithFormat:@"repository = %@", _repository];
@@ -115,7 +104,7 @@
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	[fetchRequest setReturnsDistinctResults:YES];
 	[fetchRequest setEntity:entity];
-	[fetchRequest setSortDescriptors:@[isDefault, name]];
+	[fetchRequest setSortDescriptors:@[date]];
 	[fetchRequest setPredicate:pred];
 	
 	NSFetchedResultsController *fetchedResultsController =
@@ -124,7 +113,7 @@
 										  sectionNameKeyPath:nil
 												   cacheName:nil];
 	
-	BRBranchesViewController *me = self;
+	BRCommitsViewController *me = self;
 	BRBasicFetchedResultControllerDelegate *delegate = [[BRBasicFetchedResultControllerDelegate alloc] init];
 	[delegate setTableView:self.tableView];
 	[delegate setConfigureCell:^(UITableViewCell *cell, NSIndexPath *indexPath) {
@@ -143,17 +132,48 @@
 - (IBAction)didBeginRefresh:(UIRefreshControl *)sender {
 	
 	NSError *error = nil;
-	BRBranchService *service = [[BRBranchService alloc] init];
+	BRCommitsService *service = [[BRCommitsService alloc] init];
+	int dataPage = 1;
 	
-	if (![service saveBranchesForRepository:_repository withLogin:_login error:&error]) return;
+	if (![service saveCommitsForRepository:_repository atSha:_topSha atPage:dataPage withPageSize:kDataPageSize withLogin:_login error:&error]) return;
 	
+	[self setDataPage:dataPage];
+	[self setIsDoneFetching:NO];
 	[sender endRefreshing];
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
 	
-	BRGHBranch *branch = (BRGHBranch *)[_fetchedResultsController objectAtIndexPath:indexPath];
-	[cell.textLabel setText:branch.name];
+	BRGHCommit *commit = (BRGHCommit *)[_fetchedResultsController objectAtIndexPath:indexPath];
+	[cell.textLabel setText:commit.message];
+	[cell.detailTextLabel setText:[NSString stringWithFormat:@"row: %i", indexPath.row]];
 }
+
+- (void)fetchNextPage {
+	
+	NSError *error = nil;
+	BRCommitsService *service = [[BRCommitsService alloc] init];
+	
+	int startingRows = [self tableView:self.tableView numberOfRowsInSection:0];
+	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(startingRows - 1) inSection:0];
+	BRGHCommit *lastCommit = [_fetchedResultsController objectAtIndexPath:indexPath];
+	if (!lastCommit.parentSha) {
+		
+		[self setIsDoneFetching:YES];
+		return;
+	}
+	
+	if (![service saveCommitsForRepository:_repository atSha:lastCommit.parentSha atPage:(_dataPage + 1) withPageSize:kDataPageSize withLogin:_login error:&error]) return;
+	
+	int rows = [self tableView:self.tableView numberOfRowsInSection:0];
+	if (startingRows == rows) {
+		
+		[self setIsDoneFetching:YES];
+		return;
+	}
+	
+	_dataPage++;
+}
+
 
 @end

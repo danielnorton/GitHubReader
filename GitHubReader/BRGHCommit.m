@@ -8,15 +8,17 @@
 
 #import "BRGHCommit.h"
 #import "BRGHRepository.h"
+#import "BRGHUser.h"
 
 
 @implementation BRGHCommit
 
 @dynamic date;
 @dynamic message;
+@dynamic parentSha;
 @dynamic path;
 @dynamic sha;
-@dynamic parentSha;
 @dynamic repository;
+@dynamic committer;
 
 @end

@@ -12,9 +12,9 @@
 
 @implementation BRGHBranch
 
+@dynamic isDefault;
 @dynamic name;
 @dynamic sha;
-@dynamic isDefault;
 @dynamic repository;
 
 @end

@@ -97,14 +97,14 @@
 	: [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context];
 
 	[user setGitHubId:				gitHubId];
-	[user setEmail:					[json objectForKey:@"email" orDefault:nil]];
 	[user setLongName:				[json objectForKey:@"name" orDefault:nil]];
 	[user setOrganizationsPath:		[json objectForKey:@"organizations_url" orDefault:nil]];
-	
 	[user setGravatarId:			[json objectForKey:@"gravatar_id" orDefault:nil]];
 	[user setName:					[json objectForKey:@"login" orDefault:nil]];
 	[user setPath:					[json objectForKey:@"url" orDefault:nil]];
 	[user setRepositoriesPath:		[json objectForKey:@"repos_url" orDefault:nil]];
+	[user setSortIndex:				@(0)];
+	[user setIsAuthenticated:		@(YES)];
 	
 	
 	[context save:&error];
