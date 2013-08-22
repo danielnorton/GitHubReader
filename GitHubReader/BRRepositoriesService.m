@@ -84,7 +84,7 @@
 																		  inContext:context];
 		
 		NSDate *created = [apiService dateFromJson:itemJson key:@"created_at"];
-		NSDate *updated = [apiService dateFromJson:itemJson key:@"updated_at"];
+		NSDate *updated = [apiService dateFromJson:itemJson key:@"pushed_at"];
 
 		NSString *branches = [apiService stripToken:@"{/branch}" inPathFromJson:itemJson atKey:@"branches_url"];
 		NSString *commits = [apiService stripToken:@"{/sha}" inPathFromJson:itemJson atKey:@"commits_url"];

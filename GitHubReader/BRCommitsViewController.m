@@ -9,7 +9,8 @@
 #import "BRCommitsViewController.h"
 #import "BRCommitsService.h"
 #import "BRBasicFetchedResultControllerDelegate.h"
-
+#import "BRGravatarService.h"
+#import "FuzzyTime.h"
 
 #define kDataPageSize 100
 
@@ -17,9 +18,10 @@
 
 @property (strong, nonatomic) IBOutlet UIView *footerPagingIndicatorView;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) NSFetchRequest *fetchRequest;
 @property (strong, nonatomic) BRBasicFetchedResultControllerDelegate *delegate;
 @property (nonatomic) BOOL isDoneFetching;
-
+@property (nonatomic) int dataCount;
 @end
 
 
@@ -37,6 +39,12 @@
 	[self displayPagingIndicator];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
+	
+	[_fetchedResultsController setDelegate:nil];
+}
+
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
@@ -48,6 +56,11 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
 	
 	return [[_fetchedResultsController sections] count];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+
+	return [_fetchedResultsController.sections[section] name];
 }
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
@@ -74,9 +87,8 @@
 	
 	float offset = scrollView.contentOffset.y;
 	float rowHeight = self.tableView.rowHeight;
-	int rows = [self tableView:self.tableView numberOfRowsInSection:0];
+	int rows = [self dataCount];
 	int buffer = kDataPageSize / 2;
-
 	float start = (rowHeight * rows) - (buffer * rowHeight);
 	if (offset >= start) {
 		
@@ -109,11 +121,12 @@
 	[fetchRequest setEntity:entity];
 	[fetchRequest setSortDescriptors:@[date]];
 	[fetchRequest setPredicate:pred];
+	[self setFetchRequest:fetchRequest];
 	
 	NSFetchedResultsController *fetchedResultsController =
 	[[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
 										managedObjectContext:context
-										  sectionNameKeyPath:nil
+										  sectionNameKeyPath:@"localizedDay"
 												   cacheName:nil];
 	
 	BRCommitsViewController *me = self;
@@ -130,6 +143,17 @@
 	
 	NSError *error = nil;
 	[fetchedResultsController performFetch:&error];
+	[self calculateDataCount];
+}
+
+- (int)calculateDataCount {
+	
+	NSError *error = nil;
+	int count = [_fetchedResultsController.managedObjectContext countForFetchRequest:_fetchRequest error:&error];
+	if (error) count = 0;
+	
+	_dataCount = count;
+	return count;
 }
 
 - (IBAction)didBeginRefresh:(UIRefreshControl *)sender {
@@ -140,6 +164,7 @@
 	
 	if (![service saveCommitsForRepository:_repository atSha:_topSha atPage:dataPage withPageSize:kDataPageSize withLogin:_login error:&error]) return;
 	
+	[self calculateDataCount];
 	[self displayPagingIndicator];
 	[self setDataPage:dataPage];
 	[self setIsDoneFetching:NO];
@@ -149,8 +174,12 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
 	
 	BRGHCommit *commit = (BRGHCommit *)[_fetchedResultsController objectAtIndexPath:indexPath];
+	[cell.imageView setImage:[BRGravatarService imageForGravatarWithHash:commit.author.gravatarId ofSize:80]];
 	[cell.textLabel setText:commit.message];
-	[cell.detailTextLabel setText:[NSString stringWithFormat:@"row: %i", indexPath.row]];
+	
+	NSString *date = [commit.date fuzzyTime];
+	NSString *who = [NSString stringWithFormat:@"%@ authored %@", commit.author.name, date];
+	[cell.detailTextLabel setText:who];
 }
 
 - (void)fetchNextPage {
@@ -158,9 +187,12 @@
 	NSError *error = nil;
 	BRCommitsService *service = [[BRCommitsService alloc] init];
 	
-	int startingRows = [self tableView:self.tableView numberOfRowsInSection:0];
-	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(startingRows - 1) inSection:0];
+	int startingCount = [self dataCount];
+	int sections = [self numberOfSectionsInTableView:self.tableView];
+	int rows = [self tableView:self.tableView numberOfRowsInSection:(sections - 1)];
+	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(rows - 1) inSection:(sections - 1)];
 	BRGHCommit *lastCommit = [_fetchedResultsController objectAtIndexPath:indexPath];
+	
 	if (!lastCommit.parentSha) {
 		
 		[self.tableView setTableFooterView:nil];
@@ -170,8 +202,8 @@
 	
 	if (![service saveCommitsForRepository:_repository atSha:lastCommit.parentSha atPage:(_dataPage + 1) withPageSize:kDataPageSize withLogin:_login error:&error]) return;
 	
-	int rows = [self tableView:self.tableView numberOfRowsInSection:0];
-	if (startingRows == rows) {
+	int count = [self calculateDataCount];
+	if (startingCount == count) {
 		
 		[self.tableView setTableFooterView:nil];
 		[self setIsDoneFetching:YES];

@@ -1,4 +1,4 @@
-// http://joewong.blogspot.com/2013/08/workaround-for-assertmacros-queueentry.html
+// Thanks: http://joewong.blogspot.com/2013/08/workaround-for-assertmacros-queueentry.html
 
 
 #include <dlfcn.h>

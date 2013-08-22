@@ -14,11 +14,14 @@
 @interface BRGHCommit : NSManagedObject
 
 @property (nonatomic, retain) NSDate * date;
+@property (nonatomic, retain) NSDate * day;
 @property (nonatomic, retain) NSString * message;
 @property (nonatomic, retain) NSString * parentSha;
 @property (nonatomic, retain) NSString * path;
 @property (nonatomic, retain) NSString * sha;
+@property (nonatomic, retain) BRGHUser *author;
 @property (nonatomic, retain) BRGHRepository *repository;
-@property (nonatomic, retain) BRGHUser *committer;
 
+
+@property (nonatomic, readonly) NSString *localizedDay;
 @end

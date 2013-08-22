@@ -14,11 +14,22 @@
 @implementation BRGHCommit
 
 @dynamic date;
+@dynamic day;
 @dynamic message;
 @dynamic parentSha;
 @dynamic path;
 @dynamic sha;
+@dynamic author;
 @dynamic repository;
-@dynamic committer;
+
+
+#pragma -
+#pragma mark Custom Messages
+- (NSString *)localizedDay {
+	
+	return [NSDateFormatter localizedStringFromDate:self.date
+										  dateStyle:NSDateFormatterMediumStyle
+										  timeStyle:NSDateFormatterNoStyle];
+}
 
 @end

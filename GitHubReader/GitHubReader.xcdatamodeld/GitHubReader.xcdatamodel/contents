@@ -12,7 +12,7 @@
         <attribute name="parentSha" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sha" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="committer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BRGHUser" inverseName="commits" inverseEntity="BRGHUser" syncable="YES"/>
+        <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BRGHUser" inverseName="commits" inverseEntity="BRGHUser" syncable="YES"/>
         <relationship name="repository" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BRGHRepository" inverseName="commits" inverseEntity="BRGHRepository" syncable="YES"/>
     </entity>
     <entity name="BRGHLogin" representedClassName="BRGHLogin" isAbstract="YES" syncable="YES">
@@ -46,7 +46,7 @@
     <entity name="BRGHUser" representedClassName="BRGHUser" parentEntity="BRGHLogin" syncable="YES">
         <attribute name="longName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="organizationsPath" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="commits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BRGHCommit" inverseName="committer" inverseEntity="BRGHCommit" syncable="YES"/>
+        <relationship name="commits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BRGHCommit" inverseName="author" inverseEntity="BRGHCommit" syncable="YES"/>
         <relationship name="organizations" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="BRGHOrganization" inverseName="user" inverseEntity="BRGHOrganization" syncable="YES"/>
     </entity>
     <elements>

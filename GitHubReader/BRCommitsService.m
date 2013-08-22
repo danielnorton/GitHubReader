@@ -10,6 +10,7 @@
 #import "BRGitHubApiService.h"
 #import "BRRemoteService.h"
 #import "NSDictionary+valueOrDefault.h"
+#import "NSDate-Utilities.h"
 
 
 @implementation BRCommitsService
@@ -88,11 +89,11 @@
 	Class kind = [BRGHCommit class];
 	NSString *key = BRShaKey;
 	
-	Class committerKind = [BRGHUser class];
-	NSString *committerKey = BRGitHubIdKey;
+	Class authorKind = [BRGHUser class];
+	NSString *authorKey = BRGitHubIdKey;
 	
 	NSMutableArray *shas = [NSMutableArray arrayWithCapacity:0];
-	NSMutableArray *committerIds = [NSMutableArray arrayWithCapacity:0];
+	NSMutableArray *authorIds = [NSMutableArray arrayWithCapacity:0];
 	
 	[json enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 		
@@ -119,16 +120,15 @@
 		NSNumber *gitHubId = [itemJson objectForKey:@"committer.id" orDefault:nil];
 		if (!gitHubId) return;
 		
-		[committerIds addObject:gitHubId];
-		BRGHUser *committer = (BRGHUser *)[apiService findOrCreateObjectById:gitHubId
-																	 withKey:committerKey
-																	  ofKind:committerKind
+		[authorIds addObject:gitHubId];
+		BRGHUser *author = (BRGHUser *)[apiService findOrCreateObjectById:gitHubId
+																	 withKey:authorKey
+																	  ofKind:authorKind
 																   inContext:context];
 		
-		[committer setLongName:				[itemJson objectForKey:@"committer.name" orDefault:nil]];
-		[committer setGravatarId:			[itemJson objectForKey:@"committer.gravatar_id" orDefault:nil]];
-		[committer setName:					[itemJson objectForKey:@"committer.login" orDefault:nil]];
-		[commit setCommitter:committer];
+		[author setGravatarId:				[itemJson objectForKey:@"author.gravatar_id" orDefault:nil]];
+		[author setName:					[itemJson objectForKey:@"author.login" orDefault:nil]];
+		[commit setAuthor:author];
 	}];
 	
 	if (page <= 1) {
