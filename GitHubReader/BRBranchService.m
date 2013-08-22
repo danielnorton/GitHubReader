@@ -70,7 +70,7 @@
 	Class kind = [BRGHBranch class];
 	NSString *key = BRShaKey;
 	
-	NSMutableArray *shas = [NSMutableArray arrayWithCapacity:0];
+	NSMutableArray *branches = [NSMutableArray arrayWithCapacity:0];
 	NSString *defaultBranch = [repo.defaultBranchName lowercaseString];
 	
 	[json enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -78,20 +78,21 @@
 		NSDictionary *itemJson = (NSDictionary *)obj;
 		
 		NSString *sha = (NSString *)[itemJson valueForKeyPath:@"commit.sha"];
-		[shas addObject:sha];
+		NSString *name = itemJson[@"name"];
+		if (!sha || !name) return;
 		
-		BRGHBranch *branch = (BRGHBranch *)[apiService findOrCreateObjectById:sha
-																	  withKey:key
-																	   ofKind:kind
+		BRGHBranch *branch = (BRGHBranch *)[self findOrCreateBranchForRepository:repo
+																		withName:name
+																		 withSha:sha
 																	inContext:context];
 		
-		[branch setName:[itemJson objectForKey:@"name" orDefault:nil]];
 		[branch setIsDefault:@([defaultBranch isEqualToString:[branch.name lowercaseString]])];
-		[branch setRepository:repo];
+		
+		[branches addObject:branch];
 	}];
 	
-	NSPredicate *pred = (shas.count > 0)
-	? [NSPredicate predicateWithFormat:@"repository = %@ AND NOT (%K IN %@)", repo, key, shas]
+	NSPredicate *pred = (branches.count > 0)
+	? [NSPredicate predicateWithFormat:@"repository = %@ AND NOT (SELF IN %@)", repo, branches]
 	: nil;
 	if (![apiService deletePredicate:pred withKey:key ofKind:kind inContext:context error:&inError]) {
 		
@@ -100,6 +101,37 @@
 	}
 	
 	return [context save:error];
+}
+
+- (BRGHBranch *)findOrCreateBranchForRepository:(BRGHRepository *)repo
+									   withName:(NSString *)name
+										withSha:(NSString *)sha
+									  inContext:(NSManagedObjectContext *)context {
+
+	NSString *entityName = NSStringFromClass([BRGHBranch class]);
+	
+	NSPredicate *pred = [NSPredicate predicateWithFormat:@"repository == %@ AND name == %@ AND sha == %@",repo, name.lowercaseString, sha];
+	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+	NSEntityDescription *desc = [NSEntityDescription entityForName:entityName inManagedObjectContext:context];
+	[fetch setReturnsDistinctResults:YES];
+	[fetch setEntity:desc];
+	[fetch setPredicate:pred];
+	
+	NSError *error = nil;
+	NSArray *matches = [context executeFetchRequest:fetch error:&error];
+	if (error) return nil;
+	
+	if (matches && matches.count > 0) {
+		
+		return [matches lastObject];
+	}
+	
+	BRGHBranch *newOne = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context];
+	[newOne setName:name];
+	[newOne setSha:sha];
+	[newOne setRepository:repo];
+	
+	return newOne;
 }
 
 
