@@ -48,21 +48,20 @@
 	NSIndexPath *indexPath = (NSIndexPath *)sender;
 	BRGHBranch *branch = (BRGHBranch *)[_fetchedResultsController objectAtIndexPath:indexPath];
 	
-	int dataPage = 1;
 	NSError *error = nil;
 	BRCommitsService *service = [[BRCommitsService alloc] init];
 	if (![service saveCommitsForRepository:_repository
 									 atSha:branch.sha
-									atPage:dataPage
 							  withPageSize:[BRCommitsViewController dataPageSize]
-								 withLogin:_login error:&error]) return;
+								 withLogin:_login
+						 shouldPurgeOthers:YES
+									 error:&error]) return;
 	
 	[self setTitle:branch.name];
 	
 	[controller setRepository:_repository];
 	[controller setTopSha:branch.sha];
 	[controller setLogin:_login];
-	[controller setDataPage:dataPage];
 }
 
 

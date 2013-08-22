@@ -12,7 +12,7 @@
 #import "BRGravatarService.h"
 #import "FuzzyTime.h"
 
-#define kDataPageSize 100
+#define kDataPageSize 10
 
 @interface BRCommitsViewController()
 
@@ -83,6 +83,9 @@
 #pragma mark UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	
+	// TODO: Got ahead of myself. Put this back in
+	// when we "fix" the performance issue
+	return;
 	if (_isDoneFetching) return;
 	
 	float offset = scrollView.contentOffset.y;
@@ -160,13 +163,11 @@
 	
 	NSError *error = nil;
 	BRCommitsService *service = [[BRCommitsService alloc] init];
-	int dataPage = 1;
-	
-	if (![service saveCommitsForRepository:_repository atSha:_topSha atPage:dataPage withPageSize:kDataPageSize withLogin:_login error:&error]) return;
+
+	if (![service saveCommitsForRepository:_repository atSha:_topSha withPageSize:kDataPageSize withLogin:_login shouldPurgeOthers:YES error:&error]) return;
 	
 	[self calculateDataCount];
 	[self displayPagingIndicator];
-	[self setDataPage:dataPage];
 	[self setIsDoneFetching:NO];
 	[sender endRefreshing];
 }
@@ -200,7 +201,7 @@
 		return;
 	}
 	
-	if (![service saveCommitsForRepository:_repository atSha:lastCommit.parentSha atPage:(_dataPage + 1) withPageSize:kDataPageSize withLogin:_login error:&error]) return;
+	if (![service saveCommitsForRepository:_repository atSha:lastCommit.parentSha withPageSize:kDataPageSize withLogin:_login shouldPurgeOthers:NO error:&error]) return;
 	
 	int count = [self calculateDataCount];
 	if (startingCount == count) {
@@ -209,13 +210,16 @@
 		[self setIsDoneFetching:YES];
 		return;
 	}
-	
-	_dataPage++;
 }
 
 - (void)displayPagingIndicator {
 	
-	int rows = [self tableView:self.tableView numberOfRowsInSection:0];
+	// TODO: Got ahead of myself. Put this back in
+	// when we "fix" the performance issue
+	[self.tableView setTableFooterView:nil];
+	return;
+	
+	int rows = [self dataCount];
 	UIView *view = ((kDataPageSize % rows) == 0)
 	? _footerPagingIndicatorView
 	: nil;

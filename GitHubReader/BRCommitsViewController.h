@@ -15,7 +15,6 @@
 @property (strong, nonatomic) BRGHRepository *repository;
 @property (strong, nonatomic) NSString *topSha;
 @property (strong, nonatomic) BRLogin *login;
-@property (nonatomic) int dataPage;
 
 + (int)dataPageSize;
 

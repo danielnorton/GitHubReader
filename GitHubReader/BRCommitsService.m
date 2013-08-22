@@ -20,27 +20,32 @@
 #pragma mark BRBranchService
 - (BOOL)saveCommitsForRepository:(BRGHRepository *)repo
 						   atSha:(NSString *)sha
-						  atPage:(int)page
 					withPageSize:(int)pageSize
 					   withLogin:(BRLogin *)login
-						   error:(NSError **)error{
+			   shouldPurgeOthers:(BOOL)purge
+						   error:(NSError **)error {
 	
 	NSError* inError = nil;
-	NSArray *json = [self getRemoteDataForCommitsInRepository:repo atSha:sha atPage:page withPageSize:pageSize withLogin:login error:&inError];
-	if (!json || inError) {
+	NSMutableArray *all = [NSMutableArray arrayWithCapacity:0];
+	while (sha) {
 		
-		*error = inError;
-		return NO;
+		NSArray *json = [self getRemoteDataForCommitsInRepository:repo atSha:sha withPageSize:pageSize withLogin:login error:&inError];
+		if (!json || inError) {
+			
+			*error = inError;
+			return NO;
+		}
+		sha = [[json lastObject] valueForKeyPath:@"parents.@max.sha"];
+		[all addObjectsFromArray:json];
 	}
 	
-	return [self saveCommitsData:json atPage:page forForRepository:repo error:error];
+	return [self saveCommitsData:all shouldPurgeOthers:purge forForRepository:repo error:error];
 }
 
 
 #pragma mark Private Messages
 - (NSArray *)getRemoteDataForCommitsInRepository:(BRGHRepository *)repo
 										   atSha:(NSString *)sha
-										  atPage:(int)page
 									withPageSize:(int)pageSize
 									   withLogin:(BRLogin *)login
 										   error:(NSError **)error {
@@ -50,8 +55,7 @@
 	
 	NSDictionary *params = @{
 							 @"sha": sha,
-							 @"per_page": @(pageSize),
-							 @"page": @(page)
+							 @"per_page": @(pageSize)
 							 };
 
 	BRRemoteService *service = [[BRRemoteService alloc] init];
@@ -79,7 +83,7 @@
 	return json;
 }
 
-- (BOOL)saveCommitsData:(NSArray *)json atPage:(int)page forForRepository:(BRGHRepository *)repo error:(NSError **)error {
+- (BOOL)saveCommitsData:(NSArray *)json shouldPurgeOthers:(BOOL)purge forForRepository:(BRGHRepository *)repo error:(NSError **)error {
 	
 	NSError* inError = nil;
 	BRGitHubApiService *apiService = [[BRGitHubApiService alloc] init];
@@ -131,7 +135,7 @@
 		[commit setAuthor:author];
 	}];
 	
-	if (page <= 1) {
+	if (purge) {
 
 		NSPredicate *pred = (shas.count > 0)
 		? [NSPredicate predicateWithFormat:@"repository = %@ AND NOT (%K IN %@)", repo, key, shas]

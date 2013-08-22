@@ -14,9 +14,8 @@
 
 - (BOOL)saveCommitsForRepository:(BRGHRepository *)repo
 						   atSha:(NSString *)sha
-						  atPage:(int)page
 					withPageSize:(int)pageSize
 					   withLogin:(BRLogin *)login
+			   shouldPurgeOthers:(BOOL)purge
 						   error:(NSError **)error;
-
 @end
