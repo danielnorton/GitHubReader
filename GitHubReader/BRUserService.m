@@ -44,7 +44,9 @@
 	
 	// Now make the syncronous call
 	NSURLResponse *response = nil;
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&inError];
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	if (inError || !data) {
 		
 		*error = inError;

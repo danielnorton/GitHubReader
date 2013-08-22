@@ -41,7 +41,9 @@
 	NSMutableURLRequest *request = [api requestFor:login atURL:url withHTTPMethod:BRHTTPMethodGet withHeaders:nil];
 	
 	NSURLResponse *response = nil;
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:error];
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	if (inError || !data) {
 		
 		*error = inError;

@@ -21,9 +21,14 @@
 
 + (UIImage *)imageForGravatarWithHash:(NSString *)hash ofSize:(int)size {
 	
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSURL *url = [self urlForGravatarWithHash:hash ofSize:size];
 	UIImage *gravatarDownload = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-	return [UIImage imageWithCGImage:[gravatarDownload CGImage] scale:[[UIScreen mainScreen] scale] orientation:UIImageOrientationUp];
+	UIImage *answer = [UIImage imageWithCGImage:[gravatarDownload CGImage] scale:[[UIScreen mainScreen] scale] orientation:UIImageOrientationUp];
+	
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+	
+	return answer;
 }
 
 
