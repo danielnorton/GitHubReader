@@ -147,6 +147,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.94999999999999996" alpha="1" colorSpace="calibratedWhite"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="KXU-aF-SaY">
+                            <rect key="frame" x="0.0" y="130" width="320" height="100"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="lqs-j1-anJ">
+                                    <rect key="frame" x="142" y="31" width="37" height="37"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </activityIndicatorView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.94999999999999996" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="centerX" secondItem="lqs-j1-anJ" secondAttribute="centerX" id="NJn-56-7YR"/>
+                                <constraint firstAttribute="centerY" secondItem="lqs-j1-anJ" secondAttribute="centerY" id="sqo-Gj-UiS"/>
+                            </constraints>
+                        </view>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CommitCell" textLabel="jdl-Wb-pr5" detailTextLabel="Lnu-h9-nzi" style="IBUITableViewCellStyleSubtitle" id="v8k-81-670">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
@@ -186,6 +202,9 @@
                             <action selector="didBeginRefresh:" destination="pPC-iS-2Nd" eventType="valueChanged" id="Qnp-DF-IhT"/>
                         </connections>
                     </refreshControl>
+                    <connections>
+                        <outlet property="footerPagingIndicatorView" destination="KXU-aF-SaY" id="UQj-xu-haf"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R1O-rE-gHj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

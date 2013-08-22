@@ -15,6 +15,7 @@
 
 @interface BRCommitsViewController()
 
+@property (strong, nonatomic) IBOutlet UIView *footerPagingIndicatorView;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) BRBasicFetchedResultControllerDelegate *delegate;
 @property (nonatomic) BOOL isDoneFetching;
@@ -32,6 +33,8 @@
 	
 	[self setTitle:@"Commits"];
 	[self.navigationController setNavigationBarHidden:NO animated:YES];
+	
+	[self displayPagingIndicator];
 }
 
 - (void)viewDidLoad {
@@ -137,6 +140,7 @@
 	
 	if (![service saveCommitsForRepository:_repository atSha:_topSha atPage:dataPage withPageSize:kDataPageSize withLogin:_login error:&error]) return;
 	
+	[self displayPagingIndicator];
 	[self setDataPage:dataPage];
 	[self setIsDoneFetching:NO];
 	[sender endRefreshing];
@@ -159,6 +163,7 @@
 	BRGHCommit *lastCommit = [_fetchedResultsController objectAtIndexPath:indexPath];
 	if (!lastCommit.parentSha) {
 		
+		[self.tableView setTableFooterView:nil];
 		[self setIsDoneFetching:YES];
 		return;
 	}
@@ -168,6 +173,7 @@
 	int rows = [self tableView:self.tableView numberOfRowsInSection:0];
 	if (startingRows == rows) {
 		
+		[self.tableView setTableFooterView:nil];
 		[self setIsDoneFetching:YES];
 		return;
 	}
@@ -175,5 +181,13 @@
 	_dataPage++;
 }
 
+- (void)displayPagingIndicator {
+	
+	int rows = [self tableView:self.tableView numberOfRowsInSection:0];
+	UIView *view = ((kDataPageSize % rows) == 0)
+	? _footerPagingIndicatorView
+	: nil;
+	[self.tableView setTableFooterView:view];
+}
 
 @end
