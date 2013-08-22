@@ -7,10 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9B13853C17C5B7A6003CB45E /* FuzzyTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B13853917C5B7A6003CB45E /* FuzzyTime.m */; };
-		9B13853D17C5B7A6003CB45E /* FuzzyTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B13853917C5B7A6003CB45E /* FuzzyTime.m */; };
-		9B13853E17C5B7A6003CB45E /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B13853B17C5B7A6003CB45E /* NSDate-Utilities.m */; };
-		9B13853F17C5B7A6003CB45E /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B13853B17C5B7A6003CB45E /* NSDate-Utilities.m */; };
 		9B13854217C5BEB4003CB45E /* BRGHCommit.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B13854117C5BEB4003CB45E /* BRGHCommit.m */; };
 		9B13854317C5BEB4003CB45E /* BRGHCommit.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B13854117C5BEB4003CB45E /* BRGHCommit.m */; };
 		9B13854617C5BEB5003CB45E /* BRGHUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B13854517C5BEB5003CB45E /* BRGHUser.m */; };
@@ -104,10 +100,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		9B13853817C5B7A6003CB45E /* FuzzyTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FuzzyTime.h; sourceTree = "<group>"; };
-		9B13853917C5B7A6003CB45E /* FuzzyTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FuzzyTime.m; sourceTree = "<group>"; };
-		9B13853A17C5B7A6003CB45E /* NSDate-Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate-Utilities.h"; sourceTree = "<group>"; };
-		9B13853B17C5B7A6003CB45E /* NSDate-Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-Utilities.m"; sourceTree = "<group>"; };
 		9B13854017C5BEB4003CB45E /* BRGHCommit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHCommit.h; sourceTree = "<group>"; };
 		9B13854117C5BEB4003CB45E /* BRGHCommit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRGHCommit.m; sourceTree = "<group>"; };
 		9B13854417C5BEB5003CB45E /* BRGHUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHUser.h; sourceTree = "<group>"; };
@@ -216,17 +208,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9B13853717C5B7A6003CB45E /* erica */ = {
-			isa = PBXGroup;
-			children = (
-				9B13853817C5B7A6003CB45E /* FuzzyTime.h */,
-				9B13853917C5B7A6003CB45E /* FuzzyTime.m */,
-				9B13853A17C5B7A6003CB45E /* NSDate-Utilities.h */,
-				9B13853B17C5B7A6003CB45E /* NSDate-Utilities.m */,
-			);
-			path = erica;
-			sourceTree = "<group>";
-		};
 		9B1F6A5917C0560000813AF5 = {
 			isa = PBXGroup;
 			children = (
@@ -308,7 +289,6 @@
 		9B1F6A9A17C058AB00813AF5 /* Third Party */ = {
 			isa = PBXGroup;
 			children = (
-				9B13853717C5B7A6003CB45E /* erica */,
 				9B1F6A9B17C058AB00813AF5 /* fishhook */,
 			);
 			path = "Third Party";
@@ -531,12 +511,10 @@
 				9B1F6BA817C1E12200813AF5 /* BRLogin.m in Sources */,
 				9BEA42B817C44B9F009AD0B2 /* BRBranchService.m in Sources */,
 				9B1F6ADB17C0918600813AF5 /* UIColor+Helpers.m in Sources */,
-				9B13853C17C5B7A6003CB45E /* FuzzyTime.m in Sources */,
 				9BC8503517C349D500AE502D /* BRRepositoriesViewController.m in Sources */,
 				9B1F6BA417C1DD6100813AF5 /* BRRemoteService.m in Sources */,
 				9BF70C4D17C4A042009EEB09 /* BRGHBranch.m in Sources */,
 				9BC8503917C34ADA00AE502D /* BRRepositoriesService.m in Sources */,
-				9B13853E17C5B7A6003CB45E /* NSDate-Utilities.m in Sources */,
 				9B1F6B9C17C1D62900813AF5 /* BROrganizationService.m in Sources */,
 				9BEA42D417C47BD4009AD0B2 /* BRCommitsService.m in Sources */,
 				9BF70C5517C4A043009EEB09 /* BRGHLogin.m in Sources */,
@@ -578,7 +556,6 @@
 				9B1F6B9917C1D07400813AF5 /* BROrganizationsViewController.m in Sources */,
 				9B1F6BA917C1E12200813AF5 /* BRLogin.m in Sources */,
 				9B1F6AA217C058AB00813AF5 /* fishhook.c in Sources */,
-				9B13853F17C5B7A6003CB45E /* NSDate-Utilities.m in Sources */,
 				9B1F6BA517C1DD6100813AF5 /* BRRemoteService.m in Sources */,
 				9BF70C5E17C4A043009EEB09 /* BRGHRepository.m in Sources */,
 				9B1F6A9117C0560100813AF5 /* GitHubReaderTests.m in Sources */,
@@ -596,7 +573,6 @@
 				9BC8503A17C34ADA00AE502D /* BRRepositoriesService.m in Sources */,
 				9B1F6AA617C058AB00813AF5 /* QuietAssertMacros.c in Sources */,
 				9B1F6AC717C06C0A00813AF5 /* NSData+Base64.m in Sources */,
-				9B13853D17C5B7A6003CB45E /* FuzzyTime.m in Sources */,
 				9B13854717C5BEB5003CB45E /* BRGHUser.m in Sources */,
 				9B1F6B7917C0B12D00813AF5 /* NSDictionary+valueOrDefault.m in Sources */,
 				9B13854317C5BEB4003CB45E /* BRGHCommit.m in Sources */,

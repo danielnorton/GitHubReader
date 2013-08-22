@@ -10,7 +10,7 @@
 #import "BRCommitsService.h"
 #import "BRBasicFetchedResultControllerDelegate.h"
 #import "BRGravatarService.h"
-#import "FuzzyTime.h"
+
 
 #define kDataPageSize 10
 
@@ -178,8 +178,10 @@
 	[cell.imageView setImage:[BRGravatarService imageForGravatarWithHash:commit.author.gravatarId ofSize:80]];
 	[cell.textLabel setText:commit.message];
 	
-	NSString *date = [commit.date fuzzyTime];
-	NSString *who = [NSString stringWithFormat:@"%@ authored %@", commit.author.name, date];
+	NSString *date = [NSDateFormatter localizedStringFromDate:commit.date
+													dateStyle:NSDateFormatterNoStyle
+													timeStyle:NSDateFormatterMediumStyle];
+	NSString *who = [NSString stringWithFormat:@"%@ authored at %@", commit.author.name, date];
 	[cell.detailTextLabel setText:who];
 }
 
