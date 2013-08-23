@@ -166,30 +166,44 @@ static BOOL didLaunchLogin = NO;
 		[loginService deletePassword];
 	}
 	
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	BRUserService *service = [[BRUserService alloc] init];
-	NSError *error = nil;
-	BRGHUser *user = [service getUser:login.name withPassword:password error:&error];
-	[self setIsAuthenticating:NO];
-	
-	if (!user || error) {	
+	[service beginGetUser:login.name withPassword:password withCompletion:^(BRGHUser *user, NSError *error) {
 		
-		[_avatar setImage:[UIImage imageNamed:@"strongbadtocat"]];
-		[self displayPasswordPlaceholder:@"Log-in Fail'd!" withColor:[UIColor colorFrom255Red:255 green:49 blue:48]];
-		return;
-	}
-	
-	UIImage *gravatar = [BRGravatarService imageForGravatarWithHash:user.gravatarId ofSize:_avatar.frame.size.width * 2];
-	[_avatar setImage:gravatar];
-	
-	[_password setTextColor:[UIColor colorFrom255Red:76 green:217 blue:100]];
-	[self displayFakePasswordPlaceholder];
-	
-	NSError *orgError = nil;
-	BROrganizationService *orgService = [[BROrganizationService alloc] init];
-	if ([orgService saveOrganizationsForGitLogin:user withLogin:login error:&orgError]) {
+		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 		
-		[self performSegueWithIdentifier:@"SegueFromLogin" sender:@[user, login]];
-	}
+		[self setIsAuthenticating:NO];
+		
+		if (!user || error) {
+			
+			[_avatar setImage:[UIImage imageNamed:@"strongbadtocat"]];
+			[self displayPasswordPlaceholder:@"Log-in Fail'd!" withColor:[UIColor colorFrom255Red:255 green:49 blue:48]];
+			return;
+		}
+			
+		__block UIImage *gravatar = nil;
+		dispatch_queue_t serviceQueue = dispatch_queue_create("BRLoginViewController gravatar queue", NULL);
+		dispatch_async(serviceQueue, ^{
+		
+			gravatar = [BRGravatarService imageForGravatarWithHash:user.gravatarId ofSize:_avatar.frame.size.width * 2];
+			
+			dispatch_async(dispatch_get_main_queue(), ^{
+
+				[_avatar setImage:gravatar];
+				
+				[_password setTextColor:[UIColor colorFrom255Red:76 green:217 blue:100]];
+				[self displayFakePasswordPlaceholder];
+				
+				BROrganizationService *orgService = [[BROrganizationService alloc] init];
+				[orgService beginSaveOrganizationsForGitLogin:user withLogin:login withCompletion:^(BOOL saved, NSError *error) {
+					
+					if (!saved || error) return;
+					
+					[self performSegueWithIdentifier:@"SegueFromLogin" sender:@[user, login]];
+				}];
+			});
+		});
+	}];
 }
 
 - (void)displayFakePasswordPlaceholder {

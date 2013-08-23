@@ -13,6 +13,13 @@
 #import "NSDictionary+valueOrDefault.h"
 
 
+@interface BRUserService()
+
+@property (strong, nonatomic) NSManagedObjectContext *context;
+
+@end
+
+
 @implementation BRUserService
 
 #pragma mark -
@@ -44,9 +51,7 @@
 	
 	// Now make the syncronous call
 	NSURLResponse *response = nil;
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&inError];
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	if (inError || !data) {
 		
 		*error = inError;
@@ -74,29 +79,67 @@
 	return [self saveUserData:returnJson];
 }
 
+- (void)beginGetUser:(NSString *)userName withPassword:(NSString *)password withCompletion:(void (^)(BRGHUser *user, NSError *error))completion {
+	
+	dispatch_queue_t serviceQueue = dispatch_queue_create("BRUserService queue", NULL);
+	dispatch_async(serviceQueue, ^{
+	
+		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
+		[context setPersistentStoreCoordinator:[[BRModelManager sharedInstance] persistentStoreCoordinator]];
+		
+		BRUserService *service = [[BRUserService alloc] init];
+		[service setContext:context];
+		
+		NSError *error = nil;
+		BRGHUser *user = [service getUser:userName withPassword:password error:&error];
+		NSManagedObjectID *objectId = user.objectID;
+		
+		if (completion) {
+			
+			dispatch_async(dispatch_get_main_queue(), ^{
+				if (!user || error) {
+					
+					completion(nil, error);
+					
+				} else {
+
+					NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
+					BRGHUser *user = (BRGHUser *)[context objectWithID:objectId];
+					completion(user, nil);
+				}
+			});
+		}
+	});
+}
+
 
 #pragma mark Private Messages
 - (BRGHUser *)saveUserData:(NSDictionary *)json {
 	
-	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
+	if (!_context) {
+	
+		NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
+		[self setContext:context];
+	}
+	
 	NSString *entityName = NSStringFromClass([BRGHUser class]);
 	
 	NSNumber *gitHubId = json[@"id"];
 	
 	NSPredicate *pred = [NSPredicate predicateWithFormat:@"%K == %@",@"gitHubId", gitHubId];
 	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
-	NSEntityDescription *desc = [NSEntityDescription entityForName:entityName inManagedObjectContext:context];
+	NSEntityDescription *desc = [NSEntityDescription entityForName:entityName inManagedObjectContext:_context];
 	[fetch setReturnsDistinctResults:YES];
 	[fetch setEntity:desc];
 	[fetch setPredicate:pred];
 	
 	NSError *error = nil;
-	NSArray *matches = [context executeFetchRequest:fetch error:&error];
+	NSArray *matches = [_context executeFetchRequest:fetch error:&error];
 	if (error) return nil;
 	
 	BRGHUser *user = (matches && matches.count > 0)
 	? [matches lastObject]
-	: [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context];
+	: [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:_context];
 
 	[user setGitHubId:				gitHubId];
 	[user setLongName:				[json objectForKey:@"name" orDefault:nil]];
@@ -109,7 +152,7 @@
 	[user setIsAuthenticated:		@(YES)];
 	
 	
-	[context save:&error];
+	[_context save:&error];
 	 
 	if(error) return nil;
 	

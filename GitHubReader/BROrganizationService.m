@@ -12,6 +12,13 @@
 #import "NSDictionary+valueOrDefault.h"
 
 
+@interface BROrganizationService()
+
+@property (strong, nonatomic) NSManagedObjectContext *context;
+
+@end
+
+
 @implementation BROrganizationService
 
 
@@ -30,6 +37,37 @@
 	return [self saveOrganizationsData:json forGitLogin:gitHubUser error:error];
 }
 
+- (void)beginSaveOrganizationsForGitLogin:(BRGHUser *)gitHubUser withLogin:(BRLogin *)login withCompletion:(void (^)(BOOL saved, NSError *error))completion {
+	
+	dispatch_queue_t serviceQueue = dispatch_queue_create("BROrganizationService queue", NULL);
+	dispatch_async(serviceQueue, ^{
+		
+		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
+		[context setPersistentStoreCoordinator:[[BRModelManager sharedInstance] persistentStoreCoordinator]];
+		
+		BROrganizationService *service = [[BROrganizationService alloc] init];
+		[service setContext:context];
+		
+		BRGHUser *thisUser = (BRGHUser *)[context objectWithID:gitHubUser.objectID];
+		
+		NSError *error = nil;
+		BOOL answer = [service saveOrganizationsForGitLogin:thisUser withLogin:login error:&error];
+		
+		if (completion) {
+			
+			dispatch_async(dispatch_get_main_queue(), ^{
+
+				if (answer && !error) {
+					
+					NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
+					[context reset];
+				}
+				
+				completion(answer, error);
+			});
+		}
+	});
+}
 
 #pragma mark Private Messages
 - (NSArray *)getRemoteDataForGitLogin:(BRGHUser *)gitHubUser withLogin:(BRLogin *)login error:(NSError **)error {
@@ -63,10 +101,15 @@
 
 - (BOOL)saveOrganizationsData:(NSArray *)json forGitLogin:(BRGHUser *)gitHubUser error:(NSError **)error {
 	
+	if (!_context) {
+		
+		NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
+		[self setContext:context];
+	}
+	
 	NSError* inError = nil;
 	BRGitHubApiService *apiService = [[BRGitHubApiService alloc] init];
 	
-	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
 	Class kind = [BRGHOrganization class];
 	NSString *key = BRGitHubIdKey;
 	
@@ -82,7 +125,7 @@
 		BRGHOrganization *org = (BRGHOrganization *)[apiService findOrCreateObjectById:gitHubId
 																			   withKey:key
 																				ofKind:kind
-																			 inContext:context];
+																			 inContext:_context];
 		
 		NSString *avatarPath = [itemJson objectForKey:@"avatar_url" orDefault:nil];
 		NSString *gravitarId = nil;
@@ -104,13 +147,13 @@
 	NSPredicate *pred = (gitHubIds.count > 0)
 	? [NSPredicate predicateWithFormat:@"NOT (%K IN %@)", key, gitHubIds]
 	: nil;
-	if (![apiService deletePredicate:pred withKey:key ofKind:kind inContext:context error:&inError]) {
+	if (![apiService deletePredicate:pred withKey:key ofKind:kind inContext:_context error:&inError]) {
 		
 		*error = inError;
 		return NO;
 	}
 
-	return [context save:error];
+	return [_context save:error];
 }
 
 

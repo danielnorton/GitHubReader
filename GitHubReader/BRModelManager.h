@@ -11,5 +11,6 @@
 
 + (BRModelManager *)sharedInstance;
 - (NSManagedObjectContext *)context;
+@property (readonly, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @end
