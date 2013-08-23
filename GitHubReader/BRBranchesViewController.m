@@ -11,6 +11,7 @@
 #import "BRCommitsViewController.h"
 #import "BRCommitsService.h"
 #import "BRBasicFetchedResultControllerDelegate.h"
+#import "UITableViewCell+activity.h"
 
 
 @interface BRBranchesViewController()
@@ -48,15 +49,6 @@
 	NSIndexPath *indexPath = (NSIndexPath *)sender;
 	BRGHBranch *branch = (BRGHBranch *)[_fetchedResultsController objectAtIndexPath:indexPath];
 	
-	NSError *error = nil;
-	BRCommitsService *service = [[BRCommitsService alloc] init];
-	if (![service saveCommitsForRepository:_repository
-									 atSha:branch.sha
-							  withPageSize:[BRCommitsViewController dataPageSize]
-								 withLogin:_login
-						 shouldPurgeOthers:YES
-									 error:&error]) return;
-	
 	[self setTitle:branch.name];
 	
 	[controller setRepository:_repository];
@@ -68,7 +60,23 @@
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-	[self performSegueWithIdentifier:@"SegueFromBranches" sender:indexPath];
+	BRGHBranch *branch = (BRGHBranch *)[_fetchedResultsController objectAtIndexPath:indexPath];
+	
+	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+	[cell setActivityIndicatorAccessoryView];
+	
+	BRCommitsService *service = [[BRCommitsService alloc] init];
+	[service beginSaveCommitsForRepository:_repository
+									 atSha:branch.sha
+							  withPageSize:[BRCommitsViewController dataPageSize]
+								 withLogin:_login
+						 shouldPurgeOthers:YES
+							withCompletion:^(BOOL saved, NSError *error) {
+								
+								[cell clearAccessoryViewWith:UITableViewCellAccessoryDisclosureIndicator];
+								
+								[self performSegueWithIdentifier:@"SegueFromBranches" sender:indexPath];
+							}];
 }
 
 
@@ -141,12 +149,11 @@
 
 - (IBAction)didBeginRefresh:(UIRefreshControl *)sender {
 	
-	NSError *error = nil;
 	BRBranchService *service = [[BRBranchService alloc] init];
-	
-	if (![service saveBranchesForRepository:_repository withLogin:_login error:&error]) return;
-	
-	[sender endRefreshing];
+	[service beginSaveBranchesForRepository:_repository withLogin:_login withCompletion:^(BOOL saved, NSError *error) {
+		
+		[sender endRefreshing];
+	}];
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {

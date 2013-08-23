@@ -18,4 +18,12 @@
 					   withLogin:(BRLogin *)login
 			   shouldPurgeOthers:(BOOL)purge
 						   error:(NSError **)error;
+
+- (void)beginSaveCommitsForRepository:(BRGHRepository *)repo
+								atSha:(NSString *)sha
+						 withPageSize:(int)pageSize
+							withLogin:(BRLogin *)login
+					shouldPurgeOthers:(BOOL)purge
+					   withCompletion:(void (^)(BOOL saved, NSError *error))completion;
+
 @end

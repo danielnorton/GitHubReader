@@ -12,6 +12,7 @@
 #import "BRRepositoriesService.h"
 #import "BRRepositoriesViewController.h"
 #import "BRBasicFetchedResultControllerDelegate.h"
+#import "UITableViewCell+activity.h"
 
 
 @interface BROrganizationsViewController()
@@ -50,10 +51,6 @@
 	NSIndexPath *indexPath = (NSIndexPath *)sender;
 	BRGHLogin *login = (BRGHLogin *)[_fetchedResultsController objectAtIndexPath:indexPath];
 	
-	NSError *error = nil;
-	BRRepositoriesService *service = [[BRRepositoriesService alloc] init];
-	if (![service saveRepositoriesForGitLogin:login withLogin:_login error:&error]) return;
-
 	[self setTitle:login.name];
 	
 	[controller setGitHubLogin:login];
@@ -64,7 +61,18 @@
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-	[self performSegueWithIdentifier:@"SegueFromOrganizations" sender:indexPath];
+	BRGHLogin *login = (BRGHLogin *)[_fetchedResultsController objectAtIndexPath:indexPath];
+	
+	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+	[cell setActivityIndicatorAccessoryView];
+	
+	BRRepositoriesService *service = [[BRRepositoriesService alloc] init];
+	[service beginSaveRepositoriesForGitLogin:login withLogin:_login withCompletion:^(BOOL saved, NSError *error) {
+		
+		[cell clearAccessoryViewWith:UITableViewCellAccessoryDisclosureIndicator];
+		
+		[self performSegueWithIdentifier:@"SegueFromOrganizations" sender:indexPath];
+	}];
 }
 
 
@@ -136,12 +144,11 @@
 
 - (IBAction)didBeginRefresh:(UIRefreshControl *)sender {
 	
-	NSError *error = nil;
 	BROrganizationService *service = [[BROrganizationService alloc] init];
-	
-	if (![service saveOrganizationsForGitLogin:_gitHubUser withLogin:_login error:&error]) return;
-	
-	[sender endRefreshing];
+	[service beginSaveOrganizationsForGitLogin:_gitHubUser withLogin:_login withCompletion:^(BOOL saved, NSError *error) {
+		
+		[sender endRefreshing];
+	}];
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {

@@ -12,6 +12,13 @@
 #import "NSDictionary+valueOrDefault.h"
 
 
+@interface BRRepositoriesService()
+
+@property (strong, nonatomic) NSManagedObjectContext *context;
+
+@end
+
+
 @implementation BRRepositoriesService
 
 
@@ -28,6 +35,40 @@
 	}
 	
 	return [self saveRepositoriesData:json forGitLogin:gitHubLogin error:error];
+}
+
+- (void)beginSaveRepositoriesForGitLogin:(BRGHLogin *)gitHubLogin
+							   withLogin:(BRLogin *)login
+						  withCompletion:(void (^)(BOOL saved, NSError *error))completion {
+
+	dispatch_queue_t serviceQueue = dispatch_queue_create("BRRepositoriesService queue", NULL);
+	dispatch_async(serviceQueue, ^{
+		
+		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
+		[context setPersistentStoreCoordinator:[[BRModelManager sharedInstance] persistentStoreCoordinator]];
+		
+		BRRepositoriesService *service = [[BRRepositoriesService alloc] init];
+		[service setContext:context];
+		
+		BRGHUser *thisUser = (BRGHUser *)[context objectWithID:gitHubLogin.objectID];
+		
+		NSError *error = nil;
+		BOOL answer = [service saveRepositoriesForGitLogin:thisUser withLogin:login error:&error];
+		
+		if (completion) {
+			
+			dispatch_async(dispatch_get_main_queue(), ^{
+				
+				if (answer && !error) {
+					
+					NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
+					[context reset];
+				}
+				
+				completion(answer, error);
+			});
+		}
+	});
 }
 
 
@@ -64,10 +105,15 @@
 
 - (BOOL)saveRepositoriesData:(NSArray *)json forGitLogin:(BRGHLogin *)gitHubLogin error:(NSError **)error {
 	
+	if (!_context) {
+		
+		NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
+		[self setContext:context];
+	}
+	
 	NSError* inError = nil;
 	BRGitHubApiService *apiService = [[BRGitHubApiService alloc] init];
 	
-	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
 	Class kind = [BRGHRepository class];
 	NSString *key = BRGitHubIdKey;
 	
@@ -83,7 +129,7 @@
 		BRGHRepository *repo = (BRGHRepository *)[apiService findOrCreateObjectById:gitHubId
 																			withKey:key
 																			 ofKind:kind
-																		  inContext:context];
+																		  inContext:_context];
 		
 		NSDate *created = [apiService dateFromJson:itemJson key:@"created_at"];
 		NSDate *updated = [apiService dateFromJson:itemJson key:@"pushed_at"];
@@ -109,13 +155,13 @@
 	NSPredicate *pred = (gitHubIds.count > 0)
 	? [NSPredicate predicateWithFormat:@"owner = %@ AND NOT (%K IN %@)", gitHubLogin, key, gitHubIds]
 	: nil;
-	if (![apiService deletePredicate:pred withKey:key ofKind:kind inContext:context error:&inError]) {
+	if (![apiService deletePredicate:pred withKey:key ofKind:kind inContext:_context error:&inError]) {
 		
 		*error = inError;
 		return NO;
 	}
 		
-	return [context save:error];
+	return [_context save:error];
 }
 
 

@@ -12,6 +12,13 @@
 #import "NSDictionary+valueOrDefault.h"
 
 
+@interface BRBranchService()
+
+@property (strong, nonatomic) NSManagedObjectContext *context;
+
+@end
+
+
 @implementation BRBranchService
 
 
@@ -28,6 +35,40 @@
 	}
 	
 	return [self saveBranchesData:json forForRepository:repo error:error];
+}
+
+- (void)beginSaveBranchesForRepository:(BRGHRepository *)repo
+							 withLogin:(BRLogin *)login
+						withCompletion:(void (^)(BOOL saved, NSError *error))completion {
+
+	dispatch_queue_t serviceQueue = dispatch_queue_create("BRBranchService queue", NULL);
+	dispatch_async(serviceQueue, ^{
+		
+		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
+		[context setPersistentStoreCoordinator:[[BRModelManager sharedInstance] persistentStoreCoordinator]];
+		
+		BRBranchService *service = [[BRBranchService alloc] init];
+		[service setContext:context];
+		
+		BRGHRepository *thisRepo = (BRGHRepository *)[context objectWithID:repo.objectID];
+		
+		NSError *error = nil;
+		BOOL answer = [service saveBranchesForRepository:thisRepo withLogin:login error:&error];
+		
+		if (completion) {
+			
+			dispatch_async(dispatch_get_main_queue(), ^{
+				
+				if (answer && !error) {
+					
+					NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
+					[context reset];
+				}
+				
+				completion(answer, error);
+			});
+		}
+	});
 }
 
 
@@ -63,10 +104,15 @@
 
 - (BOOL)saveBranchesData:(NSArray *)json forForRepository:(BRGHRepository *)repo error:(NSError **)error {
 	
+	if (!_context) {
+		
+		NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
+		[self setContext:context];
+	}
+	
 	NSError* inError = nil;
 	BRGitHubApiService *apiService = [[BRGitHubApiService alloc] init];
 	
-	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
 	Class kind = [BRGHBranch class];
 	NSString *key = BRShaKey;
 	
@@ -84,7 +130,7 @@
 		BRGHBranch *branch = (BRGHBranch *)[self findOrCreateBranchForRepository:repo
 																		withName:name
 																		 withSha:sha
-																	inContext:context];
+																	inContext:_context];
 		
 		[branch setIsDefault:@([defaultBranch isEqualToString:[branch.name lowercaseString]])];
 		
@@ -94,13 +140,13 @@
 	NSPredicate *pred = (branches.count > 0)
 	? [NSPredicate predicateWithFormat:@"repository = %@ AND NOT (SELF IN %@)", repo, branches]
 	: nil;
-	if (![apiService deletePredicate:pred withKey:key ofKind:kind inContext:context error:&inError]) {
+	if (![apiService deletePredicate:pred withKey:key ofKind:kind inContext:_context error:&inError]) {
 		
 		*error = inError;
 		return NO;
 	}
 	
-	return [context save:error];
+	return [_context save:error];
 }
 
 - (BRGHBranch *)findOrCreateBranchForRepository:(BRGHRepository *)repo

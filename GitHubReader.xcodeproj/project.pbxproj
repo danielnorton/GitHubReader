@@ -63,6 +63,8 @@
 		9B1F6BA917C1E12200813AF5 /* BRLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6BA717C1E12200813AF5 /* BRLogin.m */; };
 		9B40717417C3009300A7B98E /* BRGravatarService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B40717317C3009300A7B98E /* BRGravatarService.m */; };
 		9B40717517C3009300A7B98E /* BRGravatarService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B40717317C3009300A7B98E /* BRGravatarService.m */; };
+		9B6B92A217C73D5400FFEEEB /* UITableViewCell+activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B6B92A117C73D5400FFEEEB /* UITableViewCell+activity.m */; };
+		9B6B92A317C73D5400FFEEEB /* UITableViewCell+activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B6B92A117C73D5400FFEEEB /* UITableViewCell+activity.m */; };
 		9BC8503517C349D500AE502D /* BRRepositoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8503417C349D500AE502D /* BRRepositoriesViewController.m */; };
 		9BC8503617C349D500AE502D /* BRRepositoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8503417C349D500AE502D /* BRRepositoriesViewController.m */; };
 		9BC8503917C34ADA00AE502D /* BRRepositoriesService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8503817C34ADA00AE502D /* BRRepositoriesService.m */; };
@@ -157,6 +159,8 @@
 		9B1F6BA717C1E12200813AF5 /* BRLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRLogin.m; sourceTree = "<group>"; };
 		9B40717217C3009300A7B98E /* BRGravatarService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGravatarService.h; sourceTree = "<group>"; };
 		9B40717317C3009300A7B98E /* BRGravatarService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRGravatarService.m; sourceTree = "<group>"; };
+		9B6B92A017C73D5400FFEEEB /* UITableViewCell+activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+activity.h"; sourceTree = "<group>"; };
+		9B6B92A117C73D5400FFEEEB /* UITableViewCell+activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+activity.m"; sourceTree = "<group>"; };
 		9BC8503317C349D500AE502D /* BRRepositoriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRRepositoriesViewController.h; sourceTree = "<group>"; };
 		9BC8503417C349D500AE502D /* BRRepositoriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRRepositoriesViewController.m; sourceTree = "<group>"; };
 		9BC8503717C34ADA00AE502D /* BRRepositoriesService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRRepositoriesService.h; sourceTree = "<group>"; };
@@ -317,6 +321,8 @@
 				9B1F6AC517C06C0A00813AF5 /* NSData+Base64.m */,
 				9B1F6AD917C0918600813AF5 /* UIColor+Helpers.h */,
 				9B1F6ADA17C0918600813AF5 /* UIColor+Helpers.m */,
+				9B6B92A017C73D5400FFEEEB /* UITableViewCell+activity.h */,
+				9B6B92A117C73D5400FFEEEB /* UITableViewCell+activity.m */,
 			);
 			name = Category;
 			sourceTree = "<group>";
@@ -526,6 +532,7 @@
 				9B1F6AE317C09CEE00813AF5 /* GitHubReader.xcdatamodeld in Sources */,
 				9BC8503F17C3C8A300AE502D /* BRBasicFetchedResultControllerDelegate.m in Sources */,
 				9B1F6AA117C058AB00813AF5 /* fishhook.c in Sources */,
+				9B6B92A217C73D5400FFEEEB /* UITableViewCell+activity.m in Sources */,
 				9B1F6A7217C0560100813AF5 /* main.m in Sources */,
 				9B1F6B9817C1D07400813AF5 /* BROrganizationsViewController.m in Sources */,
 				9B1F6AC617C06C0A00813AF5 /* NSData+Base64.m in Sources */,
@@ -576,6 +583,7 @@
 				9B13854717C5BEB5003CB45E /* BRGHUser.m in Sources */,
 				9B1F6B7917C0B12D00813AF5 /* NSDictionary+valueOrDefault.m in Sources */,
 				9B13854317C5BEB4003CB45E /* BRGHCommit.m in Sources */,
+				9B6B92A317C73D5400FFEEEB /* UITableViewCell+activity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

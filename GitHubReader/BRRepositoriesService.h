@@ -14,4 +14,8 @@
 
 - (BOOL)saveRepositoriesForGitLogin:(BRGHLogin *)gitHubLogin withLogin:(BRLogin *)login error:(NSError **)error;
 
+- (void)beginSaveRepositoriesForGitLogin:(BRGHLogin *)gitHubLogin
+							   withLogin:(BRLogin *)login
+						  withCompletion:(void (^)(BOOL saved, NSError *error))completion;
+
 @end

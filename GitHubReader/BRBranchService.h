@@ -14,4 +14,7 @@
 
 - (BOOL)saveBranchesForRepository:(BRGHRepository *)repo withLogin:(BRLogin *)login error:(NSError **)error;
 
+- (void)beginSaveBranchesForRepository:(BRGHRepository *)repo
+							 withLogin:(BRLogin *)login
+						withCompletion:(void (^)(BOOL saved, NSError *error))completion;
 @end
