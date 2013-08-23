@@ -213,6 +213,7 @@ NSString *const BRGitHubReaderSecurityService = @"BRGitHubReaderSecurityService"
 			doFound((__bridge id)found);
 		}
 		
+		CFRelease(found);
 		
 	} else {
 		
@@ -250,6 +251,7 @@ NSString *const BRGitHubReaderSecurityService = @"BRGitHubReaderSecurityService"
 			doFound((__bridge id)found);
 		}
 		
+		CFRelease(found);
 		
 	} else {
 		
