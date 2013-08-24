@@ -119,6 +119,7 @@
 	[fetchRequest setEntity:entity];
 	[fetchRequest setSortDescriptors:@[sortIndex, name]];
 	[fetchRequest setPredicate:pred];
+	[fetchRequest setFetchBatchSize:20];
 
 	NSFetchedResultsController *fetchedResultsController =
 	[[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest

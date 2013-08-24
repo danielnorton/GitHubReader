@@ -160,6 +160,7 @@ NSString *const BRGitHubReaderSecurityService = @"BRGitHubReaderSecurityService"
 	[fetchRequest setEntity:entity];
 	[fetchRequest setSortDescriptors:@[gitHubId]];
 	[fetchRequest setPredicate:nil];
+	[fetchRequest setFetchBatchSize:20];
 	
 	NSArray *all = [context executeFetchRequest:fetchRequest error:&inError];
 	if (!all || inError) {

@@ -162,6 +162,7 @@
 	[fetch setReturnsDistinctResults:YES];
 	[fetch setEntity:desc];
 	[fetch setPredicate:pred];
+	[fetch setFetchBatchSize:5];
 	
 	NSError *error = nil;
 	NSArray *matches = [context executeFetchRequest:fetch error:&error];
