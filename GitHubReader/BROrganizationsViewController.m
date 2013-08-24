@@ -12,7 +12,6 @@
 #import "BRRepositoriesService.h"
 #import "BRRepositoriesViewController.h"
 #import "BRBasicFetchedResultControllerDelegate.h"
-#import "UITableViewCell+activity.h"
 
 
 @interface BROrganizationsViewController()
@@ -62,15 +61,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
 	BRGHLogin *login = (BRGHLogin *)[_fetchedResultsController objectAtIndexPath:indexPath];
-	
-	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-	[cell setActivityIndicatorAccessoryView];
-	
 	BRRepositoriesService *service = [[BRRepositoriesService alloc] init];
 	[service beginSaveRepositoriesForGitLogin:login withLogin:_login withCompletion:^(BOOL saved, NSError *error) {
-		
-		[cell clearAccessoryViewWith:UITableViewCellAccessoryDisclosureIndicator];
-		
+
 		[self performSegueWithIdentifier:@"SegueFromOrganizations" sender:indexPath];
 	}];
 }
