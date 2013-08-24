@@ -49,6 +49,15 @@
 	NSIndexPath *indexPath = (NSIndexPath *)sender;
 	BRGHBranch *branch = (BRGHBranch *)[_fetchedResultsController objectAtIndexPath:indexPath];
 	
+	NSError *error = nil;
+	BRCommitsService *service = [[BRCommitsService alloc] init];
+	if (![service saveCommitsForRepository:_repository
+									 atSha:branch.sha
+							  withPageSize:[BRCommitsViewController dataPageSize]
+								 withLogin:_login
+						 shouldPurgeOthers:YES
+									 error:&error]) return;
+	
 	[self setTitle:branch.name];
 	
 	[controller setRepository:_repository];
@@ -60,23 +69,7 @@
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-	BRGHBranch *branch = (BRGHBranch *)[_fetchedResultsController objectAtIndexPath:indexPath];
-	
-	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-	[cell setActivityIndicatorAccessoryView];
-	
-	BRCommitsService *service = [[BRCommitsService alloc] init];
-	[service beginSaveCommitsForRepository:_repository
-									 atSha:branch.sha
-							  withPageSize:[BRCommitsViewController dataPageSize]
-								 withLogin:_login
-						 shouldPurgeOthers:YES
-							withCompletion:^(BOOL saved, NSError *error) {
-								
-								[cell clearAccessoryViewWith:UITableViewCellAccessoryDisclosureIndicator];
-								
-								[self performSegueWithIdentifier:@"SegueFromBranches" sender:indexPath];
-							}];
+	[self performSegueWithIdentifier:@"SegueFromBranches" sender:indexPath];
 }
 
 

@@ -12,16 +12,12 @@
 #import "BRGravatarService.h"
 
 
-#define kDataPageSize 100
+#define kDataPageSize 10
 
 @interface BRCommitsViewController()
 
 @property (strong, nonatomic) IBOutlet UIView *footerPagingIndicatorView;
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (strong, nonatomic) NSFetchRequest *fetchRequest;
-@property (strong, nonatomic) BRBasicFetchedResultControllerDelegate *delegate;
-@property (nonatomic) BOOL isDoneFetching;
-@property (nonatomic) int dataCount;
+
 @end
 
 
@@ -35,38 +31,20 @@
 	
 	[self setTitle:@"Commits"];
 	[self.navigationController setNavigationBarHidden:NO animated:YES];
+	[self.tableView setTableFooterView:nil];
 	
-	[self displayPagingIndicator];
+	[self loadData];
 }
-
-- (void)viewWillDisappear:(BOOL)animated {
-	[super viewWillDisappear:animated];
-	
-	[_fetchedResultsController setDelegate:nil];
-}
-
-- (void)viewDidLoad {
-	[super viewDidLoad];
-	
-	[self initializeFetchedResultsController];
-}
-
 
 #pragma mark UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
 	
-	return [[_fetchedResultsController sections] count];
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	
-	return [_fetchedResultsController.sections[section] name];
+	return _commits.count;
 }
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
 	
-    id <NSFetchedResultsSectionInfo> sectionInfo = [_fetchedResultsController sections][section];
-    return [sectionInfo numberOfObjects];
+    return _commits.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -80,24 +58,8 @@
 }
 
 
-#pragma mark UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-	
-	if (_isDoneFetching) return;
-	
-	float offset = scrollView.contentOffset.y;
-	float rowHeight = self.tableView.rowHeight;
-	int rows = [self dataCount];
-	int buffer = kDataPageSize / 2;
-	float start = (rowHeight * rows) - (buffer * rowHeight);
-	if (offset >= start) {
-		
-		[self fetchNextPage];
-	}
-}
-
-
 #pragma mark -
+#pragma mark BRCommitsViewController
 #pragma mark BRCommitsViewController
 + (int)dataPageSize {
 	
@@ -106,7 +68,8 @@
 
 
 #pragma mark Private Messages
-- (void)initializeFetchedResultsController {
+
+- (void)loadData {
 	
 	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
 	
@@ -121,56 +84,26 @@
 	[fetchRequest setEntity:entity];
 	[fetchRequest setSortDescriptors:@[date]];
 	[fetchRequest setPredicate:pred];
-	[self setFetchRequest:fetchRequest];
-	
-	NSFetchedResultsController *fetchedResultsController =
-	[[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-										managedObjectContext:context
-										  sectionNameKeyPath:@"localizedDay"
-												   cacheName:nil];
-	
-	BRCommitsViewController *me = self;
-	BRBasicFetchedResultControllerDelegate *delegate = [[BRBasicFetchedResultControllerDelegate alloc] init];
-	[delegate setTableView:self.tableView];
-	[delegate setConfigureCell:^(UITableViewCell *cell, NSIndexPath *indexPath) {
-		
-		[me configureCell:cell atIndexPath:indexPath];
-	}];
-	
-	[self setDelegate:delegate];
-	[fetchedResultsController setDelegate:delegate];
-	[self setFetchedResultsController:fetchedResultsController];
-	
-	NSError *error = nil;
-	[fetchedResultsController performFetch:&error];
-	[self calculateDataCount];
-}
 
-- (int)calculateDataCount {
-	
-	NSError *error = nil;
-	int count = [_fetchedResultsController.managedObjectContext countForFetchRequest:_fetchRequest error:&error];
-	if (error) count = 0;
-	
-	_dataCount = count;
-	return count;
+	NSArray *commits = [context executeFetchRequest:fetchRequest error:nil];
+	[self setCommits:commits];
+	[self.tableView reloadData];
 }
 
 - (IBAction)didBeginRefresh:(UIRefreshControl *)sender {
 	
+	NSError *error = nil;
 	BRCommitsService *service = [[BRCommitsService alloc] init];
-	[service beginSaveCommitsForRepository:_repository atSha:_topSha withPageSize:kDataPageSize withLogin:_login shouldPurgeOthers:YES withCompletion:^(BOOL saved, NSError *error) {
-		
-		[self calculateDataCount];
-		[self displayPagingIndicator];
-		[self setIsDoneFetching:NO];
-		[sender endRefreshing];
-	}];
+
+	if (![service saveCommitsForRepository:_repository atSha:_topSha withPageSize:kDataPageSize withLogin:_login shouldPurgeOthers:YES error:&error]) return;
+	[self loadData];
+	
+	[sender endRefreshing];
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
 	
-	BRGHCommit *commit = (BRGHCommit *)[_fetchedResultsController objectAtIndexPath:indexPath];
+	BRGHCommit *commit = (BRGHCommit *)_commits[indexPath.row];
 	[cell.imageView setImage:[BRGravatarService imageForGravatarWithHash:commit.author.gravatarId ofSize:80]];
 	[cell.textLabel setText:commit.message];
 	
@@ -180,44 +113,5 @@
 	NSString *who = [NSString stringWithFormat:@"%@ authored at %@", commit.author.name, date];
 	[cell.detailTextLabel setText:who];
 }
-
-- (void)fetchNextPage {
-	
-	BRCommitsService *service = [[BRCommitsService alloc] init];
-	
-	int startingCount = [self dataCount];
-	int sections = [self numberOfSectionsInTableView:self.tableView];
-	int rows = [self tableView:self.tableView numberOfRowsInSection:(sections - 1)];
-	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(rows - 1) inSection:(sections - 1)];
-	BRGHCommit *lastCommit = [_fetchedResultsController objectAtIndexPath:indexPath];
-	
-	if (!lastCommit.parentSha) {
-		
-		[self.tableView setTableFooterView:nil];
-		[self setIsDoneFetching:YES];
-		return;
-	}
-	
-	[service beginSaveCommitsForRepository:_repository atSha:lastCommit.parentSha withPageSize:kDataPageSize withLogin:_login shouldPurgeOthers:NO withCompletion:^(BOOL saved, NSError *error) {
-
-		int count = [self calculateDataCount];
-		if (startingCount == count) {
-			
-			[self.tableView setTableFooterView:nil];
-			[self setIsDoneFetching:YES];
-			return;
-		}
-	}];
-}
-
-- (void)displayPagingIndicator {
-	
-	int rows = [self dataCount];
-	UIView *view = ((kDataPageSize % rows) == 0)
-	? _footerPagingIndicatorView
-	: nil;
-	[self.tableView setTableFooterView:view];
-}
-
 
 @end

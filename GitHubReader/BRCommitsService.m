@@ -12,13 +12,6 @@
 #import "NSDictionary+valueOrDefault.h"
 
 
-@interface BRCommitsService()
-
-@property (strong, nonatomic) NSManagedObjectContext *context;
-
-@end
-
-
 @implementation BRCommitsService
 
 
@@ -31,53 +24,21 @@
 			   shouldPurgeOthers:(BOOL)purge
 						   error:(NSError **)error {
 	
-	NSError *inError = nil;
-	NSArray *json = [self getRemoteDataForCommitsInRepository:repo atSha:sha withPageSize:pageSize withLogin:login error:&inError];
-	if (!json || inError) {
+	NSError* inError = nil;
+	NSMutableArray *all = [NSMutableArray arrayWithCapacity:0];
+	while (sha) {
 		
-		*error = inError;
-		return NO;
-	}
-
-	return [self saveCommitsData:json shouldPurgeOthers:purge forForRepository:repo error:error];
-}
-
-- (void)beginSaveCommitsForRepository:(BRGHRepository *)repo
-								atSha:(NSString *)sha
-						 withPageSize:(int)pageSize
-							withLogin:(BRLogin *)login
-					shouldPurgeOthers:(BOOL)purge
-					   withCompletion:(void (^)(BOOL saved, NSError *error))completion {
-	
-	dispatch_queue_t serviceQueue = dispatch_queue_create("BRCommitsService queue", NULL);
-	dispatch_async(serviceQueue, ^{
-		
-		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
-		[context setPersistentStoreCoordinator:[[BRModelManager sharedInstance] persistentStoreCoordinator]];
-		
-		BRCommitsService *service = [[BRCommitsService alloc] init];
-		[service setContext:context];
-		
-		BRGHRepository *thisRepo = (BRGHRepository *)[context objectWithID:repo.objectID];
-		
-		NSError *error = nil;
-		BOOL answer = [service saveCommitsForRepository:thisRepo atSha:sha withPageSize:pageSize withLogin:login shouldPurgeOthers:purge error:&error];
-		
-		if (completion) {
+		NSArray *json = [self getRemoteDataForCommitsInRepository:repo atSha:sha withPageSize:pageSize withLogin:login error:&inError];
+		if (!json || inError) {
 			
-			dispatch_async(dispatch_get_main_queue(), ^{
-				
-				if (answer && !error) {
-					
-					NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
-					[context reset];
-				}
-				
-				completion(answer, error);
-			});
+			*error = inError;
+			return NO;
 		}
-	});
-
+		sha = [[json lastObject] valueForKeyPath:@"parents.@max.sha"];
+		[all addObjectsFromArray:json];
+	}
+	
+	return [self saveCommitsData:all shouldPurgeOthers:purge forForRepository:repo error:error];
 }
 
 
@@ -125,14 +86,10 @@
 
 - (BOOL)saveCommitsData:(NSArray *)json shouldPurgeOthers:(BOOL)purge forForRepository:(BRGHRepository *)repo error:(NSError **)error {
 	
-	if (!_context) {
-		
-		NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
-		[self setContext:context];
-	}
-	
 	NSError* inError = nil;
 	BRGitHubApiService *apiService = [[BRGitHubApiService alloc] init];
+	
+	NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
 
 	Class kind = [BRGHCommit class];
 	NSString *key = BRShaKey;
@@ -153,7 +110,7 @@
 		BRGHCommit *commit = (BRGHCommit *)[apiService findOrCreateObjectById:sha
 																	  withKey:key
 																	   ofKind:kind
-																	inContext:_context];
+																	inContext:context];
 		
 		NSDate *date = [apiService dateFromJson:itemJson key:@"commit.committer.date"];
 		
@@ -170,9 +127,9 @@
 		
 		[authorIds addObject:gitHubId];
 		BRGHUser *author = (BRGHUser *)[apiService findOrCreateObjectById:gitHubId
-																	 withKey:authorKey
-																	  ofKind:authorKind
-																   inContext:_context];
+																  withKey:authorKey
+																   ofKind:authorKind
+																inContext:context];
 		
 		[author setGravatarId:				[itemJson objectForKey:@"author.gravatar_id" orDefault:nil]];
 		[author setName:					[itemJson objectForKey:@"author.login" orDefault:nil]];
@@ -184,14 +141,14 @@
 		NSPredicate *pred = (shas.count > 0)
 		? [NSPredicate predicateWithFormat:@"repository = %@ AND NOT (%K IN %@)", repo, key, shas]
 		: nil;
-		if (![apiService deletePredicate:pred withKey:key ofKind:kind inContext:_context error:&inError]) {
+		if (![apiService deletePredicate:pred withKey:key ofKind:kind inContext:context error:&inError]) {
 			
 			*error = inError;
 			return NO;
 		}
 	}
 	
-	return [_context save:error];
+	return [context save:error];
 }
 
 
