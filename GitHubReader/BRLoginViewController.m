@@ -180,29 +180,17 @@ static BOOL didLaunchLogin = NO;
 			[self displayPasswordPlaceholder:@"Log-in Fail'd!" withColor:[UIColor colorFrom255Red:255 green:49 blue:48]];
 			return;
 		}
-			
-		__block UIImage *gravatar = nil;
-		dispatch_queue_t serviceQueue = dispatch_queue_create("BRLoginViewController gravatar queue", NULL);
-		dispatch_async(serviceQueue, ^{
-		
-			gravatar = [BRGravatarService imageForGravatarWithHash:user.gravatarId ofSize:_avatar.frame.size.width * 2];
-			
-			dispatch_async(dispatch_get_main_queue(), ^{
 
-				[_avatar setImage:gravatar];
-				
-				[_password setTextColor:[UIColor colorFrom255Red:76 green:217 blue:100]];
-				[self displayFakePasswordPlaceholder];
-				
-				BROrganizationService *orgService = [[BROrganizationService alloc] init];
-				[orgService beginSaveOrganizationsForGitLogin:user withLogin:login withCompletion:^(BOOL saved, NSError *error) {
-					
-					if (!saved || error) return;
-					
-					[self performSegueWithIdentifier:@"SegueFromLogin" sender:@[user, login]];
-				}];
-			});
-		});
+		[_password setTextColor:[UIColor colorFrom255Red:76 green:217 blue:100]];
+		[self displayFakePasswordPlaceholder];
+		
+		BROrganizationService *orgService = [[BROrganizationService alloc] init];
+		[orgService beginSaveOrganizationsForGitLogin:user withLogin:login withCompletion:^(BOOL saved, NSError *error) {
+			
+			if (!saved || error) return;
+			
+			[self performSegueWithIdentifier:@"SegueFromLogin" sender:@[user, login]];
+		}];
 	}];
 }
 

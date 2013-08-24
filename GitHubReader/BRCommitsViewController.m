@@ -192,7 +192,6 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
 	
 	BRGHCommit *commit = (BRGHCommit *)[_fetchedResultsController objectAtIndexPath:indexPath];
-	[cell.imageView setImage:[BRGravatarService imageForGravatarWithHash:commit.author.gravatarId ofSize:80]];
 	[cell.textLabel setText:commit.message];
 	
 	NSString *date = [NSDateFormatter localizedStringFromDate:commit.date
