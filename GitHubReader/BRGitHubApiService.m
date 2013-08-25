@@ -149,6 +149,30 @@ static NSDateFormatter *gitDateFormatter;
 	return newOne;
 }
 
+- (NSArray *)findObjectsByIds:(NSArray *)objectIds
+					  withKey:(NSString *)key
+					   ofKind:(Class)kind
+		  withSortDescriptors:(NSArray *)sortDescriptors
+					inContext:(NSManagedObjectContext *)context {
+
+	NSString *entityName = NSStringFromClass(kind);
+	
+	NSPredicate *pred = [NSPredicate predicateWithFormat:@"(%K IN %@)",key, objectIds];
+	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+	NSEntityDescription *desc = [NSEntityDescription entityForName:entityName inManagedObjectContext:context];
+	[fetch setReturnsDistinctResults:YES];
+	[fetch setEntity:desc];
+	[fetch setPredicate:pred];
+	[fetch setSortDescriptors:sortDescriptors];
+	[fetch setFetchBatchSize:10];
+	
+	NSError *error = nil;
+	NSArray *matches = [context executeFetchRequest:fetch error:&error];
+	if (error) return nil;
+	
+	return matches;
+}
+
 - (BOOL)deletePredicate:(NSPredicate *)predicate
 				withKey:(NSString *)key
 				 ofKind:(Class)kind

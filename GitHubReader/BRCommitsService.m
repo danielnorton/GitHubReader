@@ -134,26 +134,58 @@
 	NSError* inError = nil;
 	BRGitHubApiService *apiService = [[BRGitHubApiService alloc] init];
 	
+	// Fetch all the json commits that already exist in the database
+	// Sort them out to a dictionary so that each loop through the json
+	// array doesn't also have to also loop through the old commits
+	// every time
 	Class kind = [BRGHCommit class];
 	NSString *key = BRShaKey;
+	NSArray *shas = [json valueForKeyPath:@"@distinctUnionOfObjects.sha"];
+	NSSortDescriptor *shaSort = [NSSortDescriptor sortDescriptorWithKey:key ascending:YES];
+	NSArray *oldCommitsArray = [apiService findObjectsByIds:shas
+													withKey:key
+													 ofKind:kind
+										withSortDescriptors:@[shaSort]
+												  inContext:_context];
+	NSMutableDictionary *oldCommits = [NSMutableDictionary dictionaryWithCapacity:0];
+	[oldCommitsArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		
+		BRGHCommit *commit = (BRGHCommit *)obj;
+		[oldCommits setObject:commit forKey:commit.sha];
+	}];
+
 	
+	// Do the same for the Authors.
 	Class authorKind = [BRGHUser class];
 	NSString *authorKey = BRGitHubIdKey;
+	NSMutableArray *authorIds = [NSMutableArray arrayWithArray:[json valueForKeyPath:@"@distinctUnionOfObjects.committer.id"]];
+	NSSortDescriptor *authorIdSort = [NSSortDescriptor sortDescriptorWithKey:authorKey ascending:YES];
+	NSArray *oldAuthorsArray = [apiService findObjectsByIds:authorIds
+											   withKey:authorKey
+												ofKind:authorKind
+								   withSortDescriptors:@[authorIdSort]
+											 inContext:_context];
+	NSMutableDictionary *oldAuthors = [NSMutableDictionary dictionaryWithCapacity:0];
+	[oldAuthorsArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		
+		BRGHUser *user = (BRGHUser *)obj;
+		NSString *gitHubId = [NSString stringWithFormat:@"%i", user.gitHubId.integerValue];
+		[oldAuthors setObject:user forKey:gitHubId];
+	}];
 	
-	NSMutableArray *shas = [NSMutableArray arrayWithCapacity:0];
-	NSMutableArray *authorIds = [NSMutableArray arrayWithCapacity:0];
 	
 	[json enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 		
 		NSDictionary *itemJson = (NSDictionary *)obj;
 		
 		NSString *sha = (NSString *)[itemJson valueForKeyPath:@"sha"];
-		[shas addObject:sha];
 		
-		BRGHCommit *commit = (BRGHCommit *)[apiService findOrCreateObjectById:sha
-																	  withKey:key
-																	   ofKind:kind
-																	inContext:_context];
+		BRGHCommit *commit = oldCommits[sha];
+		if (!commit) {
+			
+			commit = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass(kind) inManagedObjectContext:_context];
+			[commit setSha:sha];
+		}
 		
 		NSDate *date = [apiService dateFromJson:itemJson key:@"commit.committer.date"];
 		
@@ -168,12 +200,15 @@
 		NSNumber *gitHubId = [itemJson objectForKey:@"committer.id" orDefault:nil];
 		if (!gitHubId) return;
 		
-		[authorIds addObject:gitHubId];
-		BRGHUser *author = (BRGHUser *)[apiService findOrCreateObjectById:gitHubId
-																  withKey:authorKey
-																   ofKind:authorKind
-																inContext:_context];
-		
+		NSString *gitHubIdString = [NSString stringWithFormat:@"%i", gitHubId.integerValue];
+		BRGHUser *author = oldAuthors[gitHubIdString];
+		if (!author) {
+			
+			author = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass(authorKind) inManagedObjectContext:_context];
+			[author setGitHubId:gitHubId];
+			[oldAuthors setValue:author forKey:gitHubIdString];
+		}
+
 		[author setGravatarId:				[itemJson objectForKey:@"author.gravatar_id" orDefault:nil]];
 		[author setName:					[itemJson objectForKey:@"author.login" orDefault:nil]];
 		[commit setAuthor:author];

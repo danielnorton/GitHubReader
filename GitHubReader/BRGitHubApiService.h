@@ -32,6 +32,12 @@ extern NSString *const BRShaKey;
 									 ofKind:(Class)kind
 								  inContext:(NSManagedObjectContext *)context;
 
+- (NSArray *)findObjectsByIds:(NSArray *)objectIds
+					  withKey:(NSString *)key
+					   ofKind:(Class)kind
+		  withSortDescriptors:(NSArray *)sortDescriptors
+					inContext:(NSManagedObjectContext *)context;
+
 - (BOOL)deletePredicate:(NSPredicate *)predicate
 				withKey:(NSString *)key
 				 ofKind:(Class)kind
