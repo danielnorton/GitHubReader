@@ -142,6 +142,8 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 	[fetchRequest setEntity:entity];
 	[fetchRequest setSortDescriptors:@[date]];
 	[fetchRequest setPredicate:pred];
+	[fetchRequest setRelationshipKeyPathsForPrefetching:@[@"author"]];
+	[fetchRequest setFetchBatchSize:20];
 	[self setFetchRequest:fetchRequest];
 	
 	NSFetchedResultsController *fetchedResultsController =
