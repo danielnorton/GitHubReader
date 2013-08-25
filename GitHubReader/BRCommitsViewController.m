@@ -30,6 +30,8 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 @property (strong, nonatomic) id observer;
 @property (nonatomic) BRCommitFetchState fetchState;
 @property (nonatomic) int dataCount;
+@property (nonatomic) NSMutableArray *pendingMergeNotifications;
+
 @end
 
 
@@ -46,6 +48,7 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 	
 	[self displayPagingIndicator];
 	
+	[self setPendingMergeNotifications:[NSMutableArray arrayWithCapacity:0]];
 	id observer = [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextDidSaveNotification
 																	object:nil
 																	 queue:[NSOperationQueue mainQueue]
@@ -64,6 +67,7 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 	[_fetchedResultsController setDelegate:nil];
 	
 	[self setObserver:nil];
+	[self setPendingMergeNotifications:nil];
 }
 
 - (void)viewDidLoad {
@@ -102,9 +106,11 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 
 
 #pragma mark UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
 	
 	if (_fetchState != BRCommitFetchStateIdle) return;
+	
+	if (!decelerate) return;
 	
 	float offset = scrollView.contentOffset.y;
 	float rowHeight = self.tableView.rowHeight;
@@ -115,6 +121,20 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 		
 		[self fetchNextPage];
 	}
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+	
+	if (!_pendingMergeNotifications.count > 0) return;
+	
+	NSArray *queue = [_pendingMergeNotifications copy];
+	[self setPendingMergeNotifications:[NSMutableArray arrayWithCapacity:0]];
+	
+	[queue enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		
+		NSNotification *notification = (NSNotification *)obj;
+		[_fetchedResultsController.managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
+	}];
 }
 
 
@@ -250,7 +270,7 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 		return;
 	}
 	
-    [_fetchedResultsController.managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
+    [_pendingMergeNotifications addObject:notification];
 }
 
 
