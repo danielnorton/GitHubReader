@@ -199,7 +199,11 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 	NSString *date = [NSDateFormatter localizedStringFromDate:commit.date
 													dateStyle:NSDateFormatterNoStyle
 													timeStyle:NSDateFormatterMediumStyle];
-	NSString *who = [NSString stringWithFormat:@"%@ authored at %@", commit.author.name, date];
+	
+	NSString *name = commit.author.name
+	? commit.author.name
+	: @"";
+	NSString *who = [NSString stringWithFormat:@"%@ authored at %@", name, date];
 	[cell.detailTextLabel setText:who];
 }
 

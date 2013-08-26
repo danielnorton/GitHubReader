@@ -158,7 +158,8 @@
 	// Do the same for the Authors.
 	Class authorKind = [BRGHUser class];
 	NSString *authorKey = BRGitHubIdKey;
-	NSMutableArray *authorIds = [NSMutableArray arrayWithArray:[json valueForKeyPath:@"@distinctUnionOfObjects.committer.id"]];
+	NSMutableArray *authorIds = [NSMutableArray arrayWithArray:[json valueForKeyPath:@"@distinctUnionOfObjects.author.id"]];
+	[authorIds removeObjectIdenticalTo:[NSNull null]];
 	NSSortDescriptor *authorIdSort = [NSSortDescriptor sortDescriptorWithKey:authorKey ascending:YES];
 	NSArray *oldAuthorsArray = [apiService findObjectsByIds:authorIds
 											   withKey:authorKey
@@ -187,7 +188,7 @@
 			[commit setSha:sha];
 		}
 		
-		NSDate *date = [apiService dateFromJson:itemJson key:@"commit.committer.date"];
+		NSDate *date = [apiService dateFromJson:itemJson key:@"commit.author.date"];
 		
 		[commit setDate:				date];
 		[commit setMessage:				[itemJson objectForKey:@"commit.message" orDefault:nil]];
@@ -197,7 +198,7 @@
 		[commit setRepository:repo];
 		
 		
-		NSNumber *gitHubId = [itemJson objectForKey:@"committer.id" orDefault:nil];
+		NSNumber *gitHubId = [itemJson objectForKey:@"author.id" orDefault:nil];
 		if (!gitHubId) return;
 		
 		NSString *gitHubIdString = [NSString stringWithFormat:@"%i", gitHubId.integerValue];
