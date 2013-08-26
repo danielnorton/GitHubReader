@@ -63,6 +63,10 @@
 		9B1F6BA917C1E12200813AF5 /* BRLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F6BA717C1E12200813AF5 /* BRLogin.m */; };
 		9B40717417C3009300A7B98E /* BRGravatarService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B40717317C3009300A7B98E /* BRGravatarService.m */; };
 		9B40717517C3009300A7B98E /* BRGravatarService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B40717317C3009300A7B98E /* BRGravatarService.m */; };
+		9B93ECE417CB29FC0024210D /* BRGHLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B93ECE317CB29FC0024210D /* BRGHLogin.m */; };
+		9B93ECE517CB29FC0024210D /* BRGHLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B93ECE317CB29FC0024210D /* BRGHLogin.m */; };
+		9B93ECE817CB29FD0024210D /* BRGHGravatar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B93ECE717CB29FD0024210D /* BRGHGravatar.m */; };
+		9B93ECE917CB29FD0024210D /* BRGHGravatar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B93ECE717CB29FD0024210D /* BRGHGravatar.m */; };
 		9BC8503517C349D500AE502D /* BRRepositoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8503417C349D500AE502D /* BRRepositoriesViewController.m */; };
 		9BC8503617C349D500AE502D /* BRRepositoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8503417C349D500AE502D /* BRRepositoriesViewController.m */; };
 		9BC8503917C34ADA00AE502D /* BRRepositoriesService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8503817C34ADA00AE502D /* BRRepositoriesService.m */; };
@@ -81,8 +85,6 @@
 		9BEA42E517C48CC7009AD0B2 /* BRCommitsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BEA42E317C48CC7009AD0B2 /* BRCommitsViewController.m */; };
 		9BF70C4D17C4A042009EEB09 /* BRGHBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF70C4C17C4A042009EEB09 /* BRGHBranch.m */; };
 		9BF70C4E17C4A042009EEB09 /* BRGHBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF70C4C17C4A042009EEB09 /* BRGHBranch.m */; };
-		9BF70C5517C4A043009EEB09 /* BRGHLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF70C5417C4A043009EEB09 /* BRGHLogin.m */; };
-		9BF70C5617C4A043009EEB09 /* BRGHLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF70C5417C4A043009EEB09 /* BRGHLogin.m */; };
 		9BF70C5917C4A043009EEB09 /* BRGHOrganization.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF70C5817C4A043009EEB09 /* BRGHOrganization.m */; };
 		9BF70C5A17C4A043009EEB09 /* BRGHOrganization.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF70C5817C4A043009EEB09 /* BRGHOrganization.m */; };
 		9BF70C5D17C4A043009EEB09 /* BRGHRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF70C5C17C4A043009EEB09 /* BRGHRepository.m */; };
@@ -100,7 +102,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		9B04159217CB01C9005D0FC1 /* GitHubReader2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = GitHubReader2.xcdatamodel; sourceTree = "<group>"; };
+		9B04159217CB01C9005D0FC1 /* GitHubReader2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GitHubReader2.xcdatamodel; sourceTree = "<group>"; };
 		9B13854017C5BEB4003CB45E /* BRGHCommit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHCommit.h; sourceTree = "<group>"; };
 		9B13854117C5BEB4003CB45E /* BRGHCommit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRGHCommit.m; sourceTree = "<group>"; };
 		9B13854417C5BEB5003CB45E /* BRGHUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHUser.h; sourceTree = "<group>"; };
@@ -158,6 +160,10 @@
 		9B1F6BA717C1E12200813AF5 /* BRLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRLogin.m; sourceTree = "<group>"; };
 		9B40717217C3009300A7B98E /* BRGravatarService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGravatarService.h; sourceTree = "<group>"; };
 		9B40717317C3009300A7B98E /* BRGravatarService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRGravatarService.m; sourceTree = "<group>"; };
+		9B93ECE217CB29FC0024210D /* BRGHLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHLogin.h; sourceTree = "<group>"; };
+		9B93ECE317CB29FC0024210D /* BRGHLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRGHLogin.m; sourceTree = "<group>"; };
+		9B93ECE617CB29FD0024210D /* BRGHGravatar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHGravatar.h; sourceTree = "<group>"; };
+		9B93ECE717CB29FD0024210D /* BRGHGravatar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRGHGravatar.m; sourceTree = "<group>"; };
 		9BC8503317C349D500AE502D /* BRRepositoriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRRepositoriesViewController.h; sourceTree = "<group>"; };
 		9BC8503417C349D500AE502D /* BRRepositoriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRRepositoriesViewController.m; sourceTree = "<group>"; };
 		9BC8503717C34ADA00AE502D /* BRRepositoriesService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRRepositoriesService.h; sourceTree = "<group>"; };
@@ -176,8 +182,6 @@
 		9BEA42E317C48CC7009AD0B2 /* BRCommitsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRCommitsViewController.m; sourceTree = "<group>"; };
 		9BF70C4B17C4A042009EEB09 /* BRGHBranch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHBranch.h; sourceTree = "<group>"; };
 		9BF70C4C17C4A042009EEB09 /* BRGHBranch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRGHBranch.m; sourceTree = "<group>"; };
-		9BF70C5317C4A043009EEB09 /* BRGHLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHLogin.h; sourceTree = "<group>"; };
-		9BF70C5417C4A043009EEB09 /* BRGHLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRGHLogin.m; sourceTree = "<group>"; };
 		9BF70C5717C4A043009EEB09 /* BRGHOrganization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHOrganization.h; sourceTree = "<group>"; };
 		9BF70C5817C4A043009EEB09 /* BRGHOrganization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRGHOrganization.m; sourceTree = "<group>"; };
 		9BF70C5B17C4A043009EEB09 /* BRGHRepository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHRepository.h; sourceTree = "<group>"; };
@@ -342,8 +346,6 @@
 				9B1F6AE117C09CEE00813AF5 /* GitHubReader.xcdatamodeld */,
 				9BF70C4B17C4A042009EEB09 /* BRGHBranch.h */,
 				9BF70C4C17C4A042009EEB09 /* BRGHBranch.m */,
-				9BF70C5317C4A043009EEB09 /* BRGHLogin.h */,
-				9BF70C5417C4A043009EEB09 /* BRGHLogin.m */,
 				9BF70C5717C4A043009EEB09 /* BRGHOrganization.h */,
 				9BF70C5817C4A043009EEB09 /* BRGHOrganization.m */,
 				9BF70C5B17C4A043009EEB09 /* BRGHRepository.h */,
@@ -352,6 +354,10 @@
 				9B13854117C5BEB4003CB45E /* BRGHCommit.m */,
 				9B13854417C5BEB5003CB45E /* BRGHUser.h */,
 				9B13854517C5BEB5003CB45E /* BRGHUser.m */,
+				9B93ECE217CB29FC0024210D /* BRGHLogin.h */,
+				9B93ECE317CB29FC0024210D /* BRGHLogin.m */,
+				9B93ECE617CB29FD0024210D /* BRGHGravatar.h */,
+				9B93ECE717CB29FD0024210D /* BRGHGravatar.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -513,12 +519,13 @@
 				9BEA42B817C44B9F009AD0B2 /* BRBranchService.m in Sources */,
 				9B1F6ADB17C0918600813AF5 /* UIColor+Helpers.m in Sources */,
 				9BC8503517C349D500AE502D /* BRRepositoriesViewController.m in Sources */,
+				9B93ECE417CB29FC0024210D /* BRGHLogin.m in Sources */,
 				9B1F6BA417C1DD6100813AF5 /* BRRemoteService.m in Sources */,
 				9BF70C4D17C4A042009EEB09 /* BRGHBranch.m in Sources */,
 				9BC8503917C34ADA00AE502D /* BRRepositoriesService.m in Sources */,
 				9B1F6B9C17C1D62900813AF5 /* BROrganizationService.m in Sources */,
 				9BEA42D417C47BD4009AD0B2 /* BRCommitsService.m in Sources */,
-				9BF70C5517C4A043009EEB09 /* BRGHLogin.m in Sources */,
+				9B93ECE817CB29FD0024210D /* BRGHGravatar.m in Sources */,
 				9BF70C5917C4A043009EEB09 /* BRGHOrganization.m in Sources */,
 				9B1F6A7617C0560100813AF5 /* BRAppDelegate.m in Sources */,
 				9B1F6B7817C0B12D00813AF5 /* NSDictionary+valueOrDefault.m in Sources */,
@@ -547,7 +554,6 @@
 			files = (
 				9B1F6ACB17C06CB200813AF5 /* BRBasicAuthenticationService.m in Sources */,
 				9B1F6BA117C1D69300813AF5 /* BRGitHubApiService.m in Sources */,
-				9BF70C5617C4A043009EEB09 /* BRGHLogin.m in Sources */,
 				9BEA42D517C47BD4009AD0B2 /* BRCommitsService.m in Sources */,
 				9BEA42E517C48CC7009AD0B2 /* BRCommitsViewController.m in Sources */,
 				9BF70C5A17C4A043009EEB09 /* BRGHOrganization.m in Sources */,
@@ -559,6 +565,7 @@
 				9B1F6AA217C058AB00813AF5 /* fishhook.c in Sources */,
 				9B1F6BA517C1DD6100813AF5 /* BRRemoteService.m in Sources */,
 				9BF70C5E17C4A043009EEB09 /* BRGHRepository.m in Sources */,
+				9B93ECE517CB29FC0024210D /* BRGHLogin.m in Sources */,
 				9B1F6A9117C0560100813AF5 /* GitHubReaderTests.m in Sources */,
 				9BEA42B917C44B9F009AD0B2 /* BRBranchService.m in Sources */,
 				9BC8504017C3C8A300AE502D /* BRBasicFetchedResultControllerDelegate.m in Sources */,
@@ -573,6 +580,7 @@
 				9B1F6AC217C0666B00813AF5 /* BRUserService.m in Sources */,
 				9BC8503A17C34ADA00AE502D /* BRRepositoriesService.m in Sources */,
 				9B1F6AA617C058AB00813AF5 /* QuietAssertMacros.c in Sources */,
+				9B93ECE917CB29FD0024210D /* BRGHGravatar.m in Sources */,
 				9B1F6AC717C06C0A00813AF5 /* NSData+Base64.m in Sources */,
 				9B13854717C5BEB5003CB45E /* BRGHUser.m in Sources */,
 				9B1F6B7917C0B12D00813AF5 /* NSDictionary+valueOrDefault.m in Sources */,

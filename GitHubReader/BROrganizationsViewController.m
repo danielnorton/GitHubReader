@@ -18,6 +18,9 @@
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) BRBasicFetchedResultControllerDelegate *delegate;
+@property (strong, nonatomic) id observer;
+@property (strong, nonatomic) BRGravatarService *gravatarService;
+@property (strong, nonatomic) NSCache *thumbnailCache;
 
 @end
 
@@ -31,6 +34,23 @@
 	
 	[self setTitle:@"Organizations"];
 	[self.navigationController setNavigationBarHidden:NO animated:YES];
+
+	id observer = [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextDidSaveNotification
+																	object:nil
+																	 queue:[NSOperationQueue mainQueue]
+																usingBlock:^(NSNotification *note) {
+																	
+																	if (note.object == [[BRModelManager sharedInstance] context]) return;
+																	
+																	[self updateDataFromNotifiction:note];
+																}];
+	[self setObserver:observer];
+	
+	BRGravatarService *service = [[BRGravatarService alloc] init];
+	[self setGravatarService:service];
+	
+	NSCache *cache = [[NSCache alloc] init];
+	[self setThumbnailCache:cache];
 }
 
 - (void)viewDidLoad {
@@ -68,6 +88,11 @@
 	}];
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+	
+	BRGHLogin *login = (BRGHLogin *)[_fetchedResultsController objectAtIndexPath:indexPath];
+	[_gravatarService saveGravatarsForLogin:login ofSize:80 * [[UIScreen mainScreen] scale]];
+}
 
 #pragma mark UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
@@ -138,6 +163,8 @@
 
 - (IBAction)didBeginRefresh:(UIRefreshControl *)sender {
 	
+	[_thumbnailCache removeAllObjects];
+	
 	BROrganizationService *service = [[BROrganizationService alloc] init];
 	[service beginSaveOrganizationsForGitLogin:_gitHubUser withLogin:_login withCompletion:^(BOOL saved, NSError *error) {
 		
@@ -148,6 +175,21 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
 	
 	BRGHLogin *login = (BRGHLogin *)[_fetchedResultsController objectAtIndexPath:indexPath];
+	
+	UIImage *image = [_thumbnailCache objectForKey:login.gravatarId];
+	if (!image) {
+
+		if (login.thumbnailGravatar.image) {
+			
+			UIImage *image = [UIImage imageWithData:login.thumbnailGravatar.image scale:[[UIScreen mainScreen] scale]];
+			if (image) {
+				
+				[cell.imageView setImage:image];
+				[_thumbnailCache setObject:image forKey:login.gravatarId];
+			}
+		}
+	}
+	
 	[cell.textLabel setText:login.name];
 }
 
@@ -156,5 +198,15 @@
 	[self performSegueWithIdentifier:@"unwindFromOrganizationSegue" sender:self];
 }
 
+- (void)updateDataFromNotifiction:(NSNotification *)notification {
+    
+    if (![NSThread isMainThread]) {
+		
+		[self performSelectorOnMainThread:@selector(updateDataFromNotifiction:) withObject:notification waitUntilDone:NO];
+		return;
+	}
+	
+    [_fetchedResultsController.managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
+}
 
 @end

@@ -10,6 +10,7 @@
 
 #import "BRGHBranch.h"
 #import "BRGHCommit.h"
+#import "BRGHGravatar.h"
 #import "BRGHLogin.h"
 #import "BRGHOrganization.h"
 #import "BRGHRepository.h"

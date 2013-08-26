@@ -44,6 +44,7 @@
 		
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
 		[context setPersistentStoreCoordinator:[[BRModelManager sharedInstance] persistentStoreCoordinator]];
+		[context setMergePolicy:NSMergeByPropertyObjectTrumpMergePolicy];
 		
 		BROrganizationService *service = [[BROrganizationService alloc] init];
 		[service setContext:context];

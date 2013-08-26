@@ -10,6 +10,6 @@
 @interface BRGravatarService : NSObject
 
 + (NSURL *)urlForGravatarWithHash:(NSString *)hash ofSize:(int)size;
-+ (UIImage *)imageForGravatarWithHash:(NSString *)hash ofSize:(int)size;
+- (void)saveGravatarsForLogin:(BRGHLogin *)login ofSize:(int)size;
 
 @end
