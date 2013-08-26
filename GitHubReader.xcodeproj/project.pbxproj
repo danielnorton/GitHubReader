@@ -100,6 +100,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9B04159217CB01C9005D0FC1 /* GitHubReader2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = GitHubReader2.xcdatamodel; sourceTree = "<group>"; };
 		9B13854017C5BEB4003CB45E /* BRGHCommit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHCommit.h; sourceTree = "<group>"; };
 		9B13854117C5BEB4003CB45E /* BRGHCommit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRGHCommit.m; sourceTree = "<group>"; };
 		9B13854417C5BEB5003CB45E /* BRGHUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHUser.h; sourceTree = "<group>"; };
@@ -789,9 +790,10 @@
 		9B1F6AE117C09CEE00813AF5 /* GitHubReader.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				9B04159217CB01C9005D0FC1 /* GitHubReader2.xcdatamodel */,
 				9B1F6AE217C09CEE00813AF5 /* GitHubReader.xcdatamodel */,
 			);
-			currentVersion = 9B1F6AE217C09CEE00813AF5 /* GitHubReader.xcdatamodel */;
+			currentVersion = 9B04159217CB01C9005D0FC1 /* GitHubReader2.xcdatamodel */;
 			path = GitHubReader.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

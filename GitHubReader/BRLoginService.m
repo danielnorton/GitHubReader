@@ -165,7 +165,10 @@ NSString *const BRGitHubReaderSecurityService = @"BRGitHubReaderSecurityService"
 	NSArray *all = [context executeFetchRequest:fetchRequest error:&inError];
 	if (!all || inError) {
 		
-		*error = inError;
+		if (error != NULL) {
+		
+			*error = inError;
+		}
 		return NO;
 	}
 	
@@ -175,7 +178,12 @@ NSString *const BRGitHubReaderSecurityService = @"BRGitHubReaderSecurityService"
 		[context deleteObject:one];
 	}];
 	
-	return YES;
+	BOOL answer = [context save:&inError];
+	if (error != NULL) {
+	
+		*error = inError;
+	}
+	return answer;
 }
 
 
