@@ -2,7 +2,7 @@
 //  BRGHUser.h
 //  GitHubReader
 //
-//  Created by Daniel Norton on 8/21/13.
+//  Created by Daniel Norton on 8/26/13.
 //  Copyright (c) 2013 Daniel Norton. All rights reserved.
 //
 
@@ -16,8 +16,9 @@
 
 @property (nonatomic, retain) NSString * longName;
 @property (nonatomic, retain) NSString * organizationsPath;
+@property (nonatomic, retain) NSString * organizationLastModified;
 @property (nonatomic, retain) NSSet *commits;
-@property (nonatomic, retain) BRGHOrganization *organizations;
+@property (nonatomic, retain) NSSet *organizations;
 @end
 
 @interface BRGHUser (CoreDataGeneratedAccessors)
@@ -26,5 +27,10 @@
 - (void)removeCommitsObject:(BRGHCommit *)value;
 - (void)addCommits:(NSSet *)values;
 - (void)removeCommits:(NSSet *)values;
+
+- (void)addOrganizationsObject:(BRGHOrganization *)value;
+- (void)removeOrganizationsObject:(BRGHOrganization *)value;
+- (void)addOrganizations:(NSSet *)values;
+- (void)removeOrganizations:(NSSet *)values;
 
 @end

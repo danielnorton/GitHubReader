@@ -2,7 +2,7 @@
 //  BRGHRepository.m
 //  GitHubReader
 //
-//  Created by Daniel Norton on 8/21/13.
+//  Created by Daniel Norton on 8/26/13.
 //  Copyright (c) 2013 Daniel Norton. All rights reserved.
 //
 
@@ -24,6 +24,9 @@
 @dynamic name;
 @dynamic treesPath;
 @dynamic updated;
+@dynamic branchesLastModified;
+@dynamic commitsLastModified;
+@dynamic treesLastModified;
 @dynamic branches;
 @dynamic commits;
 @dynamic owner;

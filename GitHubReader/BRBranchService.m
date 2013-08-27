@@ -26,15 +26,18 @@
 #pragma mark BRBranchService
 - (BOOL)saveBranchesForRepository:(BRGHRepository *)repo withLogin:(BRLogin *)login error:(NSError **)error {
 	
+	NSString *lastModified = nil;
 	NSError* inError = nil;
-	NSArray *json = [self getRemoteDataForBranchesForRepository:repo withLogin:login error:&inError];
+	NSArray *json = [self getRemoteDataForBranchesForRepository:repo withLogin:login lastModified:&lastModified error:&inError];
 	if (!json || inError) {
 		
 		*error = inError;
 		return NO;
 	}
 	
-	return [self saveBranchesData:json forForRepository:repo error:error];
+	if (json.count == 0) return YES;
+	
+	return [self saveBranchesData:json forForRepository:repo lastModified:lastModified error:error];
 }
 
 - (void)beginSaveBranchesForRepository:(BRGHRepository *)repo
@@ -73,15 +76,21 @@
 
 
 #pragma mark Private Messages
-- (NSArray *)getRemoteDataForBranchesForRepository:(BRGHRepository *)repo withLogin:(BRLogin *)login error:(NSError **)error {
+- (NSArray *)getRemoteDataForBranchesForRepository:(BRGHRepository *)repo
+										 withLogin:(BRLogin *)login
+									  lastModified:(NSString **)lastModified
+											 error:(NSError **)error {
 	
 	NSError* inError = nil;
 	BRGitHubApiService *api = [[BRGitHubApiService alloc] init];
 	
 	NSURL *url = [NSURL URLWithString:repo.branchesPath];
-	NSMutableURLRequest *request = [api requestFor:login atURL:url withHTTPMethod:BRHTTPMethodGet withHeaders:nil];
+	NSDictionary *headers = (repo.branchesLastModified)
+	? @{BRIfModifiedSinceHeader: repo.branchesLastModified}
+	: nil;
+	NSMutableURLRequest *request = [api requestFor:login atURL:url withHTTPMethod:BRHTTPMethodGet withHeaders:headers];
 	
-	NSURLResponse *response = nil;
+	NSHTTPURLResponse *response = nil;
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:error];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -89,6 +98,11 @@
 		
 		*error = inError;
 		return nil;
+	}
+	
+	if (response.statusCode == BRHTTPNotModified) {
+		
+		return [NSArray array];
 	}
 	
 	// Parse out the json response data
@@ -99,16 +113,22 @@
 		return nil;
 	}
 	
+	*lastModified = response.allHeaderFields[BRLastModifiedHeader];
 	return json;
 }
 
-- (BOOL)saveBranchesData:(NSArray *)json forForRepository:(BRGHRepository *)repo error:(NSError **)error {
+- (BOOL)saveBranchesData:(NSArray *)json
+		forForRepository:(BRGHRepository *)repo
+			lastModified:(NSString *)lastModified
+				   error:(NSError **)error {
 	
 	if (!_context) {
 		
 		NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
 		[self setContext:context];
 	}
+	
+	[repo setBranchesLastModified:lastModified];
 	
 	NSError* inError = nil;
 	BRGitHubApiService *apiService = [[BRGitHubApiService alloc] init];

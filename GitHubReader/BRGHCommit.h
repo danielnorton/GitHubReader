@@ -2,7 +2,7 @@
 //  BRGHCommit.h
 //  GitHubReader
 //
-//  Created by Daniel Norton on 8/21/13.
+//  Created by Daniel Norton on 8/26/13.
 //  Copyright (c) 2013 Daniel Norton. All rights reserved.
 //
 
@@ -14,7 +14,6 @@
 @interface BRGHCommit : NSManagedObject
 
 @property (nonatomic, retain) NSDate * date;
-@property (nonatomic, retain) NSDate * day;
 @property (nonatomic, retain) NSString * message;
 @property (nonatomic, retain) NSString * parentSha;
 @property (nonatomic, retain) NSString * path;
@@ -22,6 +21,4 @@
 @property (nonatomic, retain) BRGHUser *author;
 @property (nonatomic, retain) BRGHRepository *repository;
 
-
-@property (nonatomic, readonly) NSString *localizedDay;
 @end

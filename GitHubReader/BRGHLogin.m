@@ -20,7 +20,8 @@
 @dynamic path;
 @dynamic repositoriesPath;
 @dynamic sortIndex;
-@dynamic thumbnailGravatar;
+@dynamic repositoriesLastModified;
 @dynamic repositories;
+@dynamic thumbnailGravatar;
 
 @end

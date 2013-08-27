@@ -11,6 +11,9 @@
 
 extern NSString *const BRGitHubIdKey;
 extern NSString *const BRShaKey;
+extern NSString *const BRIfModifiedSinceHeader;
+extern NSString *const BRLastModifiedHeader;
+extern int const BRHTTPNotModified;
 
 @interface BRGitHubApiService : NSObject
 
@@ -19,6 +22,12 @@ extern NSString *const BRShaKey;
 - (NSMutableURLRequest *)requestFor:(BRLogin *)login
 							  atURL:(NSURL *)url
 					 withHTTPMethod:(NSString *)httpMethod
+						withHeaders:(NSDictionary *)headers;
+
+- (NSMutableURLRequest *)requestFor:(BRLogin *)login
+							  atURL:(NSURL *)url
+					 withHTTPMethod:(NSString *)httpMethod
+						cachePolicy:(NSURLRequestCachePolicy)cachePolicy
 						withHeaders:(NSDictionary *)headers;
 
 - (NSDate *)dateFromJson:(NSDictionary *)json key:(NSString *)key;

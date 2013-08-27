@@ -15,3 +15,5 @@
 #import "BRGHOrganization.h"
 #import "BRGHRepository.h"
 #import "BRGHUser.h"
+
+#import "BRGHCommit+model.h"

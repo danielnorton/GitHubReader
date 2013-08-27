@@ -16,6 +16,9 @@
 
 NSString *const BRGitHubIdKey = @"gitHubId";
 NSString *const BRShaKey = @"sha";
+NSString *const BRIfModifiedSinceHeader = @"if-modified-since";
+NSString *const BRLastModifiedHeader = @"Last-Modified";
+int const BRHTTPNotModified = 304;
 
 
 @implementation BRGitHubApiService
@@ -49,8 +52,17 @@ static NSDateFormatter *gitDateFormatter;
 					 withHTTPMethod:(NSString *)httpMethod
 						withHeaders:(NSDictionary *)headers {
 	
+	return [self requestFor:login atURL:url withHTTPMethod:httpMethod cachePolicy:NSURLRequestReloadIgnoringCacheData withHeaders:headers];
+}
+
+- (NSMutableURLRequest *)requestFor:(BRLogin *)login
+							  atURL:(NSURL *)url
+					 withHTTPMethod:(NSString *)httpMethod
+						cachePolicy:(NSURLRequestCachePolicy)cachePolicy
+						withHeaders:(NSDictionary *)headers {
+	
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url
-																cachePolicy:NSURLRequestReloadIgnoringCacheData
+																cachePolicy:cachePolicy
 															timeoutInterval:30.0f];
 	[request setHTTPMethod:httpMethod];
 	

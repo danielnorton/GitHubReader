@@ -26,15 +26,18 @@
 #pragma mark BRRepositoriesService
 - (BOOL)saveRepositoriesForGitLogin:(BRGHLogin *)gitHubLogin withLogin:(BRLogin *)login error:(NSError **)error {
 	
+	NSString *lastModified = nil;
 	NSError* inError = nil;
-	NSArray *json = [self getRemoteDataForGitLogin:gitHubLogin withLogin:login error:error];
+	NSArray *json = [self getRemoteDataForGitLogin:gitHubLogin withLogin:login lastModified:&lastModified error:error];
 	if (!json || inError) {
 		
 		*error = inError;
 		return NO;
 	}
 	
-	return [self saveRepositoriesData:json forGitLogin:gitHubLogin error:error];
+	if (json.count == 0) return YES;
+	
+	return [self saveRepositoriesData:json forGitLogin:gitHubLogin lastModified:lastModified error:error];
 }
 
 - (void)beginSaveRepositoriesForGitLogin:(BRGHLogin *)gitHubLogin
@@ -73,15 +76,21 @@
 
 
 #pragma mark Private Messages
-- (NSArray *)getRemoteDataForGitLogin:(BRGHLogin *)gitHubLogin withLogin:(BRLogin *)login error:(NSError **)error {
+- (NSArray *)getRemoteDataForGitLogin:(BRGHLogin *)gitHubLogin
+							withLogin:(BRLogin *)login
+						 lastModified:(NSString **)lastModified
+								error:(NSError **)error {
 	
 	NSError* inError = nil;
 	BRGitHubApiService *api = [[BRGitHubApiService alloc] init];
 	
 	NSURL *url = [NSURL URLWithString:gitHubLogin.repositoriesPath];
-	NSMutableURLRequest *request = [api requestFor:login atURL:url withHTTPMethod:BRHTTPMethodGet withHeaders:nil];
+	NSDictionary *headers = (gitHubLogin.repositoriesLastModified)
+	? @{BRIfModifiedSinceHeader: gitHubLogin.repositoriesLastModified}
+	: nil;
+	NSMutableURLRequest *request = [api requestFor:login atURL:url withHTTPMethod:BRHTTPMethodGet withHeaders:headers];
 	
-	NSURLResponse *response = nil;
+	NSHTTPURLResponse *response = nil;
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:error];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -89,6 +98,11 @@
 		
 		*error = inError;
 		return nil;
+	}
+	
+	if (response.statusCode == BRHTTPNotModified) {
+		
+		return [NSArray array];
 	}
 	
 	// Parse out the json response data
@@ -99,17 +113,22 @@
 		return nil;
 	}
 
-	
+	*lastModified = response.allHeaderFields[BRLastModifiedHeader];
 	return json;
 }
 
-- (BOOL)saveRepositoriesData:(NSArray *)json forGitLogin:(BRGHLogin *)gitHubLogin error:(NSError **)error {
+- (BOOL)saveRepositoriesData:(NSArray *)json
+				 forGitLogin:(BRGHLogin *)gitHubLogin
+				lastModified:(NSString *)lastModified
+					   error:(NSError **)error {
 	
 	if (!_context) {
 		
 		NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
 		[self setContext:context];
 	}
+	
+	[gitHubLogin setRepositoriesLastModified:lastModified];
 	
 	NSError* inError = nil;
 	BRGitHubApiService *apiService = [[BRGitHubApiService alloc] init];

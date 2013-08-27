@@ -26,6 +26,7 @@
         <attribute name="isAuthenticated" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="repositoriesLastModified" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="repositoriesPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sortIndex" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="repositories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BRGHRepository" inverseName="owner" inverseEntity="BRGHRepository" syncable="YES"/>
@@ -35,7 +36,9 @@
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BRGHUser" inverseName="organizations" inverseEntity="BRGHUser" syncable="YES"/>
     </entity>
     <entity name="BRGHRepository" representedClassName="BRGHRepository" syncable="YES">
+        <attribute name="branchesLastModified" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="branchesPath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="commitsLastModified" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="commitsPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="created" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="defaultBranchName" optional="YES" attributeType="String" syncable="YES"/>
@@ -43,6 +46,7 @@
         <attribute name="gitHubDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gitHubId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="treesLastModified" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="treesPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="branches" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BRGHBranch" inverseName="repository" inverseEntity="BRGHBranch" syncable="YES"/>
@@ -51,6 +55,7 @@
     </entity>
     <entity name="BRGHUser" representedClassName="BRGHUser" parentEntity="BRGHLogin" syncable="YES">
         <attribute name="longName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="organizationLastModified" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="organizationsPath" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="commits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BRGHCommit" inverseName="author" inverseEntity="BRGHCommit" syncable="YES"/>
         <relationship name="organizations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BRGHOrganization" inverseName="user" inverseEntity="BRGHOrganization" syncable="YES"/>
@@ -59,9 +64,9 @@
         <element name="BRGHBranch" positionX="-261" positionY="185" width="128" height="103"/>
         <element name="BRGHCommit" positionX="-261" positionY="351" width="128" height="148"/>
         <element name="BRGHGravatar" positionX="-695" positionY="-72" width="128" height="88"/>
-        <element name="BRGHLogin" positionX="-452" positionY="-36" width="128" height="178"/>
+        <element name="BRGHLogin" positionX="-452" positionY="-36" width="128" height="193"/>
         <element name="BRGHOrganization" positionX="-74" positionY="-49" width="128" height="58"/>
-        <element name="BRGHRepository" positionX="-479" positionY="216" width="128" height="238"/>
-        <element name="BRGHUser" positionX="-54" positionY="77" width="128" height="103"/>
+        <element name="BRGHRepository" positionX="-479" positionY="216" width="128" height="283"/>
+        <element name="BRGHUser" positionX="-54" positionY="77" width="128" height="118"/>
     </elements>
 </model>

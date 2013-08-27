@@ -1,17 +1,14 @@
 //
-//  BRGHOrganization.m
+//  BRGHCommit+model.h
 //  GitHubReader
 //
 //  Created by Daniel Norton on 8/26/13.
 //  Copyright (c) 2013 Daniel Norton. All rights reserved.
 //
 
-#import "BRGHOrganization.h"
-#import "BRGHUser.h"
 
+@interface BRGHCommit(model)
 
-@implementation BRGHOrganization
-
-@dynamic user;
+@property (nonatomic, readonly) NSString *localizedDay;
 
 @end

@@ -20,8 +20,9 @@
 @property (nonatomic, retain) NSString * path;
 @property (nonatomic, retain) NSString * repositoriesPath;
 @property (nonatomic, retain) NSNumber * sortIndex;
-@property (nonatomic, retain) BRGHGravatar *thumbnailGravatar;
+@property (nonatomic, retain) NSString * repositoriesLastModified;
 @property (nonatomic, retain) NSSet *repositories;
+@property (nonatomic, retain) BRGHGravatar *thumbnailGravatar;
 @end
 
 @interface BRGHLogin (CoreDataGeneratedAccessors)
