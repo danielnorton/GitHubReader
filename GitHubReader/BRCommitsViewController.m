@@ -30,6 +30,8 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 @property (strong, nonatomic) id observer;
 @property (nonatomic) BRCommitFetchState fetchState;
 @property (nonatomic) int dataCount;
+@property (strong, nonatomic) BRGravatarService *gravatarService;
+
 @end
 
 
@@ -56,6 +58,9 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 																	[self updateDataFromNotifiction:note];
 																}];
 	[self setObserver:observer];
+	
+	BRGravatarService *service = [[BRGravatarService alloc] init];
+	[self setGravatarService:service];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -70,6 +75,16 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 	[super viewDidLoad];
 	
 	[self initializeFetchedResultsController];
+}
+
+
+#pragma mark UITableViewDelegate
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+	
+	BRGHCommit *commit = (BRGHCommit *)[_fetchedResultsController objectAtIndexPath:indexPath];
+	if (!commit.author) return;
+	
+	[_gravatarService saveGravatarsForLogin:commit.author ofSize:80 * [[UIScreen mainScreen] scale]];
 }
 
 
@@ -126,6 +141,22 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 }
 
 
+#pragma mark IBAction
+- (IBAction)didBeginRefresh:(UIRefreshControl *)sender {
+	
+	[_gravatarService.thumbnailCache removeAllObjects];
+	
+	BRCommitsService *service = [[BRCommitsService alloc] init];
+	[service beginSaveCommitsForRepository:_repository atSha:_topSha withPageSize:kDataPageSize withLogin:_login shouldPurgeOthers:YES withCompletion:^(BOOL saved, NSError *error) {
+		
+		[self calculateDataCount];
+		[self displayPagingIndicator];
+		[self setFetchState:BRCommitFetchStateIdle];
+		[sender endRefreshing];
+	}];
+}
+
+
 #pragma mark Private Messages
 - (void)initializeFetchedResultsController {
 	
@@ -142,7 +173,7 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 	[fetchRequest setEntity:entity];
 	[fetchRequest setSortDescriptors:@[date]];
 	[fetchRequest setPredicate:pred];
-	[fetchRequest setRelationshipKeyPathsForPrefetching:@[@"author"]];
+	[fetchRequest setRelationshipKeyPathsForPrefetching:@[@"author", @"gravatar"]];
 	[fetchRequest setFetchBatchSize:20];
 	[self setFetchRequest:fetchRequest];
 	
@@ -179,18 +210,6 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 	return count;
 }
 
-- (IBAction)didBeginRefresh:(UIRefreshControl *)sender {
-	
-	BRCommitsService *service = [[BRCommitsService alloc] init];
-	[service beginSaveCommitsForRepository:_repository atSha:_topSha withPageSize:kDataPageSize withLogin:_login shouldPurgeOthers:YES withCompletion:^(BOOL saved, NSError *error) {
-		
-		[self calculateDataCount];
-		[self displayPagingIndicator];
-		[self setFetchState:BRCommitFetchStateIdle];
-		[sender endRefreshing];
-	}];
-}
-
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
 	
 	BRGHCommit *commit = (BRGHCommit *)[_fetchedResultsController objectAtIndexPath:indexPath];
@@ -205,6 +224,9 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 	: @"";
 	NSString *who = [NSString stringWithFormat:@"%@ authored at %@", name, date];
 	[cell.detailTextLabel setText:who];
+
+	UIImage *image = [_gravatarService cachedImageForLogin:commit.author];
+	[cell.imageView setImage:image];
 }
 
 - (void)fetchNextPage {

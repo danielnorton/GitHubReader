@@ -11,6 +11,7 @@
 @interface BRGravatarService()
 
 @property (strong, nonatomic) NSOperationQueue *queue;
+@property (strong, nonatomic) NSCache *thumbnailCache;
 
 @end
 
@@ -29,6 +30,8 @@
 		[queue setName:@"BRGravatarService queue"];
 		[queue setMaxConcurrentOperationCount:3];
 		_queue = queue;
+		
+		_thumbnailCache = [[NSCache alloc] init];
 	}
 	
 	return self;
@@ -40,18 +43,6 @@
 	
 	NSString *gravatarPath = [NSString stringWithFormat:@"https://gravatar.com/avatar/%@?s=%i", hash, size];
 	return [NSURL URLWithString:gravatarPath];
-}
-
-+ (UIImage *)imageForGravatarWithHash:(NSString *)hash ofSize:(int)size {
-	
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-	NSURL *url = [self urlForGravatarWithHash:hash ofSize:size];
-	UIImage *gravatarDownload = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-	UIImage *answer = [UIImage imageWithCGImage:[gravatarDownload CGImage] scale:[[UIScreen mainScreen] scale] orientation:UIImageOrientationUp];
-	
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-	
-	return answer;
 }
 
 - (void)saveGravatarsForLogin:(BRGHLogin *)login ofSize:(int)size {
@@ -99,4 +90,25 @@
 		[context save:NULL];
 	}];
 }
+
+- (UIImage *)cachedImageForLogin:(BRGHLogin *)login {
+	
+	UIImage *image = [_thumbnailCache objectForKey:login.gravatarId];
+	if (!image) {
+		
+		if (login.thumbnailGravatar.image) {
+			
+			image = [UIImage imageWithData:login.thumbnailGravatar.image scale:[[UIScreen mainScreen] scale]];
+			if (image) {
+
+				[_thumbnailCache setObject:image forKey:login.gravatarId];
+			}
+		}
+	}
+	
+	return image;
+}
+
+
 @end
+

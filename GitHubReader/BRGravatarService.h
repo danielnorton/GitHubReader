@@ -9,7 +9,10 @@
 
 @interface BRGravatarService : NSObject
 
+@property (readonly, nonatomic) NSCache *thumbnailCache;
+
 + (NSURL *)urlForGravatarWithHash:(NSString *)hash ofSize:(int)size;
 - (void)saveGravatarsForLogin:(BRGHLogin *)login ofSize:(int)size;
+- (UIImage *)cachedImageForLogin:(BRGHLogin *)login;
 
 @end

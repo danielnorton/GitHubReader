@@ -20,7 +20,6 @@
 @property (strong, nonatomic) BRBasicFetchedResultControllerDelegate *delegate;
 @property (strong, nonatomic) id observer;
 @property (strong, nonatomic) BRGravatarService *gravatarService;
-@property (strong, nonatomic) NSCache *thumbnailCache;
 
 @end
 
@@ -48,9 +47,6 @@
 	
 	BRGravatarService *service = [[BRGravatarService alloc] init];
 	[self setGravatarService:service];
-	
-	NSCache *cache = [[NSCache alloc] init];
-	[self setThumbnailCache:cache];
 }
 
 - (void)viewDidLoad {
@@ -137,6 +133,7 @@
 	[fetchRequest setEntity:entity];
 	[fetchRequest setSortDescriptors:@[sortIndex, name]];
 	[fetchRequest setPredicate:pred];
+	[fetchRequest setRelationshipKeyPathsForPrefetching:@[@"gravatar"]];
 	[fetchRequest setFetchBatchSize:20];
 
 	NSFetchedResultsController *fetchedResultsController =
@@ -163,7 +160,7 @@
 
 - (IBAction)didBeginRefresh:(UIRefreshControl *)sender {
 	
-	[_thumbnailCache removeAllObjects];
+	[_gravatarService.thumbnailCache removeAllObjects];
 	
 	BROrganizationService *service = [[BROrganizationService alloc] init];
 	[service beginSaveOrganizationsForGitLogin:_gitHubUser withLogin:_login withCompletion:^(BOOL saved, NSError *error) {
@@ -176,20 +173,8 @@
 	
 	BRGHLogin *login = (BRGHLogin *)[_fetchedResultsController objectAtIndexPath:indexPath];
 	
-	UIImage *image = [_thumbnailCache objectForKey:login.gravatarId];
-	if (!image) {
-
-		if (login.thumbnailGravatar.image) {
-			
-			UIImage *image = [UIImage imageWithData:login.thumbnailGravatar.image scale:[[UIScreen mainScreen] scale]];
-			if (image) {
-				
-				[cell.imageView setImage:image];
-				[_thumbnailCache setObject:image forKey:login.gravatarId];
-			}
-		}
-	}
-	
+	UIImage *image = [_gravatarService cachedImageForLogin:login];
+	[cell.imageView setImage:image];
 	[cell.textLabel setText:login.name];
 }
 
