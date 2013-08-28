@@ -174,6 +174,10 @@
 	BRGHLogin *login = (BRGHLogin *)[_fetchedResultsController objectAtIndexPath:indexPath];
 	
 	UIImage *image = [_gravatarService cachedImageForLogin:login];
+	UIImage *placeImage = image
+	? image
+	: [UIImage imageNamed:@"cell60"];
+	[cell.imageView setImage:placeImage];
 	[cell.imageView setImage:image];
 	[cell.textLabel setText:login.name];
 }

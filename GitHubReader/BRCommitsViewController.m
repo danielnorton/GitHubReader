@@ -230,7 +230,10 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 	[cell.detailTextLabel setText:who];
 
 	UIImage *image = [_gravatarService cachedImageForLogin:commit.author];
-	[cell.imageView setImage:image];
+	UIImage *placeImage = image
+	? image
+	: [UIImage imageNamed:@"cell60"];
+	[cell.imageView setImage:placeImage];
 }
 
 - (void)fetchNextPage {
