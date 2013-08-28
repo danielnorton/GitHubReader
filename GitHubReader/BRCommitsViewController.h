@@ -13,7 +13,7 @@
 @interface BRCommitsViewController : UITableViewController
 
 @property (strong, nonatomic) BRGHRepository *repository;
-@property (strong, nonatomic) NSString *topSha;
+@property (strong, nonatomic) BRGHBranch *branch;
 @property (strong, nonatomic) BRLogin *login;
 
 + (int)dataPageSize;

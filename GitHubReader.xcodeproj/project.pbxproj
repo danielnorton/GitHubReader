@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9B0E810017CD84E700C8E5BF /* BRGHBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0E80FF17CD84E700C8E5BF /* BRGHBranch.m */; };
+		9B0E810117CD84E700C8E5BF /* BRGHBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0E80FF17CD84E700C8E5BF /* BRGHBranch.m */; };
 		9B1F6A6617C0560100813AF5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B1F6A6517C0560100813AF5 /* Foundation.framework */; };
 		9B1F6A6817C0560100813AF5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B1F6A6717C0560100813AF5 /* CoreGraphics.framework */; };
 		9B1F6A6A17C0560100813AF5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B1F6A6917C0560100813AF5 /* UIKit.framework */; };
@@ -77,8 +79,6 @@
 		9BEA42E517C48CC7009AD0B2 /* BRCommitsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BEA42E317C48CC7009AD0B2 /* BRCommitsViewController.m */; };
 		9BFD429317CBCB3500637797 /* BRGHGravatar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFD429217CBCB3500637797 /* BRGHGravatar.m */; };
 		9BFD429417CBCB3500637797 /* BRGHGravatar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFD429217CBCB3500637797 /* BRGHGravatar.m */; };
-		9BFD429717CBCB3600637797 /* BRGHBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFD429617CBCB3600637797 /* BRGHBranch.m */; };
-		9BFD429817CBCB3600637797 /* BRGHBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFD429617CBCB3600637797 /* BRGHBranch.m */; };
 		9BFD429B17CBCB3600637797 /* BRGHRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFD429A17CBCB3600637797 /* BRGHRepository.m */; };
 		9BFD429C17CBCB3600637797 /* BRGHRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFD429A17CBCB3600637797 /* BRGHRepository.m */; };
 		9BFD429F17CBCB3600637797 /* BRGHCommit.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFD429E17CBCB3600637797 /* BRGHCommit.m */; };
@@ -105,6 +105,8 @@
 
 /* Begin PBXFileReference section */
 		9B04159217CB01C9005D0FC1 /* GitHubReader2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GitHubReader2.xcdatamodel; sourceTree = "<group>"; };
+		9B0E80FE17CD84E700C8E5BF /* BRGHBranch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHBranch.h; sourceTree = "<group>"; };
+		9B0E80FF17CD84E700C8E5BF /* BRGHBranch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRGHBranch.m; sourceTree = "<group>"; };
 		9B1F6A6217C0560100813AF5 /* GitHubReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitHubReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B1F6A6517C0560100813AF5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9B1F6A6717C0560100813AF5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -176,8 +178,6 @@
 		9BEA42E317C48CC7009AD0B2 /* BRCommitsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRCommitsViewController.m; sourceTree = "<group>"; };
 		9BFD429117CBCB3500637797 /* BRGHGravatar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHGravatar.h; sourceTree = "<group>"; };
 		9BFD429217CBCB3500637797 /* BRGHGravatar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRGHGravatar.m; sourceTree = "<group>"; };
-		9BFD429517CBCB3600637797 /* BRGHBranch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHBranch.h; sourceTree = "<group>"; };
-		9BFD429617CBCB3600637797 /* BRGHBranch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRGHBranch.m; sourceTree = "<group>"; };
 		9BFD429917CBCB3600637797 /* BRGHRepository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHRepository.h; sourceTree = "<group>"; };
 		9BFD429A17CBCB3600637797 /* BRGHRepository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRGHRepository.m; sourceTree = "<group>"; };
 		9BFD429D17CBCB3600637797 /* BRGHCommit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHCommit.h; sourceTree = "<group>"; };
@@ -351,8 +351,6 @@
 				9B1F6AE117C09CEE00813AF5 /* GitHubReader.xcdatamodeld */,
 				9BFD429117CBCB3500637797 /* BRGHGravatar.h */,
 				9BFD429217CBCB3500637797 /* BRGHGravatar.m */,
-				9BFD429517CBCB3600637797 /* BRGHBranch.h */,
-				9BFD429617CBCB3600637797 /* BRGHBranch.m */,
 				9BFD429917CBCB3600637797 /* BRGHRepository.h */,
 				9BFD429A17CBCB3600637797 /* BRGHRepository.m */,
 				9BFD429D17CBCB3600637797 /* BRGHCommit.h */,
@@ -363,6 +361,8 @@
 				9BFD42AA17CBCB3600637797 /* BRGHUser.m */,
 				9BFD42AD17CBF48600637797 /* BRGHLogin.h */,
 				9BFD42AE17CBF48600637797 /* BRGHLogin.m */,
+				9B0E80FE17CD84E700C8E5BF /* BRGHBranch.h */,
+				9B0E80FF17CD84E700C8E5BF /* BRGHBranch.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -542,7 +542,6 @@
 				9BFD429317CBCB3500637797 /* BRGHGravatar.m in Sources */,
 				9B1F6A7617C0560100813AF5 /* BRAppDelegate.m in Sources */,
 				9BFD42A717CBCB3600637797 /* BRGHOrganization.m in Sources */,
-				9BFD429717CBCB3600637797 /* BRGHBranch.m in Sources */,
 				9B1F6B7817C0B12D00813AF5 /* NSDictionary+valueOrDefault.m in Sources */,
 				9BEA42C417C46C1D009AD0B2 /* BRBranchesViewController.m in Sources */,
 				9B1F6BA017C1D69300813AF5 /* BRGitHubApiService.m in Sources */,
@@ -552,6 +551,7 @@
 				9B1F6A7217C0560100813AF5 /* main.m in Sources */,
 				9B1F6B9817C1D07400813AF5 /* BROrganizationsViewController.m in Sources */,
 				9B1F6AC617C06C0A00813AF5 /* NSData+Base64.m in Sources */,
+				9B0E810017CD84E700C8E5BF /* BRGHBranch.m in Sources */,
 				9B1F6AAC17C0632400813AF5 /* BRLoginViewController.m in Sources */,
 				9B40717417C3009300A7B98E /* BRGravatarService.m in Sources */,
 				9B1F6AC117C0666B00813AF5 /* BRUserService.m in Sources */,
@@ -577,13 +577,13 @@
 				9B1F6AD817C07EBE00813AF5 /* BRLoginService.m in Sources */,
 				9B1F6B4A17C0A6F900813AF5 /* BRModelManager.m in Sources */,
 				9B1F6B9917C1D07400813AF5 /* BROrganizationsViewController.m in Sources */,
-				9BFD429817CBCB3600637797 /* BRGHBranch.m in Sources */,
 				9B1F6BA917C1E12200813AF5 /* BRLogin.m in Sources */,
 				9B1F6AA217C058AB00813AF5 /* fishhook.c in Sources */,
 				9B1F6BA517C1DD6100813AF5 /* BRRemoteService.m in Sources */,
 				9BFD42B017CBF48600637797 /* BRGHLogin.m in Sources */,
 				9BFD42A817CBCB3600637797 /* BRGHOrganization.m in Sources */,
 				9B1F6A9117C0560100813AF5 /* GitHubReaderTests.m in Sources */,
+				9B0E810117CD84E700C8E5BF /* BRGHBranch.m in Sources */,
 				9BEA42B917C44B9F009AD0B2 /* BRBranchService.m in Sources */,
 				9BC8504017C3C8A300AE502D /* BRBasicFetchedResultControllerDelegate.m in Sources */,
 				9B1F6ADC17C0918600813AF5 /* UIColor+Helpers.m in Sources */,

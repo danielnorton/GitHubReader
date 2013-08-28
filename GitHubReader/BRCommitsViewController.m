@@ -147,7 +147,11 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 	[_gravatarService.thumbnailCache removeAllObjects];
 	
 	BRCommitsService *service = [[BRCommitsService alloc] init];
-	[service beginSaveCommitsForRepository:_repository atSha:_topSha withPageSize:kDataPageSize withLogin:_login shouldPurgeOthers:YES withCompletion:^(BOOL saved, NSError *error) {
+	[service beginSaveCommitsForRepository:_repository
+							atHeadOfBranch:_branch
+							  withPageSize:kDataPageSize
+								 withLogin:_login
+							withCompletion:^(BOOL saved, NSError *error) {
 		
 		[self calculateDataCount];
 		[self displayPagingIndicator];
@@ -247,7 +251,11 @@ typedef NS_ENUM(uint, BRCommitFetchState) {
 	}
 	
 	[self setFetchState:BRCommitFetchStateFetching];
-	[service beginSaveCommitsForRepository:_repository atSha:lastCommit.parentSha withPageSize:kDataPageSize withLogin:_login shouldPurgeOthers:NO withCompletion:^(BOOL saved, NSError *error) {
+	[service beginSaveCommitsForRepository:_repository
+								  atCommit:lastCommit
+							  withPageSize:kDataPageSize
+								 withLogin:_login
+							withCompletion:^(BOOL saved, NSError *error) {
 		
 		int count = [self calculateDataCount];
 		if (startingCount == count) {

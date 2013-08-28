@@ -24,31 +24,28 @@
 
 #pragma mark -
 #pragma mark BRBranchService
-- (BOOL)saveCommitsForRepository:(BRGHRepository *)repo
-						   atSha:(NSString *)sha
-					withPageSize:(int)pageSize
-					   withLogin:(BRLogin *)login
-			   shouldPurgeOthers:(BOOL)purge
-						   error:(NSError **)error {
-	
-	NSError *inError = nil;
-	NSArray *json = [self getRemoteDataForCommitsInRepository:repo atSha:sha withPageSize:pageSize withLogin:login error:&inError];
-	if (!json || inError) {
-		
-		*error = inError;
-		return NO;
-	}
-	
-	return [self saveCommitsData:json shouldPurgeOthers:purge forForRepository:repo error:error];
-}
+//- (BOOL)saveCommitsForRepository:(BRGHRepository *)repo
+//					 withRequest:(NSMutableURLRequest *)request
+//			   shouldPurgeOthers:(BOOL)purge
+//						   error:(NSError **)error {
+//	
+//	NSError *inError = nil;
+//	NSArray *json = [self getRemoteDataForCommitsForRequest:request error:&inError];
+//	if (!json || inError) {
+//		
+//		*error = inError;
+//		return NO;
+//	}
+//	
+//	return [self saveCommitsData:json shouldPurgeOthers:purge forForRepository:repo error:error];
+//}
 
 - (void)beginSaveCommitsForRepository:(BRGHRepository *)repo
-								atSha:(NSString *)sha
+					   atHeadOfBranch:(BRGHBranch *)branch
 						 withPageSize:(int)pageSize
 							withLogin:(BRLogin *)login
-					shouldPurgeOthers:(BOOL)purge
 					   withCompletion:(void (^)(BOOL saved, NSError *error))completion {
-	
+
 	dispatch_queue_t serviceQueue = dispatch_queue_create("BRCommitsService queue", NULL);
 	dispatch_async(serviceQueue, ^{
 		
@@ -59,9 +56,40 @@
 		[service setContext:context];
 		
 		BRGHRepository *thisRepo = (BRGHRepository *)[context objectWithID:repo.objectID];
+		BRGHBranch *thisBranch = (BRGHBranch *)[context objectWithID:branch.objectID];
+		BRGitHubApiService *api = [[BRGitHubApiService alloc] init];
 		
-		NSError *error = nil;
-		BOOL answer = [service saveCommitsForRepository:thisRepo atSha:sha withPageSize:pageSize withLogin:login shouldPurgeOthers:purge error:&error];
+		NSDictionary *params = @{
+								 @"sha": branch.sha,
+								 @"per_page": @(pageSize)
+								 };
+
+		NSDictionary *headers = branch.shaLastModified
+		? @{BRIfModifiedSinceHeader: branch.shaLastModified}
+		: nil;
+		
+		BRRemoteService *remoteService = [[BRRemoteService alloc] init];
+		NSString *path = [remoteService pathFromURLPath:thisRepo.commitsPath withQueryStringParams:params];
+		NSURL *url = [NSURL URLWithString:path];
+		NSMutableURLRequest *request = [api requestFor:login atURL:url withHTTPMethod:BRHTTPMethodGet withHeaders:headers];
+		
+		NSError* error = nil;
+		BOOL answer = YES;
+		NSString *lastModified = nil;
+		NSArray *json = [service getRemoteDataForCommitsForRequest:request lastModified:&lastModified error:&error];
+		if (!json || error) {
+			
+			answer = NO;
+			
+		} else if (json.count == 0) {
+			
+			// 304: no-op
+			
+		} else {
+			
+			[thisBranch setShaLastModified:lastModified];
+			answer = [service saveCommitsData:json shouldPurgeOthers:YES forForRepository:thisRepo error:&error];
+		}
 		
 		if (completion) {
 			
@@ -77,32 +105,73 @@
 			});
 		}
 	});
+}
+
+- (void)beginSaveCommitsForRepository:(BRGHRepository *)repo
+							 atCommit:(BRGHCommit *)commit
+						 withPageSize:(int)pageSize
+							withLogin:(BRLogin *)login
+					   withCompletion:(void (^)(BOOL saved, NSError *error))completion {
 	
+	dispatch_queue_t serviceQueue = dispatch_queue_create("BRCommitsService queue", NULL);
+	dispatch_async(serviceQueue, ^{
+		
+		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
+		[context setPersistentStoreCoordinator:[[BRModelManager sharedInstance] persistentStoreCoordinator]];
+		
+		BRCommitsService *service = [[BRCommitsService alloc] init];
+		[service setContext:context];
+		
+		BRGHRepository *thisRepo = (BRGHRepository *)[context objectWithID:repo.objectID];
+		BRGitHubApiService *api = [[BRGitHubApiService alloc] init];
+		
+		NSDictionary *params = @{
+								 @"sha": commit.parentSha,
+								 @"per_page": @(pageSize)
+								 };
+		
+		BRRemoteService *remoteService = [[BRRemoteService alloc] init];
+		NSString *path = [remoteService pathFromURLPath:thisRepo.commitsPath withQueryStringParams:params];
+		NSURL *url = [NSURL URLWithString:path];
+		NSMutableURLRequest *request = [api requestFor:login atURL:url withHTTPMethod:BRHTTPMethodGet withHeaders:nil];
+		[request setCachePolicy:NSURLRequestUseProtocolCachePolicy];
+		
+		NSError* error = nil;
+		BOOL answer = YES;
+		NSArray *json = [service getRemoteDataForCommitsForRequest:request lastModified:nil error:&error];
+		if (!json || error) {
+			
+			answer = NO;
+			
+		} else {
+			
+			answer = [service saveCommitsData:json shouldPurgeOthers:NO forForRepository:thisRepo error:&error];
+		}
+		
+		if (completion) {
+			
+			dispatch_async(dispatch_get_main_queue(), ^{
+				
+				if (answer && !error) {
+					
+					NSManagedObjectContext *context = [[BRModelManager sharedInstance] context];
+					[context reset];
+				}
+				
+				completion(answer, error);
+			});
+		}
+	});
 }
 
 
 #pragma mark Private Messages
-- (NSArray *)getRemoteDataForCommitsInRepository:(BRGHRepository *)repo
-										   atSha:(NSString *)sha
-									withPageSize:(int)pageSize
-									   withLogin:(BRLogin *)login
-										   error:(NSError **)error {
+- (NSArray *)getRemoteDataForCommitsForRequest:(NSMutableURLRequest *)request
+								  lastModified:(NSString **)lastModified
+										 error:(NSError **)error {
 	
 	NSError* inError = nil;
-	BRGitHubApiService *api = [[BRGitHubApiService alloc] init];
-	
-	NSDictionary *params = @{
-							 @"sha": sha,
-							 @"per_page": @(pageSize)
-							 };
-	
-	BRRemoteService *service = [[BRRemoteService alloc] init];
-	NSString *path = [service pathFromURLPath:repo.commitsPath withQueryStringParams:params];
-	NSURL *url = [NSURL URLWithString:path];
-	NSMutableURLRequest *request = [api requestFor:login atURL:url withHTTPMethod:BRHTTPMethodGet withHeaders:nil];
-	
-	
-	NSURLResponse *response = nil;
+	NSHTTPURLResponse *response = nil;
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:error];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -110,6 +179,11 @@
 		
 		*error = inError;
 		return nil;
+	}
+	
+	if (response.statusCode == BRHTTPNotModified) {
+		
+		return [NSArray array];
 	}
 	
 	// Parse out the json response data
@@ -120,10 +194,17 @@
 		return nil;
 	}
 	
+	if (lastModified) {
+
+		*lastModified = response.allHeaderFields[BRLastModifiedHeader];
+	}
 	return json;
 }
 
-- (BOOL)saveCommitsData:(NSArray *)json shouldPurgeOthers:(BOOL)purge forForRepository:(BRGHRepository *)repo error:(NSError **)error {
+- (BOOL)saveCommitsData:(NSArray *)json
+	  shouldPurgeOthers:(BOOL)purge
+	   forForRepository:(BRGHRepository *)repo
+				  error:(NSError **)error {
 	
 	if (!_context) {
 		

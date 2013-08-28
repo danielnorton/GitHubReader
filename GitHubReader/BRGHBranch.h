@@ -2,7 +2,7 @@
 //  BRGHBranch.h
 //  GitHubReader
 //
-//  Created by Daniel Norton on 8/21/13.
+//  Created by Daniel Norton on 8/27/13.
 //  Copyright (c) 2013 Daniel Norton. All rights reserved.
 //
 
@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSNumber * isDefault;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * sha;
+@property (nonatomic, retain) NSString * shaLastModified;
 @property (nonatomic, retain) BRGHRepository *repository;
 
 @end

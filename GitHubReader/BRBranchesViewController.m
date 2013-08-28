@@ -51,7 +51,7 @@
 	[self setTitle:branch.name];
 	
 	[controller setRepository:_repository];
-	[controller setTopSha:branch.sha];
+	[controller setBranch:branch];
 	[controller setLogin:_login];
 }
 
@@ -61,11 +61,11 @@
 	
 	BRGHBranch *branch = (BRGHBranch *)[_fetchedResultsController objectAtIndexPath:indexPath];
 	BRCommitsService *service = [[BRCommitsService alloc] init];
+	
 	[service beginSaveCommitsForRepository:_repository
-									 atSha:branch.sha
+							atHeadOfBranch:branch
 							  withPageSize:[BRCommitsViewController dataPageSize]
 								 withLogin:_login
-						 shouldPurgeOthers:YES
 							withCompletion:^(BOOL saved, NSError *error) {
 								
 								[self performSegueWithIdentifier:@"SegueFromBranches" sender:indexPath];
