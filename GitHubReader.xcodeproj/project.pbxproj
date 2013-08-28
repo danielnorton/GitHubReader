@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		9B0E810017CD84E700C8E5BF /* BRGHBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0E80FF17CD84E700C8E5BF /* BRGHBranch.m */; };
 		9B0E810117CD84E700C8E5BF /* BRGHBranch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0E80FF17CD84E700C8E5BF /* BRGHBranch.m */; };
+		9B0E810417CDA44700C8E5BF /* UITableViewCell+activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0E810317CDA44700C8E5BF /* UITableViewCell+activity.m */; };
+		9B0E810517CDA44700C8E5BF /* UITableViewCell+activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0E810317CDA44700C8E5BF /* UITableViewCell+activity.m */; };
 		9B1F6A6617C0560100813AF5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B1F6A6517C0560100813AF5 /* Foundation.framework */; };
 		9B1F6A6817C0560100813AF5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B1F6A6717C0560100813AF5 /* CoreGraphics.framework */; };
 		9B1F6A6A17C0560100813AF5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B1F6A6917C0560100813AF5 /* UIKit.framework */; };
@@ -107,6 +109,8 @@
 		9B04159217CB01C9005D0FC1 /* GitHubReader2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GitHubReader2.xcdatamodel; sourceTree = "<group>"; };
 		9B0E80FE17CD84E700C8E5BF /* BRGHBranch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGHBranch.h; sourceTree = "<group>"; };
 		9B0E80FF17CD84E700C8E5BF /* BRGHBranch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRGHBranch.m; sourceTree = "<group>"; };
+		9B0E810217CDA44700C8E5BF /* UITableViewCell+activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+activity.h"; sourceTree = "<group>"; };
+		9B0E810317CDA44700C8E5BF /* UITableViewCell+activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+activity.m"; sourceTree = "<group>"; };
 		9B1F6A6217C0560100813AF5 /* GitHubReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitHubReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B1F6A6517C0560100813AF5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9B1F6A6717C0560100813AF5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -326,6 +330,8 @@
 				9B1F6AC517C06C0A00813AF5 /* NSData+Base64.m */,
 				9B1F6AD917C0918600813AF5 /* UIColor+Helpers.h */,
 				9B1F6ADA17C0918600813AF5 /* UIColor+Helpers.m */,
+				9B0E810217CDA44700C8E5BF /* UITableViewCell+activity.h */,
+				9B0E810317CDA44700C8E5BF /* UITableViewCell+activity.m */,
 			);
 			name = Category;
 			sourceTree = "<group>";
@@ -539,6 +545,7 @@
 				9B1F6B9C17C1D62900813AF5 /* BROrganizationService.m in Sources */,
 				9BFD429B17CBCB3600637797 /* BRGHRepository.m in Sources */,
 				9BEA42D417C47BD4009AD0B2 /* BRCommitsService.m in Sources */,
+				9B0E810417CDA44700C8E5BF /* UITableViewCell+activity.m in Sources */,
 				9BFD429317CBCB3500637797 /* BRGHGravatar.m in Sources */,
 				9B1F6A7617C0560100813AF5 /* BRAppDelegate.m in Sources */,
 				9BFD42A717CBCB3600637797 /* BRGHOrganization.m in Sources */,
@@ -594,6 +601,7 @@
 				9BC8503617C349D500AE502D /* BRRepositoriesViewController.m in Sources */,
 				9BEA42D917C47E62009AD0B2 /* NSDictionary+join.m in Sources */,
 				9B1F6B9D17C1D62900813AF5 /* BROrganizationService.m in Sources */,
+				9B0E810517CDA44700C8E5BF /* UITableViewCell+activity.m in Sources */,
 				9B1F6AC217C0666B00813AF5 /* BRUserService.m in Sources */,
 				9BC8503A17C34ADA00AE502D /* BRRepositoriesService.m in Sources */,
 				9B1F6AA617C058AB00813AF5 /* QuietAssertMacros.c in Sources */,

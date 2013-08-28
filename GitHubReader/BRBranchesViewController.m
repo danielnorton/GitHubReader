@@ -11,6 +11,7 @@
 #import "BRCommitsViewController.h"
 #import "BRCommitsService.h"
 #import "BRBasicFetchedResultControllerDelegate.h"
+#import "UITableViewCell+activity.h"
 
 
 @interface BRBranchesViewController()
@@ -62,12 +63,16 @@
 	BRGHBranch *branch = (BRGHBranch *)[_fetchedResultsController objectAtIndexPath:indexPath];
 	BRCommitsService *service = [[BRCommitsService alloc] init];
 	
+	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+	[cell setActivityIndicatorAccessoryView];
+	
 	[service beginSaveCommitsForRepository:_repository
 							atHeadOfBranch:branch
 							  withPageSize:[BRCommitsViewController dataPageSize]
 								 withLogin:_login
 							withCompletion:^(BOOL saved, NSError *error) {
 								
+								[cell clearAccessoryViewWith:UITableViewCellAccessoryDisclosureIndicator];
 								[self performSegueWithIdentifier:@"SegueFromBranches" sender:indexPath];
 							}];
 }

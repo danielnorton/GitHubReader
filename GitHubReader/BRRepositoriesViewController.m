@@ -11,6 +11,7 @@
 #import "BRBranchesViewController.h"
 #import "BRBranchService.h"
 #import "BRBasicFetchedResultControllerDelegate.h"
+#import "UITableViewCell+activity.h"
 
 
 @interface BRRepositoriesViewController()
@@ -58,8 +59,13 @@
 	
 	BRGHRepository *repo = (BRGHRepository *)[_fetchedResultsController objectAtIndexPath:indexPath];
 	BRBranchService *service = [[BRBranchService alloc] init];
+	
+	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+	[cell setActivityIndicatorAccessoryView];
+	
 	[service beginSaveBranchesForRepository:repo withLogin:_login withCompletion:^(BOOL saved, NSError *error) {
 
+		[cell clearAccessoryViewWith:UITableViewCellAccessoryDisclosureIndicator];
 		[self performSegueWithIdentifier:@"SegueFromRepositories" sender:indexPath];
 	}];
 }
